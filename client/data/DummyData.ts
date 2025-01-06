@@ -72,3 +72,17 @@ export const AIDAanalysisData = [
       key_focus: "Industry specific",
     },
   ];
+
+
+  export const marketSharedData = {
+    labels: ["Competitor A", "Competitor B", "Competitor C", "Other"],
+    dataValues: [30, 25, 20, 25],
+    colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+  };
+
+  export const MarketSharedsources = [
+    "https://example.com/source1",
+    "https://example.com/source2",
+  ];
+
+  export const MarketSharedetails = ["Detail 1", "Detail 2", "Detail 3"];

@@ -1,8 +1,9 @@
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
+import MarketShareCard from "@/components/MarketShareCardComponent";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
-import { AIDAanalysisData, analysis_data, SWOTanalysisData } from "@/data/DummyData";
+import { AIDAanalysisData, analysis_data, marketSharedData, MarketSharedetails, MarketSharedsources, SWOTanalysisData } from "@/data/DummyData";
 import Image from "next/image";
 
 export default function Home() {
@@ -15,6 +16,13 @@ export default function Home() {
       <CompetitorAnalysisTable analysis_data={analysis_data} />
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
+      <MarketShareCard
+        title="Market Share"
+        subtitle="Q4 2023"
+        chartData={marketSharedData}
+        sources={MarketSharedsources}
+        details={MarketSharedetails}
+      />
     </div>
   );
 }
