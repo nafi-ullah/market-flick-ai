@@ -3,8 +3,9 @@ import BusinessAnalysisForm from "@/components/BusinessCardForm";
 import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
 import MarketShareCard from "@/components/MarketShareCardComponent";
+import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
-import { AIDAanalysisData, analysis_data, marketSharedData, MarketSharedetails, MarketSharedsources, SWOTanalysisData } from "@/data/DummyData";
+import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedetails, MarketSharedsources, SWOTanalysisData } from "@/data/DummyData";
 import Image from "next/image";
 
 export default function Home() {
@@ -14,6 +15,12 @@ export default function Home() {
   return (
     <div className=" font-[family-name:var(--font-geist-sans)]">
       <BusinessAnalysisForm/>
+      <MarketSizeAnalysisCard
+        title="Market Size Analysis"
+        subtitle="TAM, SAM, SOM"
+        chartData={MarketSizeAnalysisCardchartData}
+        sources={MarketSharedsources}
+      />
       <CompetitorAnalysisTable analysis_data={analysis_data} />
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
       <CompetitiorAnalysisGraph/>

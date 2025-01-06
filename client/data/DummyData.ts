@@ -136,3 +136,27 @@ export const AIDAanalysisData = [
       },
     ],
   };
+
+  export const MarketSizeAnalysisCardchartData = {
+    labels: ["2024", "2025", "2026", "2027", "2028"],
+    datasets: [
+      {
+        label: "TAM",
+        data: [1000, 1200, 1400, 1600, 1800],
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+      },
+      {
+        label: "SAM",
+        data: [600, 700, 800, 900, 1000],
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+      },
+      {
+        label: "SOM",
+        data: [300, 400, 500, 600, 700],
+        borderColor: "rgba(255, 206, 86, 1)",
+        backgroundColor: "rgba(255, 206, 86, 0.2)",
+      },
+    ],
+  };
