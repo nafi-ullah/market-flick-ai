@@ -1,34 +1,10 @@
+import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
+import { AIDAanalysisData, analysis_data } from "@/data/DummyData";
 import Image from "next/image";
 
 export default function Home() {
-  const analysis_data = [
-    {
-      company: "CompetitorX",
-      valuation: "$2.5B",
-      money_raised: "$450M",
-      key_focus: "AI-driven analytics",
-    },
-    {
-      company: "MarketPro",
-      valuation: "$1.8B",
-      money_raised: "$280M",
-      key_focus: "Enterprise solutions",
-    },
-    {
-      company: "DataVision",
-      valuation: "$900M",
-      money_raised: "$150M",
-      key_focus: "SMB focus",
-    },
-    {
-      company: "AnalyticsPro",
-      valuation: "$750M",
-      money_raised: "$120M",
-      key_focus: "Industry specific",
-    },
-  ];
 
 
 
@@ -36,6 +12,7 @@ export default function Home() {
     <div className=" font-[family-name:var(--font-geist-sans)]">
       <BusinessAnalysisForm/>
       <CompetitorAnalysisTable analysis_data={analysis_data} />
+      <AIDAAnalysis analysis_data={AIDAanalysisData}/>
     </div>
   );
 }
