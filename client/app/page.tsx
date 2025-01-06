@@ -1,41 +1,32 @@
+import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
+import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
+import MarketShareCard from "@/components/MarketShareCardComponent";
+import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
+import SWOTAnalysis from "@/components/SWOTAnalysisCard";
+import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedetails, MarketSharedsources, SWOTanalysisData } from "@/data/DummyData";
 import Image from "next/image";
 
 export default function Home() {
-  const analysis_data = [
-    {
-      company: "CompetitorX",
-      valuation: "$2.5B",
-      money_raised: "$450M",
-      key_focus: "AI-driven analytics",
-    },
-    {
-      company: "MarketPro",
-      valuation: "$1.8B",
-      money_raised: "$280M",
-      key_focus: "Enterprise solutions",
-    },
-    {
-      company: "DataVision",
-      valuation: "$900M",
-      money_raised: "$150M",
-      key_focus: "SMB focus",
-    },
-    {
-      company: "AnalyticsPro",
-      valuation: "$750M",
-      money_raised: "$120M",
-      key_focus: "Industry specific",
-    },
-  ];
 
 
 
   return (
     <div className=" font-[family-name:var(--font-geist-sans)]">
       <BusinessAnalysisForm/>
+      <MarketSizeAnalysisCard
+        title="Market Size Analysis"
+        subtitle="TAM, SAM, SOM"
+        chartData={MarketSizeAnalysisCardchartData}
+        sources={MarketSharedsources}
+      />
       <CompetitorAnalysisTable analysis_data={analysis_data} />
+      <SWOTAnalysis swot_data={SWOTanalysisData}/>
+      <CompetitiorAnalysisGraph/>
+      <AIDAAnalysis analysis_data={AIDAanalysisData}/>
+      
+      
     </div>
   );
 }
