@@ -1,22 +1,24 @@
 import React from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdDetails } from "react-icons/md";
-import PieChartComponent from "./charts/PieChart";
+import BubbleChartComponent from "./charts/BubbleChart";
 
 
-type MarketShareCardProps = {
+type MarketPositionMappingCardProps = {
   title: string;
   subtitle: string;
   chartData: {
-    labels: string[];
-    dataValues: number[];
-    colors: string[];
+    datasets: {
+      label: string;
+      data: { x: number; y: number; r: number }[];
+      backgroundColor: string;
+    }[];
   };
   sources: string[];
   details: string[];
 };
 
-const MarketShareCard: React.FC<MarketShareCardProps> = ({
+const MarketPositionMappingCard: React.FC<MarketPositionMappingCardProps> = ({
   title,
   subtitle,
   chartData,
@@ -24,7 +26,7 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   details,
 }) => {
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-md mx-auto">
+    <div className="p-4 bg-white rounded-md shadow-md max-w-sm mx-auto flex flex-col justify-between">
       {/* Title */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">{title}</h2>
@@ -33,11 +35,7 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
 
       {/* Chart */}
       <div className="mb-4">
-        <PieChartComponent
-          labels={chartData.labels}
-          dataValues={chartData.dataValues}
-          backgroundColors={chartData.colors}
-        />
+        <BubbleChartComponent datasets={chartData.datasets} />
       </div>
 
       {/* Buttons */}
@@ -55,4 +53,4 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   );
 };
 
-export default MarketShareCard;
+export default MarketPositionMappingCard;

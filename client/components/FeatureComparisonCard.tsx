@@ -1,22 +1,26 @@
 import React from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdDetails } from "react-icons/md";
-import PieChartComponent from "./charts/PieChart";
+import RadarChartComponent from "./charts/RadarChart";
 
 
-type MarketShareCardProps = {
+type FeatureComparisonCardProps = {
   title: string;
   subtitle: string;
   chartData: {
     labels: string[];
-    dataValues: number[];
-    colors: string[];
+    datasets: {
+      label: string;
+      data: number[];
+      borderColor: string;
+      backgroundColor: string;
+    }[];
   };
   sources: string[];
   details: string[];
 };
 
-const MarketShareCard: React.FC<MarketShareCardProps> = ({
+const FeatureComparisonCard: React.FC<FeatureComparisonCardProps> = ({
   title,
   subtitle,
   chartData,
@@ -24,7 +28,7 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   details,
 }) => {
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-md mx-auto">
+    <div className="p-4 bg-white rounded-md shadow-md max-w-sm mx-auto">
       {/* Title */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">{title}</h2>
@@ -33,10 +37,9 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
 
       {/* Chart */}
       <div className="mb-4">
-        <PieChartComponent
+        <RadarChartComponent
           labels={chartData.labels}
-          dataValues={chartData.dataValues}
-          backgroundColors={chartData.colors}
+          datasets={chartData.datasets}
         />
       </div>
 
@@ -55,4 +58,4 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   );
 };
 
-export default MarketShareCard;
+export default FeatureComparisonCard;

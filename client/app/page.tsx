@@ -15,9 +15,11 @@ export default function Home() {
     <div className=" font-[family-name:var(--font-geist-sans)]">
       <BusinessAnalysisForm/>
       <CompetitorAnalysisTable analysis_data={analysis_data} />
-      <AIDAAnalysis analysis_data={AIDAanalysisData}/>
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
       <CompetitiorAnalysisGraph/>
+      <AIDAAnalysis analysis_data={AIDAanalysisData}/>
+      
+      
     </div>
   );
 }

@@ -86,9 +86,53 @@ export const AIDAanalysisData = [
     color: "purple",
   };
 
+  export const FeatureComparisonChartData = {
+    labels: ["Quality", "Service", "Innovation", "Price", "Brand"],
+    datasets: [
+      {
+        label: "Our Company",
+        data: [90, 80, 70, 85, 75],
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+      },
+      {
+        label: "Industry Average",
+        data: [80, 70, 60, 70, 65],
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+      },
+    ],
+  };
+
   export const MarketSharedsources = [
     "https://example.com/source1",
     "https://example.com/source2",
   ];
 
   export const MarketSharedetails = ["Detail 1", "Detail 2", "Detail 3"];
+
+
+  export  const MarketPositionMappingCardchartData = {
+    datasets: [
+      {
+        label: "Our Company",
+        data: [{ x: 40, y: 15, r: 10 }],
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
+      },
+      {
+        label: "Competitor A",
+        data: [{ x: 20, y: 9, r: 7 }],
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+      },
+      {
+        label: "Competitor B",
+        data: [{ x: 30, y: 12, r: 8 }],
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+      },
+      {
+        label: "Competitor C",
+        data: [{ x: 10, y: 6, r: 5 }],
+        backgroundColor: "rgba(153, 102, 255, 0.6)",
+      },
+    ],
+  };
