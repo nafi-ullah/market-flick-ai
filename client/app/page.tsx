@@ -1,7 +1,8 @@
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
-import { AIDAanalysisData, analysis_data } from "@/data/DummyData";
+import SWOTAnalysis from "@/components/SWOTAnalysisCard";
+import { AIDAanalysisData, analysis_data, SWOTanalysisData } from "@/data/DummyData";
 import Image from "next/image";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <BusinessAnalysisForm/>
       <CompetitorAnalysisTable analysis_data={analysis_data} />
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>
+      <SWOTAnalysis swot_data={SWOTanalysisData}/>
     </div>
   );
 }

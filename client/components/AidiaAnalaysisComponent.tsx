@@ -1,5 +1,6 @@
-import { getLowOpacityHexColor } from "@/utils/designs";
 import React from "react";
+import AnalysisCard from "./subcomponent/AnalysisColorCard";
+ // Import the new component
 
 type AnalysisItem = {
   title: string;
@@ -17,24 +18,12 @@ const AIDAAnalysis: React.FC<AIDAAnalysisProps> = ({ analysis_data }) => {
       <h2 className="text-lg font-bold mb-4">AIDA Model Analysis</h2>
       <div className="space-y-4">
         {analysis_data.map((item, index) => (
-          <div
+          <AnalysisCard
             key={index}
-            className="p-4 rounded-md"
-            style={{ backgroundColor: getLowOpacityHexColor(item.color, 10) }}
-          >
-            <h3
-              className="text-md font-semibold"
-              style={{ color: item.color }}
-            >
-              {item.title}
-            </h3>
-            <p
-              className="text-sm mt-1"
-              style={{ color: item.color }}
-            >
-              {item.description}
-            </p>
-          </div>
+            title={item.title}
+            description={item.description}
+            color={item.color}
+          />
         ))}
       </div>
     </div>

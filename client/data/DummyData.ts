@@ -21,6 +21,30 @@ export const AIDAanalysisData = [
     },
   ];
 
+  export const SWOTanalysisData = [
+    {
+      title: "Strengths",
+      key_points: ["Strong brand recognition", "Innovative product line", "Global presence"],
+      color: "#16A34A", // Green
+    },
+    {
+      title: "Weaknesses",
+      key_points: ["High production costs", "Limited distribution", "Aging technology"],
+      color: "#DC2626", // Red
+    },
+    {
+      title: "Opportunities",
+      key_points: ["Emerging markets", "Digital transformation", "Strategic partnerships"],
+      color: "#2563EB", // Blue
+    },
+    {
+      title: "Threats",
+      key_points: ["New competitors", "Changing regulations", "Economic uncertainty"],
+      color: "#F59E0B", // Yellow
+    },
+  ];
+
+
 
  export const analysis_data = [
     {
