@@ -80,6 +80,12 @@ export const AIDAanalysisData = [
     colors: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
   };
 
+  export const PricePositioningChartData = {
+    labels: ["Our Company", "Competitor A", "Competitor C"],
+    dataValues: [80, 70, 90],
+    color: "purple",
+  };
+
   export const MarketSharedsources = [
     "https://example.com/source1",
     "https://example.com/source2",
