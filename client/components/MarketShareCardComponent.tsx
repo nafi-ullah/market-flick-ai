@@ -23,6 +23,8 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   sources,
   details,
 }) => {
+  console.log(sources, details);
+
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-md mx-auto">
       {/* Title */}

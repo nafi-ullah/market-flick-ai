@@ -23,6 +23,8 @@ const PricePositioningCard: React.FC<PricePositioningCardProps> = ({
   sources,
   details,
 }) => {
+  console.log(sources, details);
+
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-sm mx-auto flex flex-col justify-between">
       {/* Title */}

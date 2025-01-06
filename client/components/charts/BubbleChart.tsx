@@ -26,6 +26,7 @@ const BubbleChartComponent: React.FC<BubbleChartComponentProps> = ({ datasets })
       },
       tooltip: {
         callbacks: {
+          /* eslint-disable  @typescript-eslint/no-explicit-any */
           label: (context: any) => {
             const { x, y, r } = context.raw;
             return `(${x}, ${y}), Size: ${r}`;

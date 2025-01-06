@@ -18,6 +18,7 @@ type MarketSizeAnalysisCardProps = {
 };
 
 const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ title, subtitle, chartData, sources }) => {
+  console.log(sources)
   return (
     <div className="p-6 bg-white rounded-md shadow-md max-w-4xl mx-auto">
       {/* Header */}

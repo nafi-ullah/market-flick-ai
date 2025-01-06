@@ -1,6 +1,6 @@
 import React from 'react'
 import MarketShareCard from './MarketShareCardComponent'
-import { MarketPositionMappingCardchartData, analysis_data, marketSharedData, MarketSharedetails, MarketSharedsources, SWOTanalysisData, PricePositioningChartData, FeatureComparisonChartData } from "@/data/DummyData";
+import { MarketPositionMappingCardchartData, marketSharedData, MarketSharedetails, MarketSharedsources, PricePositioningChartData, FeatureComparisonChartData } from "@/data/DummyData";
 import PricePositioningCard from './PricePositionCard';
 import FeatureComparisonCard from './FeatureComparisonCard';
 import MarketPositionMappingCard from './MarketPositionMappingCard';
