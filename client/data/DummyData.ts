@@ -195,13 +195,13 @@ export const AIDAanalysisData = [
       title: 'Economic',
       description: 'Market conditions, inflation rates, and economic growth indicators.',
       impact_level: 50,
-      color: '#0000FF',
+      color: '#2563EB',
     },
     {
       title: 'Social',
       description: 'Demographics, lifestyle changes, and social trends impacting market behavior.',
       impact_level: 70,
-      color: '#00FF00',
+      color: '#16A34A',
     },
     {
       title: 'Technological',
@@ -219,7 +219,7 @@ export const AIDAanalysisData = [
       title: 'Legal',
       description: 'Legal frameworks, compliance requirements, and regulatory landscape.',
       impact_level: 60,
-      color: '#800080',
+      color: '#4F46E5',
     },
     {
       title: 'Industry',
