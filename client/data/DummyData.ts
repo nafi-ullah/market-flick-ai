@@ -160,3 +160,71 @@ export const AIDAanalysisData = [
       },
     ],
   };
+
+
+
+  export const KeyDifferentiatorsData = {
+    title: 'Key Differentiators',
+    items: [
+      'Superior product quality and innovation leadership',
+      'Strong brand recognition and customer loyalty',
+      'Extensive distribution network and market presence',
+    ],
+  };
+
+
+
+  export const StrategicRecData = {
+    title: 'Strategic Recommendation',
+    items: [
+      'Superior product quality and innovation leadership',
+      'Strong brand recognition and customer loyalty',
+      'Extensive distribution network and market presence',
+    ],
+  };
+
+
+  export const PastelData = [
+    {
+      title: 'Political',
+      description: 'Trade policies, regulatory changes, and political stability affecting market conditions.',
+      impact_level: 80,
+      color: '#FF0000',
+    },
+    {
+      title: 'Economic',
+      description: 'Market conditions, inflation rates, and economic growth indicators.',
+      impact_level: 50,
+      color: '#0000FF',
+    },
+    {
+      title: 'Social',
+      description: 'Demographics, lifestyle changes, and social trends impacting market behavior.',
+      impact_level: 70,
+      color: '#00FF00',
+    },
+    {
+      title: 'Technological',
+      description: 'Technological advancements, digital transformation, and innovation trends.',
+      impact_level: 90,
+      color: '#800080',
+    },
+    {
+      title: 'Environmental',
+      description: 'Environmental regulations, sustainability practices, and ecological impact.',
+      impact_level: 40,
+      color: '#CA8A04',
+    },
+    {
+      title: 'Legal',
+      description: 'Legal frameworks, compliance requirements, and regulatory landscape.',
+      impact_level: 60,
+      color: '#800080',
+    },
+    {
+      title: 'Industry',
+      description: 'Industry-specific trends, competitive dynamics, and market structure.',
+      impact_level: 75,
+      color: '#FF8000',
+    },
+  ];
