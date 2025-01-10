@@ -228,3 +228,57 @@ export const AIDAanalysisData = [
       color: '#FF8000',
     },
   ];
+
+
+
+  // data/cards.ts
+export const swotdata = [
+  {
+    showPrompts: ["Prompt 1", "Prompt 2", "Prompt 3"],
+    title: "Strengths",
+    tips: [
+      "Consider unique capabilities",
+      "Evaluate market advantages",
+      "Assess core competencies",
+    ],
+    values: ["Market leadership", "Strong R&D", "Brand value"],
+    aiSuggestion: "Strong data analytics capabilities",
+    cardColor: "#16A34A",
+  },
+  {
+    showPrompts: ["Prompt A", "Prompt B", "Prompt C"],
+    title: "Weaknesses",
+    tips: [
+      "Identify improvement areas",
+      "Review customer feedback",
+      "Examine resource gaps",
+    ],
+    values: ["High costs", "Limited reach", "Resource constraints"],
+    aiSuggestion: "Limited international presence",
+    cardColor: "#16A34A",
+  },
+  {
+    showPrompts: ["Prompt X", "Prompt Y", "Prompt Z"],
+    title: "Opportunities",
+    tips: [
+      "Research market trends",
+      "Analyze competitor gaps",
+      "Explore new technologies",
+    ],
+    values: ["New markets", "Digital transformation", "Strategic partnerships"],
+    aiSuggestion: "Emerging AI market growth",
+    cardColor: "#16A34A",
+  },
+  {
+    showPrompts: ["Prompt 1", "Prompt 2", "Prompt 3"],
+    title: "Threats",
+    tips: [
+      "Monitor market changes",
+      "Track competitive moves",
+      "Assess external risks",
+    ],
+    values: ["Competition", "Market volatility", "Regulatory changes"],
+    aiSuggestion: "Rapid technological changes",
+    cardColor: "#16A34A",
+  },
+];
