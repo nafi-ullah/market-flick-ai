@@ -4,7 +4,10 @@ import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
 import Navbar from "@/components/core/Navbar";
 import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
+import PASTELIAnalysis from "@/components/PastelAnalysis";
+import StrategicInsigtsCard from "@/components/StrategicInsigts";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
+import SWOTfullComponent from "@/components/SWOTfullComponent";
 import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData } from "@/data/DummyData";
 
 export default function Home() {
@@ -22,7 +25,9 @@ export default function Home() {
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
       <CompetitiorAnalysisGraph/>
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>
-      
+      <StrategicInsigtsCard/>
+      <PASTELIAnalysis/>
+      <SWOTfullComponent/>
       
     </div>
   );

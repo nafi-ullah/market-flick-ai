@@ -160,3 +160,125 @@ export const AIDAanalysisData = [
       },
     ],
   };
+
+
+
+  export const KeyDifferentiatorsData = {
+    title: 'Key Differentiators',
+    items: [
+      'Superior product quality and innovation leadership',
+      'Strong brand recognition and customer loyalty',
+      'Extensive distribution network and market presence',
+    ],
+  };
+
+
+
+  export const StrategicRecData = {
+    title: 'Strategic Recommendation',
+    items: [
+      'Superior product quality and innovation leadership',
+      'Strong brand recognition and customer loyalty',
+      'Extensive distribution network and market presence',
+    ],
+  };
+
+
+  export const PastelData = [
+    {
+      title: 'Political',
+      description: 'Trade policies, regulatory changes, and political stability affecting market conditions.',
+      impact_level: 80,
+      color: '#FF0000',
+    },
+    {
+      title: 'Economic',
+      description: 'Market conditions, inflation rates, and economic growth indicators.',
+      impact_level: 50,
+      color: '#2563EB',
+    },
+    {
+      title: 'Social',
+      description: 'Demographics, lifestyle changes, and social trends impacting market behavior.',
+      impact_level: 70,
+      color: '#16A34A',
+    },
+    {
+      title: 'Technological',
+      description: 'Technological advancements, digital transformation, and innovation trends.',
+      impact_level: 90,
+      color: '#800080',
+    },
+    {
+      title: 'Environmental',
+      description: 'Environmental regulations, sustainability practices, and ecological impact.',
+      impact_level: 40,
+      color: '#CA8A04',
+    },
+    {
+      title: 'Legal',
+      description: 'Legal frameworks, compliance requirements, and regulatory landscape.',
+      impact_level: 60,
+      color: '#4F46E5',
+    },
+    {
+      title: 'Industry',
+      description: 'Industry-specific trends, competitive dynamics, and market structure.',
+      impact_level: 75,
+      color: '#FF8000',
+    },
+  ];
+
+
+
+  // data/cards.ts
+export const swotdata = [
+  {
+    showPrompts: ["Prompt 1", "Prompt 2", "Prompt 3"],
+    title: "Strengths",
+    tips: [
+      "Consider unique capabilities",
+      "Evaluate market advantages",
+      "Assess core competencies",
+    ],
+    values: ["Market leadership", "Strong R&D", "Brand value"],
+    aiSuggestion: "Strong data analytics capabilities",
+    cardColor: "#15803D",
+  },
+  {
+    showPrompts: ["Prompt A", "Prompt B", "Prompt C"],
+    title: "Weaknesses",
+    tips: [
+      "Identify improvement areas",
+      "Review customer feedback",
+      "Examine resource gaps",
+    ],
+    values: ["High costs", "Limited reach", "Resource constraints"],
+    aiSuggestion: "Limited international presence",
+    cardColor: "#B91C1C",
+  },
+  {
+    showPrompts: ["Prompt X", "Prompt Y", "Prompt Z"],
+    title: "Opportunities",
+    tips: [
+      "Research market trends",
+      "Analyze competitor gaps",
+      "Explore new technologies",
+    ],
+    values: ["New markets", "Digital transformation", "Strategic partnerships"],
+    aiSuggestion: "Emerging AI market growth",
+    cardColor: "#1D4ED8",
+  },
+  {
+    showPrompts: ["Prompt 1", "Prompt 2", "Prompt 3"],
+    title: "Threats",
+    tips: [
+      "Monitor market changes",
+      "Track competitive moves",
+      "Assess external risks",
+    ],
+    values: ["Competition", "Market volatility", "Regulatory changes"],
+    aiSuggestion: "Rapid technological changes",
+    cardColor: "#A16207",
+  },
+];
