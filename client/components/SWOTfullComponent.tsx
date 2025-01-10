@@ -1,6 +1,7 @@
-import { swotdata } from '@/data/DummyData'
+import { swotdata, TeamcollaborationData } from '@/data/DummyData'
 import React from 'react'
 import SwotDetailedCard from './common/SWOTCard'
+import TeamCollaboration from './subcomponent/TeamCollaboration'
 
 const SWOTfullComponent = () => {
   return (
@@ -19,6 +20,10 @@ const SWOTfullComponent = () => {
         />
       ))}
       </div>
+
+      <div className="w-full bg-gray-50 flex items-center justify-center p-4">
+      <TeamCollaboration data={TeamcollaborationData} />
+    </div>
       
       </div>
   )

@@ -282,3 +282,20 @@ export const swotdata = [
     cardColor: "#A16207",
   },
 ];
+
+
+
+export const TeamcollaborationData = [
+  {
+    name: "John Doe",
+    imageUrl: "https://via.placeholder.com/40", // Placeholder image
+    description: "Added strength: Market leadership",
+    timeAgo: "2m ago",
+  },
+  {
+    name: "Jane Smith",
+    imageUrl: "https://via.placeholder.com/40", // Placeholder image
+    description: "Commented on weakness analysis",
+    timeAgo: "5m ago",
+  },
+];
