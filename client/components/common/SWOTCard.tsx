@@ -20,7 +20,7 @@ const SwotDetailedCard: React.FC<CardProps> = ({
 }) => {
   return (
     <div
-      className={`p-4 rounded-lg shadow-md`}
+      className={`p-4 rounded-lg`}
       style={{
         backgroundColor: `${cardColor}1A` , // Low opacity background
       }}
@@ -32,25 +32,28 @@ const SwotDetailedCard: React.FC<CardProps> = ({
         >
           Show Prompts
         </button>
-        <div className="text-sm text-gray-500">Tips for {title} Analysis:</div>
+        
       </div>
-      <ul className="text-sm text-gray-700 list-disc pl-5 mb-4">
+      <div className="bg-[#F3F4F6] rounded-md p-2 py-4">
+      <div className="text-sm text-gray-600">Tips for {title} Analysis:</div>
+      <ul className="text-sm text-gray-600 list-disc pl-5">
         {tips.map((tip, index) => (
           <li key={index}>{tip}</li>
         ))}
       </ul>
+      </div>
       <div>
         <h3
-          className={`font-bold text-lg`}
+          className={`font-bold text-lg my-4`}
           style={{
             color: cardColor, // Title color matches card color
           }}
         >
           {title}
         </h3>
-        <ul className={`list-disc pl-5 mt-2`}>
+        <ul className={`list-disc pl-5 `}>
           {values.map((value, index) => (
-            <li key={index} className={`text-${cardColor}`}>
+            <li key={index} style={{ color: cardColor }}>
               {value}
             </li>
           ))}

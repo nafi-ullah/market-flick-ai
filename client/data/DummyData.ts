@@ -243,7 +243,7 @@ export const swotdata = [
     ],
     values: ["Market leadership", "Strong R&D", "Brand value"],
     aiSuggestion: "Strong data analytics capabilities",
-    cardColor: "#16A34A",
+    cardColor: "#15803D",
   },
   {
     showPrompts: ["Prompt A", "Prompt B", "Prompt C"],
@@ -255,7 +255,7 @@ export const swotdata = [
     ],
     values: ["High costs", "Limited reach", "Resource constraints"],
     aiSuggestion: "Limited international presence",
-    cardColor: "#16A34A",
+    cardColor: "#B91C1C",
   },
   {
     showPrompts: ["Prompt X", "Prompt Y", "Prompt Z"],
@@ -267,7 +267,7 @@ export const swotdata = [
     ],
     values: ["New markets", "Digital transformation", "Strategic partnerships"],
     aiSuggestion: "Emerging AI market growth",
-    cardColor: "#16A34A",
+    cardColor: "#1D4ED8",
   },
   {
     showPrompts: ["Prompt 1", "Prompt 2", "Prompt 3"],
@@ -279,6 +279,6 @@ export const swotdata = [
     ],
     values: ["Competition", "Market volatility", "Regulatory changes"],
     aiSuggestion: "Rapid technological changes",
-    cardColor: "#16A34A",
+    cardColor: "#A16207",
   },
 ];
