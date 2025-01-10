@@ -1,7 +1,7 @@
 from database.db import get_database
+from core.market_size_analysis.agent import generate_queries
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from controllers.analysis import get_analysis
 
 app = FastAPI()
 
@@ -23,4 +23,6 @@ async def root():
     return {"message": "Python server is running..."}
 
 
-
+@app.get("/test")
+async def test():
+    return generate_queries()
