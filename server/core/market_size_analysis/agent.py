@@ -5,9 +5,10 @@ from custom_types.market_analysis import BusinessAnalysisInput
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_community.tools import TavilySearchResults
 from langchain_openai import ChatOpenAI
-from core.market_size_analysis.prompts import market_size_system_message, market_size_human_message
-from core.market_size_analysis.utils import print_and_save_stream, extract_knowledge_base
+from core.market_size_analysis.prompts import market_size_system_message, market_size_human_message, graph_and_table_generator_system_message, graph_and_table_generator_human_message
+from core.market_size_analysis.utils import print_and_save_stream, extract_knowledge_base, print_stream
 from core.market_size_analysis.market_size_graph import plot_market_projection
+from core.market_size_analysis.market_player_table import generate_market_player_table
 from langgraph.prebuilt import create_react_agent
 
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
@@ -18,7 +19,7 @@ search_tool = TavilySearchResults(
 )   
 
 
-def market_size_report(business_analysis_input: BusinessAnalysisInput):
+def market_size_report(business_analysis_input: BusinessAnalysisInput) -> str:
     """ 
     Generate a market size report for a business idea.
 
@@ -42,10 +43,25 @@ def market_size_report(business_analysis_input: BusinessAnalysisInput):
     return knowledge_base_id
 
 def market_size_graph_and_table_generator(knowledge_base_id: str):
+
+    """
+    Generate a market size graph and table for a business idea.
+
+    Args:
+        knowledge_base_id (str): The ID of the knowledge base to generate the graph and table for.
+    """
+
+
     knowledge_base = extract_knowledge_base(knowledge_base_id)
     agent = create_react_agent(llm, tools=[search_tool, plot_market_projection])
 
 
+    inputs = {"messages": [SystemMessage(graph_and_table_generator_system_message), HumanMessage(graph_and_table_generator_human_message.format(
+        knowledge_base=knowledge_base
+    ))]}
     
+    print_stream(agent.stream(inputs, stream_mode="values"))
+
+
     
 

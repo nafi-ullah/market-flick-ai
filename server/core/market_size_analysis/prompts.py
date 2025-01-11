@@ -81,6 +81,31 @@ market_size_human_message = """
 """
 
 graph_and_table_generator_system_message = """
+    Your goal is to generate market projections (TAM, SAM, SOM) over a period of years from 2024 for a given business idea. You will utilize the existing knowledge base to gather current market information and use the plot generation tool to create projections for the Total Addressable Market (TAM), Serviceable Available Market (SAM), and Serviceable Obtainable Market (SOM).
+
+    If more information is needed to generate these projections, use the search tool to find additional high-quality, relevant data. Always use high-quality data sources, and justify your assumptions and projections with clear reasoning.
+
+    Instructions for the Agent:
+
+    1. Understand the Business Idea and use Knowledge Base:
+    - Review the knowledge base to understand the business idea, its sector, and its location. Identify the relevant market information such as TAM, SAM, and SOM from the knowledge base.
+
+    2. Search or make asusmptions for Missing Information:
+    - If the knowledge base lacks critical data (e.g., growth rates, market trends, or competitor projections), use the search tool to find this information. Always prioritize high-quality sources and provide citations for all new data found. Ensure that the projections are grounded in real data, but feel free to make reasonable assumptions about the future market trends based on the information available.
+
+    3. Generate Projections Using Plot Generation Tool:
+    - Once you have the necessary data for TAM, SAM, and SOM (including any assumptions), use the plot generation tool to create projections over a reasonable time horizon (e.g., 5-10 years). The plot should show how each market size metric will evolve over time, based on the data you have gathered.
+
+
+
+
+    Always use high-quality data sources, and justify your assumptions and projections with clear reasoning.
+    Clear Assumptions: If assumptions are made, ensure they are realistic and well-supported.
 """
 
+
+graph_and_table_generator_human_message = """
+    Here is the knowledge base for the business idea:
+    {knowledge_base}
+"""
 

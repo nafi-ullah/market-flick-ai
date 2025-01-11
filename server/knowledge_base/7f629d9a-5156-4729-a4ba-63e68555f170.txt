@@ -1,0 +1,50 @@
+### 1. Introduction
+
+The business idea is to develop an online tool that generates reel videos from any story prompt. This tool falls under the Information Technology (IT) sector and is intended for a global market. The tool aims to leverage AI and machine learning to automate video creation, catering to content creators, marketers, and businesses seeking efficient video production solutions.
+
+### 2. Market Size Analysis
+
+#### TAM (Total Addressable Market) Estimate
+The TAM for online video creation tools, including AI-driven solutions, is substantial given the increasing demand for video content across social media, marketing, and entertainment sectors. The market is expected to grow significantly as more businesses and individuals seek to create engaging video content. [Source](https://www.linkedin.com/posts/tam-ho-van_top-7-ai-video-generation-tools-to-explore-activity-7114576233614512128-OquM)
+
+#### SAM (Serviceable Available Market) Estimate
+The SAM for online reel video generation tools is a subset of the broader video creation market, focusing specifically on tools that can generate short-form video content or reels. This market is driven by the popularity of platforms like Instagram Reels, TikTok, and YouTube Shorts. [Source](https://ai.meta.com/blog/segment-anything-2/)
+
+#### SOM (Serviceable Obtainable Market) Estimate
+The SOM represents the realistic market share that the business can capture in its initial stages. This would depend on factors such as the tool's unique features, pricing strategy, and marketing efforts. The SOM is likely to be a small percentage of the SAM initially, as the business establishes its presence and differentiates itself from competitors. [Source](https://simply-crm.com/blog/11-ai-video-generators-to-use-in-2023/)
+
+### 3. Competitor Analysis
+
+1. **RunwayML**
+   - **Description**: RunwayML offers AI-powered video editing and generation tools, focusing on real-time collaboration and precision editing.
+   - **Valuation**: Not publicly available.
+   - **Competitive Advantages**: Advanced AI features, real-time collaboration.
+   - **Weaknesses**: May require technical expertise to fully utilize features.
+
+2. **Lumen5**
+   - **Description**: Lumen5 uses AI to transform text into video content, offering templates and a user-friendly interface.
+   - **Valuation**: Not publicly available.
+   - **Competitive Advantages**: Ease of use, integration with social media platforms.
+   - **Weaknesses**: Limited customization options for advanced users.
+
+3. **D-ID's Creative Reality™ Studio**
+   - **Description**: This tool creates realistic videos from images using AI, focusing on high-quality video production.
+   - **Valuation**: Not publicly available.
+   - **Competitive Advantages**: High-quality output, innovative AI technology.
+   - **Weaknesses**: Higher cost, may not be suitable for all types of video content.
+
+### 4. Additional Insights
+
+- **Industry Trends**: The demand for video content is growing rapidly, driven by social media and digital marketing trends. AI and machine learning are becoming integral in automating video production processes.
+- **Growth Rate**: The sector is experiencing a high growth rate, with more businesses adopting video content strategies.
+- **Regulatory Factors**: Data privacy and copyright issues are important considerations in the video creation industry.
+
+### 5. Conclusion
+
+The market for online reel video generation tools is promising, with significant growth potential driven by the increasing demand for video content. The business can differentiate itself by focusing on user-friendly interfaces, competitive pricing, and unique features that cater to specific user needs.
+
+### 6. References
+
+- [LinkedIn - Top 7 AI Video Generation Tools](https://www.linkedin.com/posts/tam-ho-van_top-7-ai-video-generation-tools-to-explore-activity-7114576233614512128-OquM)
+- [Meta AI Blog - Segment Anything Model 2](https://ai.meta.com/blog/segment-anything-2/)
+- [Simply CRM - AI Video Generators](https://simply-crm.com/blog/11-ai-video-generators-to-use-in-2023/)

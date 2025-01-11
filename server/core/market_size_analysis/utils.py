@@ -1,6 +1,14 @@
 from constants import KNOWLEDGE_BASE_PATH
 
 
+def print_stream(stream):
+    for s in stream:
+        message = s["messages"][-1]
+        if isinstance(message, tuple):
+            print(message)
+        else:
+            message.pretty_print()
+
 def print_and_save_stream(stream, id):
     final_message = ""
     for s in stream:

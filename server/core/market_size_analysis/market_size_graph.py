@@ -4,10 +4,21 @@ from typing import List
 from constants import FIGURE_PATH
 from uuid import uuid4
 
-
+# Set Matplotlib to use the Agg backend to avoid GUI issues
+plt.switch_backend('Agg')
 
 # Function to plot TAM, SAM, SOM and save the figure
 def plot_market_projection(data_points: List[MarketDataPoint]):
+    """
+    Plot TAM, SAM, SOM and save the figure.
+
+    Args:
+        data_points (List[MarketDataPoint]): List of market data points.
+        each data point contains date, TAM, SAM, SOM
+
+    Returns:
+        str: Unique ID of the saved figure.
+    """
 
     unique_id = str(uuid4())
 
@@ -36,6 +47,6 @@ def plot_market_projection(data_points: List[MarketDataPoint]):
     plt.savefig(f"{FIGURE_PATH}/market_projection_{unique_id}.png")
     plt.close()  # Close the plot to free up memory
 
+    print(f"Figure saved as market_projection_{unique_id}.png")
+
     return unique_id
-
-
