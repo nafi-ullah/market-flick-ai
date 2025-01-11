@@ -5,6 +5,7 @@ from core.market_size_analysis.utils import extract_knowledge_base
 from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from datetime import date
+from core.market_size_analysis.test_langgraph import run_business_analysis, BusinessAnalysisState
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,17 +13,25 @@ load_dotenv()
 
 # ba = BusinessAnalysisInput(
 #     sector="IT",
-#     idea="An online tool to generate reel videos on any story from prompt.",
-#     location="Global"
+#     idea="An online AI tool which generates customised virtual gift cards and tries to sell  affiliated products on preferred choices to make money.",
+#     location="USA"
 # )
 
 # knowledge_base_id = market_size_report(ba)
 
 # print(knowledge_base_id)
 
-knowledge_base_id="7f629d9a-5156-4729-a4ba-63e68555f170"
+# knowledge_base_id="18eedc58-895b-4e84-9d2c-1c262cc4031c"
 
-competitors_table_generator(knowledge_base_id)
+# competitors_table_generator(knowledge_base_id)
+
+business_input = BusinessAnalysisInput(
+    sector="Technology",
+    idea="AI-powered productivity tool",
+    location="San Francisco"
+)
+
+run_business_analysis(business_input)
 
 
 
