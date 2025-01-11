@@ -109,3 +109,23 @@ graph_and_table_generator_human_message = """
     {knowledge_base}
 """
 
+
+
+competitors_table_generator_system_message = """
+    Your goal is to generate a table of market players or competitors. 
+    You will be given a knowledge base that provides information about competitors in the market. 
+    use the information in the knowledge base to generate a table of market players or competitors.
+    If more information is needed, use the search tool to find additional high-quality, relevant data.
+    Always use high-quality data sources, and justify your assumptions and projections with clear reasoning.
+
+    The table should include the following columns:
+    - Company Name
+    - Valuation
+    - Money Raised
+    - Key Focus    
+"""
+
+competitors_table_generator_human_message = """
+    Here is the knowledge base for the business idea:
+    {knowledge_base}
+"""

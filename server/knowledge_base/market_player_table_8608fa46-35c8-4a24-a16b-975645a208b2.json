@@ -1,0 +1,20 @@
+[
+    {
+        "company_name": "RunwayML",
+        "valuation": "$1.5 billion",
+        "money_raised": "$236.5 million",
+        "key_focus": "AI-powered video editing and generation tools, focusing on real-time collaboration and precision editing."
+    },
+    {
+        "company_name": "Lumen5",
+        "valuation": "Not publicly available",
+        "money_raised": "$105,000",
+        "key_focus": "AI to transform text into video content, offering templates and a user-friendly interface."
+    },
+    {
+        "company_name": "D-ID's Creative Reality\u2122 Studio",
+        "valuation": "Not publicly available",
+        "money_raised": "$48 million",
+        "key_focus": "Creates realistic videos from images using AI, focusing on high-quality video production."
+    }
+]

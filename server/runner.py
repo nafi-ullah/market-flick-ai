@@ -1,6 +1,6 @@
 
 
-from core.market_size_analysis.agent import market_size_report, market_size_graph_and_table_generator
+from core.market_size_analysis.agent import market_size_report, market_size_graph_generator, competitors_table_generator
 from core.market_size_analysis.utils import extract_knowledge_base
 from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint
 from core.market_size_analysis.market_size_graph import plot_market_projection
@@ -22,7 +22,7 @@ load_dotenv()
 
 knowledge_base_id="7f629d9a-5156-4729-a4ba-63e68555f170"
 
-market_size_graph_and_table_generator(knowledge_base_id)
+competitors_table_generator(knowledge_base_id)
 
 
 
