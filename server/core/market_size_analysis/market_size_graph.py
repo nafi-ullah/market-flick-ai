@@ -17,7 +17,7 @@ def plot_market_projection(data_points: List[MarketDataPoint]):
         each data point contains date, TAM, SAM, SOM
 
     Returns:
-        str: Unique ID of the saved figure.
+        dict: Dictionary containing the plot id and data points.
     """
 
     unique_id = str(uuid4())
@@ -49,4 +49,7 @@ def plot_market_projection(data_points: List[MarketDataPoint]):
 
     print(f"Figure saved as market_projection_{unique_id}.png")
 
-    return unique_id
+    return {
+        "market_size_plot_id": unique_id,
+        "market_size_data_points": str(data_points)
+    }

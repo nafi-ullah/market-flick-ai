@@ -45,9 +45,19 @@ async def business_analysis_stream(
             # Initial state
             initial_state = {
                 "business_analysis_input": business_input,
-                "messages": [],
-                "knowledge_base_id": None
+                "messages": "",
+                "knowledge_base_id": "",
+                "knowledge_base": "",
+                "market_size_data_points": "",
+                "market_size_plot_id": "",
+                "market_player_table_data": "",
+                "market_player_table_id": "",
+                "is_last_step": False
             }
+
+            yield "AnalyzingBusiness Idea: {}\n".format(business_input.idea)
+
+            yield "Generating market size report...\n"
             
             # Stream the graph execution
             async for event in graph.astream(initial_state):
@@ -61,8 +71,13 @@ async def business_analysis_stream(
                             output_str += f"{message.content}\n"
                     
                     # Handle knowledge base ID
-                    if "knowledge_base_id" in output:
-                        output_str += f"Knowledge Base ID: {output['knowledge_base_id']}\n"
+                    for key in [
+                        "messages", "knowledge_base_id", "knowledge_base", 
+                        "market_size_data_points", "market_size_plot_id",
+                        "market_player_table_data", "market_player_table_id"
+                    ]:
+                        if key in output:
+                            output_str += f"{key}: {output[key]}\n"
                 
                 # Yield the output as a server-sent event
                 if output_str:

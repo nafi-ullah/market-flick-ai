@@ -43,4 +43,7 @@ def generate_market_player_table(competitors: list[MarketPlayerTableData]):
 
     print("Table data saved in JSON format:", f"{KNOWLEDGE_BASE_PATH}/market_player_table_{unique_id}.json")
     
-    return unique_id
+    return {
+        "market_player_table_id": f"market_player_table_{unique_id}.json",
+        "market_player_table_data": str(table_data)
+    }

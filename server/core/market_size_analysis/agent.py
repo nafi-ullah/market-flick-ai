@@ -62,7 +62,6 @@ def market_size_graph_generator(knowledge_base_id: str):
     
     print_stream(agent.stream(inputs, stream_mode="values"))
 
-
 def competitors_table_generator(knowledge_base_id: str):
     knowledge_base = extract_knowledge_base(knowledge_base_id)
     agent = create_react_agent(llm, tools=[search_tool, generate_market_player_table])
