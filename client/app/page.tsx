@@ -4,6 +4,7 @@ import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
 import Navbar from "@/components/core/Navbar";
 import FiveForceAnalysis from "@/components/FiveForceAnalysis";
+import MarketMixAnalysis from "@/components/MarketMixAnalysis";
 import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
 import PASTELIAnalysis from "@/components/PastelAnalysis";
 import StrategicInsigtsCard from "@/components/StrategicInsigts";
@@ -30,6 +31,7 @@ export default function Home() {
       <PASTELIAnalysis/>
       <SWOTfullComponent/>
       <FiveForceAnalysis/>
+      <MarketMixAnalysis/>
     </div>
   );
 }
