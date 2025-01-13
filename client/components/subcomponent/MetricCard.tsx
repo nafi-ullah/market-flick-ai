@@ -13,7 +13,7 @@ interface MetricCardProps {
 
 const MetricCard: React.FC<MetricCardProps> = ({ data }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-12">
       {data.map((item, index) => (
         <div
           key={index}
