@@ -1,5 +1,8 @@
 "use client";
 import React from "react";
+import { FaRobot } from "react-icons/fa";
+import { FaLightbulb } from "react-icons/fa6";
+
 
 interface CardProps {
   showPrompts: string[];
@@ -27,10 +30,10 @@ const SwotDetailedCard: React.FC<CardProps> = ({
     >
       <div className="flex justify-between items-center mb-4">
         <button
-          className="bg-black text-white text-xs px-2 py-1 rounded-md"
+          className="bg-black text-white text-xs px-2 py-1 rounded-md flex items-center space-x-2"
           onClick={() => console.log("Show Prompts", showPrompts)}
         >
-          Show Prompts
+         <span><FaLightbulb/> </span><span> Show Prompts</span>
         </button>
         
       </div>
@@ -65,8 +68,8 @@ const SwotDetailedCard: React.FC<CardProps> = ({
             className="border rounded px-2 py-1 w-full text-sm"
           />
         </div>
-        <div className="text-sm text-gray-500 mt-2">
-          AI Suggestion: <span className="italic">{aiSuggestion}</span>
+        <div className="text-sm text-gray-500 mt-2 flex items-center">
+         <span className="mr-2"><FaRobot/></span> AI Suggestion: <span className="italic">{aiSuggestion}</span>
         </div>
       </div>
     </div>
