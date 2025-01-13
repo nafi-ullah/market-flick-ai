@@ -44,6 +44,10 @@ const MarketMixAnalysis = () => {
           aiRecommendation: 'Leverage personalized marketing campaigns using AI insights',
         },
       ];
+
+
+
+      
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
     <h2 className="text-lg font-bold mb-4">4P Marketing Mix Analysis</h2>

@@ -1,11 +1,23 @@
 "use client";
 import React from 'react'
 import dynamic from 'next/dynamic';
+import MetricCard from './subcomponent/MetricCard';
 // import CombinedBarLineChart from './charts/BarLineChart';
 
 const CombinedBarLineChart = dynamic(() => import('./charts/BarLineChart'), {
     ssr: false, // Disable server-side rendering
   });
+
+  interface MetricCardProps {
+    data: {
+      title: string;
+      description: string;
+      value: string;
+      trend: 'up' | 'down';
+      color: string;
+    }[];
+  }
+
 
 const MarketTrends = () => {
 
@@ -17,10 +29,36 @@ const MarketTrends = () => {
         { year: '2024 (P)', marketSize: 110, growthRate: 40, digitalAdoption: 85 },
         { year: '2025 (P)', marketSize: 120, growthRate: 45, digitalAdoption: 90 },
       ];
+
+
+      const metricdata: MetricCardProps['data'] = [
+        {
+          title: 'Market Growth',
+          description: 'Year-over-year expansion',
+          value: '23%',
+          trend: 'up',
+          color: '#dbeafe', // Light blue
+        },
+        {
+          title: 'Digital Adoption',
+          description: 'Digital transformation rate',
+          value: '45%',
+          trend: 'down',
+          color: '#f5f3ff', // Light purple
+        },
+        {
+          title: 'Innovation Index',
+          description: 'Industry innovation score',
+          value: '12%',
+          trend: 'up',
+          color: '#dcfce7', // Light green
+        },
+      ];
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
     <h2 className="text-lg font-bold mb-4">Market Trends & Future Projections</h2>
     <CombinedBarLineChart data={graphData} />
+    <MetricCard data={metricdata} />
     </div>
   )
 }
