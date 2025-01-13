@@ -5,6 +5,7 @@ import MetricCard from './subcomponent/MetricCard';
 // import CombinedBarLineChart from './charts/BarLineChart';
 import { FaRobot, FaLeaf, FaMobileAlt } from 'react-icons/fa';
 import EmergingTrends from './subcomponent/EmergencyTrend';
+import FuturePredictions from './subcomponent/FuturePrediction';
 const CombinedBarLineChart = dynamic(() => import('./charts/BarLineChart'), {
     ssr: false, // Disable server-side rendering
   });
@@ -76,12 +77,41 @@ const MarketTrends = () => {
           icon: <FaMobileAlt />,
         },
       ];
+
+
+      const predictionsData = [
+        {
+          quarter: 'Q1 2024',
+          growth: '+28%',
+          description: 'Expected Growth',
+          color: '#16a34a', // Green
+        },
+        {
+          quarter: 'Q2 2024',
+          growth: '+32%',
+          description: 'Expected Growth',
+          color: '#16a34a', // Green
+        },
+        {
+          quarter: 'Q3 2024',
+          growth: '+18%',
+          description: 'Expected Growth',
+          color: '#f59e0b', // Yellow
+        },
+        {
+          quarter: 'Q4 2024',
+          growth: '+25%',
+          description: 'Expected Growth',
+          color: '#16a34a', // Green
+        }]
+
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
     <h2 className="text-lg font-bold mb-4">Market Trends & Future Projections</h2>
     <CombinedBarLineChart data={graphData} />
     <MetricCard data={metricdata} />
     <EmergingTrends data={trendsData} />
+    <FuturePredictions data={predictionsData} />
     </div>
   )
 }
