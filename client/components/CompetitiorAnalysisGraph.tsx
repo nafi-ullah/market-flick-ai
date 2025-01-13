@@ -8,7 +8,7 @@ const CompetitiorAnalysisGraph = () => {
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
       <h2 className="text-lg font-bold mb-4">Competitor Analysis Graph</h2>
-       <div className='grid grid-cols-2 gap-4'>
+       <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
        <MarketShareCard
         title="Market Share"
         subtitle="Q4 2023"
