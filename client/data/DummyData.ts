@@ -299,3 +299,34 @@ export const TeamcollaborationData = [
     timeAgo: "5m ago",
   },
 ];
+
+export const sevenSData = [
+  {
+    title: 'Strategy',
+    description: 'Long-term planning and competitive positioning',
+  },
+  {
+    title: 'Structure',
+    description: 'Organizational hierarchy and reporting lines',
+  },
+  {
+    title: 'Systems',
+    description: 'Business processes and information systems',
+  },
+  {
+    title: 'Shared Values',
+    description: 'Core values and corporate culture',
+  },
+  {
+    title: 'Style',
+    description: 'Leadership approach and management style',
+  },
+  {
+    title: 'Staff',
+    description: 'Human resources and capabilities',
+  },
+  {
+    title: 'Skills',
+    description: 'Core competencies and capabilities',
+  },
+];

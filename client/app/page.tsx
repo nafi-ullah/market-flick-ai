@@ -8,10 +8,11 @@ import MarketMixAnalysis from "@/components/MarketMixAnalysis";
 import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
 import MarketTrends from "@/components/MarketTrends";
 import PASTELIAnalysis from "@/components/PastelAnalysis";
+import SevenSModel from "@/components/SevenModelComponent";
 import StrategicInsigtsCard from "@/components/StrategicInsigts";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
 import SWOTfullComponent from "@/components/SWOTfullComponent";
-import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData } from "@/data/DummyData";
+import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData, sevenSData } from "@/data/DummyData";
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
       <FiveForceAnalysis/>
       <MarketMixAnalysis/>
       <MarketTrends/>
+      <SevenSModel data={sevenSData} />
     </div>
   );
 }
