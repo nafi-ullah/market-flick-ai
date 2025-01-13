@@ -1,5 +1,6 @@
 from constants import KNOWLEDGE_BASE_PATH
-
+from constants import FIGURE_PATH
+import json
 
 def print_stream(stream):
     for s in stream:
@@ -28,5 +29,10 @@ def extract_knowledge_base(id):
     with open(f"{KNOWLEDGE_BASE_PATH}/{id}.txt", "r") as f:
         return f.read()
 
-    
+def extract_plot_data(plot_id):
+    with open(f"{FIGURE_PATH}/market_projection_{plot_id}.json", "r") as f:
+        return json.load(f)
 
+def extract_table_data(table_id):
+    with open(f"{KNOWLEDGE_BASE_PATH}/market_player_table_{table_id}.json", "r") as f:
+        return f.read()

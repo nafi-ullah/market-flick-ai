@@ -55,7 +55,7 @@ async def business_analysis_stream(
                 "is_last_step": False
             }
 
-            yield "AnalyzingBusiness Idea: {}\n".format(business_input.idea)
+            yield "Analyzing Business Idea: {}\n".format(business_input.idea)
 
             yield "Generating market size report...\n"
             
@@ -63,6 +63,7 @@ async def business_analysis_stream(
             async for event in graph.astream(initial_state):
                 output_str = ""
                 for node, output in event.items():
+
                     output_str += f"Node: {node}\n"
                     
                     # Handle messages
@@ -81,7 +82,7 @@ async def business_analysis_stream(
                 
                 # Yield the output as a server-sent event
                 if output_str:
-                    yield f"data: {output_str}\n\n"
+                    yield f"{output_str}\n\n"
                 
                 # Optional: add a small delay to prevent overwhelming the client
                 await asyncio.sleep(0.1)

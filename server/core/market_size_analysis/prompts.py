@@ -107,6 +107,8 @@ graph_and_table_generator_system_message = """
 graph_and_table_generator_human_message = """
     Here is the knowledge base for the business idea:
     {knowledge_base}
+
+    Generate graph using this plot id: {plot_id}
 """
 
 
@@ -128,4 +130,6 @@ competitors_table_generator_system_message = """
 competitors_table_generator_human_message = """
     Here is the knowledge base for the business idea:
     {knowledge_base}
+
+    Generate table using this table id: {table_id}
 """

@@ -3,7 +3,7 @@ from uuid import uuid4
 from constants import KNOWLEDGE_BASE_PATH
 import json
 
-def generate_market_player_table(competitors: list[MarketPlayerTableData]):
+def generate_market_player_table(competitors: list[MarketPlayerTableData], table_id: str):
     """
     Generate a table of market players or competitors.
 
@@ -19,8 +19,6 @@ def generate_market_player_table(competitors: list[MarketPlayerTableData]):
 
     
     """
-
-    unique_id = str(uuid4())
 
     table_data = []
 
@@ -38,12 +36,12 @@ def generate_market_player_table(competitors: list[MarketPlayerTableData]):
 
     
 
-    with open(f"{KNOWLEDGE_BASE_PATH}/market_player_table_{unique_id}.json", "w") as f:
+    with open(f"{KNOWLEDGE_BASE_PATH}/market_player_table_{table_id}.json", "w") as f:
         json.dump(table_data, f)
 
-    print("Table data saved in JSON format:", f"{KNOWLEDGE_BASE_PATH}/market_player_table_{unique_id}.json")
+    print("Table data saved in JSON format:", f"{KNOWLEDGE_BASE_PATH}/market_player_table_{table_id}.json")
     
     return {
-        "market_player_table_id": f"market_player_table_{unique_id}.json",
+        "market_player_table_id": f"market_player_table_{table_id}.json",
         "market_player_table_data": str(table_data)
     }

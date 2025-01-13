@@ -6,7 +6,7 @@ from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint,
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
 import uuid
-from core.market_size_analysis.utils import print_and_save_stream, extract_knowledge_base, print_stream
+from core.market_size_analysis.utils import extract_plot_data, extract_table_data, print_and_save_stream, extract_knowledge_base, print_stream
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from core.market_size_analysis.market_player_table import generate_market_player_table
 from core.market_size_analysis.prompts import market_size_human_message, market_size_system_message, graph_and_table_generator_system_message, graph_and_table_generator_human_message, competitors_table_generator_system_message, competitors_table_generator_human_message
@@ -72,30 +72,37 @@ def market_size_graph_node(state: BusinessAnalysisState):
     knowledge_base = extract_knowledge_base(state['knowledge_base_id'])
     agent = create_react_agent(llm, tools=[search_tool, plot_market_projection], state_schema=BusinessAnalysisState)
 
+    plot_id = str(uuid.uuid4())
+
     inputs = {"messages": [
         SystemMessage(graph_and_table_generator_system_message), 
         HumanMessage(graph_and_table_generator_human_message.format(
-            knowledge_base=knowledge_base
+            knowledge_base=knowledge_base,
+            plot_id=plot_id
         ))
     ]}
     
     print_stream(agent.stream(inputs, stream_mode="values"))
+
+    data_points = extract_plot_data(plot_id)
     
     return {
         "messages": [AIMessage(content="Market size graph and table generated")],
-        "market_size_data_points": state['market_size_data_points'],
-        "market_size_plot_id": state['market_size_plot_id'],
+        "market_size_data_points": data_points,
+        "market_size_plot_id": plot_id,
     }
 
 def competitors_table_node(state: BusinessAnalysisState):
     """Generate competitors table"""
     knowledge_base = extract_knowledge_base(state['knowledge_base_id'])
     agent = create_react_agent(llm, tools=[search_tool, generate_market_player_table], state_schema=BusinessAnalysisState)
+    table_id = str(uuid.uuid4())
 
     inputs = {"messages": [
         SystemMessage(competitors_table_generator_system_message), 
         HumanMessage(competitors_table_generator_human_message.format(
-            knowledge_base=knowledge_base
+            knowledge_base=knowledge_base,
+            table_id=table_id
         ))
     ]}
     
@@ -103,8 +110,8 @@ def competitors_table_node(state: BusinessAnalysisState):
     
     return {
         "messages": [AIMessage(content="Competitors table generated")],
-        "market_player_table_id": state['market_player_table_id'],
-        "market_player_table_data": state['market_player_table_data'],
+        "market_player_table_id": table_id,
+        "market_player_table_data": extract_table_data(table_id),
     }
 
 # Build the graph
