@@ -28,7 +28,8 @@ const FiveForceAnalysis = () => {
   
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
-      <h2 className="text-lg font-bold mb-4">Porter's Five Forces Analysis</h2>
+      <h2 className="text-lg font-bold mb-4">Porter&apos;s Five Forces Analysis</h2>
+
       <div className='rounded-lg border-[1px] border-gray-200 p-3 mb-4'>
       <IndustryRivalry />
       <FiveForcesBar data={Bardata} />
