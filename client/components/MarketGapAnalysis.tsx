@@ -4,6 +4,7 @@ import AIGapIdentification from './marketgapanalysis/AiGapIdentification';
 import { FaCheckCircle, FaStar } from 'react-icons/fa';
 import StrategicRecommendations from './marketgapanalysis/StrategicRecommend';
 import VisualGapAnalysis from './charts/VIsualGapAnalysis';
+import CustomReports from './marketgapanalysis/CustomReports';
 const MarketGapAnalysis = () => {
 
     const gapData = [
@@ -50,6 +51,7 @@ const MarketGapAnalysis = () => {
       <AIGapIdentification data={gapData} onRefresh={handleRefresh} />
       <StrategicRecommendations data={recommendationsData} />
       <VisualGapAnalysis />
+      <CustomReports/>
         </div>
   )
 }
