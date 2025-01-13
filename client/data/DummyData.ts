@@ -288,13 +288,13 @@ export const swotdata = [
 export const TeamcollaborationData = [
   {
     name: "John Doe",
-    imageUrl: "https://via.placeholder.com/40", // Placeholder image
+    imageUrl: "/avatar.png", // Placeholder image
     description: "Added strength: Market leadership",
     timeAgo: "2m ago",
   },
   {
     name: "Jane Smith",
-    imageUrl: "https://via.placeholder.com/40", // Placeholder image
+    imageUrl: "/avatar.png", // Placeholder image
     description: "Commented on weakness analysis",
     timeAgo: "5m ago",
   },

@@ -4,6 +4,7 @@ import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
 import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
 import Navbar from "@/components/core/Navbar";
 import FiveForceAnalysis from "@/components/FiveForceAnalysis";
+import MarketGapAnalysis from "@/components/MarketGapAnalysis";
 import MarketMixAnalysis from "@/components/MarketMixAnalysis";
 import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
 import MarketTrends from "@/components/MarketTrends";
@@ -36,6 +37,7 @@ export default function Home() {
       <MarketMixAnalysis/>
       <MarketTrends/>
       <SevenSModel data={sevenSData} />
+      <MarketGapAnalysis/>
     </div>
   );
 }
