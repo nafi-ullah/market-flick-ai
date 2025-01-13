@@ -3,7 +3,8 @@ import React from 'react'
 import dynamic from 'next/dynamic';
 import MetricCard from './subcomponent/MetricCard';
 // import CombinedBarLineChart from './charts/BarLineChart';
-
+import { FaRobot, FaLeaf, FaMobileAlt } from 'react-icons/fa';
+import EmergingTrends from './subcomponent/EmergencyTrend';
 const CombinedBarLineChart = dynamic(() => import('./charts/BarLineChart'), {
     ssr: false, // Disable server-side rendering
   });
@@ -54,11 +55,33 @@ const MarketTrends = () => {
           color: '#dcfce7', // Light green
         },
       ];
+
+      const trendsData = [
+        {
+          title: 'AI Integration',
+          percentage: 75,
+          color: '#4F46E5', // Blue
+          icon: <FaRobot />,
+        },
+        {
+          title: 'Sustainability',
+          percentage: 60,
+          color: '#10B981', // Green
+          icon: <FaLeaf />,
+        },
+        {
+          title: 'Mobile First',
+          percentage: 85,
+          color: '#D946EF', // Purple
+          icon: <FaMobileAlt />,
+        },
+      ];
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
     <h2 className="text-lg font-bold mb-4">Market Trends & Future Projections</h2>
     <CombinedBarLineChart data={graphData} />
     <MetricCard data={metricdata} />
+    <EmergingTrends data={trendsData} />
     </div>
   )
 }
