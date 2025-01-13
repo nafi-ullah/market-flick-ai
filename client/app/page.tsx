@@ -6,6 +6,7 @@ import Navbar from "@/components/core/Navbar";
 import FiveForceAnalysis from "@/components/FiveForceAnalysis";
 import MarketMixAnalysis from "@/components/MarketMixAnalysis";
 import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
+import MarketTrends from "@/components/MarketTrends";
 import PASTELIAnalysis from "@/components/PastelAnalysis";
 import StrategicInsigtsCard from "@/components/StrategicInsigts";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
@@ -32,6 +33,7 @@ export default function Home() {
       <SWOTfullComponent/>
       <FiveForceAnalysis/>
       <MarketMixAnalysis/>
+      <MarketTrends/>
     </div>
   );
 }
