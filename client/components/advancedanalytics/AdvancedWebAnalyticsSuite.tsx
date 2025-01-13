@@ -11,8 +11,8 @@ import IntegrationHub from './IntegrationHub'
 const AdvancedWebAnalyticsSuite = () => {
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
-    <h2 className="text-lg font-bold mb-4">Market Trends & Future Projections</h2>
-    <div className='grid grid-cols-2 gap-4'>
+    <h2 className="text-lg font-bold mb-4">Advanced Web Analytics</h2>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
     <UserBehaviorAnalytics />
       <CompetitorBenchmarking />
       <PredictiveAnalytics />
