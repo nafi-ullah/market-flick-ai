@@ -5,6 +5,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import CustomIconList from './common/Customiconlist';
 import { KeyDifferentiatorsData } from '@/data/DummyData';
 import InfoCard from './subcomponent/AiInfoCard';
+import CompetititveLandScape from './subcomponent/CompetitiveLandscape';
 const FiveForceAnalysis = () => {
 
   const Bardata = [
@@ -17,6 +18,12 @@ const FiveForceAnalysis = () => {
   const AiInsightData = [
     { title: 'Key Opportunity', description: 'Market consolidation potential through strategic partnerships', color: '#007bff' },
     { title: 'Primary Threat', description: 'Increasing buyer bargaining power due to digital transformation', color: '#dc3545' },
+  ];
+
+  const CompettitveData = [
+    { title: 'Market Attractiveness', rating: 4 },
+    { title: 'Entry Barriers', rating: 3 },
+    { title: 'Profit Potential', rating: 5 },
   ];
   
   return (
@@ -38,7 +45,7 @@ const FiveForceAnalysis = () => {
 
       <div className='rounded-lg border-[1px] border-gray-200 p-3 mb-4'>
       <h3 className="text-lg font-bold mb-4">Competitive Landscape</h3>
- 
+      <CompetititveLandScape data={CompettitveData} />
       </div>
 
  
