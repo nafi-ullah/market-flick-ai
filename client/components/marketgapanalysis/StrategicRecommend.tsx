@@ -1,6 +1,5 @@
 "use client";
 import React from 'react';
-import { FaCheckCircle, FaStar } from 'react-icons/fa';
 
 interface Recommendation {
   title: string;
