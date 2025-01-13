@@ -1,3 +1,4 @@
+import AdvancedWebAnalyticsSuite from "@/components/advancedanalytics/AdvancedWebAnalyticsSuite";
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
 import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
@@ -38,6 +39,7 @@ export default function Home() {
       <MarketTrends/>
       <SevenSModel data={sevenSData} />
       <MarketGapAnalysis/>
+      <AdvancedWebAnalyticsSuite/>
     </div>
   );
 }
