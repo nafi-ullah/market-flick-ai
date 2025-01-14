@@ -1,30 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import LineChartComponent from "./charts/LineChart";
+import { parseMarketSizeData } from "@/data/DataMapping";
 
 type MarketSizeAnalysisCardProps = {
-  title: string;
-  subtitle: string;
-  chartData: {
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      borderColor: string;
-      backgroundColor: string;
-    }[];
-  };
-  sources: string[];
+
+  content: string;
+  
 };
 
-const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ title, subtitle, chartData, sources }) => {
-  console.log(sources)
+const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  content }) => {
+  const [chartData, setChartData]= useState(parseMarketSizeData(content));
+  
+  useEffect(()=>{
+    console.log(chartData);
+    console.log(content);
+  },[chartData])
+  
   return (
     <div className="p-6 bg-white rounded-md shadow-md max-w-4xl mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">{title}</h2>
-        <p className="text-sm text-gray-500">{subtitle}</p>
+        <h2 className="text-lg font-bold">Market Size Analysis</h2>
+        <p className="text-sm text-gray-500">TAM, SAM, SOM</p>
       </div>
 
       {/* Chart */}

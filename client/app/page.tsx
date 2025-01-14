@@ -19,13 +19,14 @@ import SWOTAnalysis from "@/components/SWOTAnalysisCard";
 import SWOTfullComponent from "@/components/SWOTfullComponent";
 import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData, sevenSData } from "@/data/DummyData";
 import MarkdownViewer from "@/components/MarkdownComponent";
+import { parseMarketSizeData } from "@/data/DataMapping";
 
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
 
   const streamDataKeys = {
     "Node: market_size_report": MarkdownViewer,
-    "Node: market_size_graph": MarkdownViewer,
+    "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": MarkdownViewer,
     "Node: generate_competitors_chart": MarkdownViewer,
   };
@@ -72,12 +73,11 @@ export default function Home() {
         </div>
       )}
      
-      <MarketSizeAnalysisCard
-        title="Market Size Analysis"
-        subtitle="TAM, SAM, SOM"
-        chartData={MarketSizeAnalysisCardchartData}
-        sources={MarketSharedsources}
-      />
+      {/* <MarketSizeAnalysisCard
+      
+        content={parseMarketSizeData(content)}
+       
+      /> */}
       <CompetitorAnalysisTable analysis_data={analysis_data} />
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
       <CompetitiorAnalysisGraph/>
