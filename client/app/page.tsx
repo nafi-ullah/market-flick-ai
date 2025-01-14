@@ -20,15 +20,17 @@ import SWOTfullComponent from "@/components/SWOTfullComponent";
 import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData, sevenSData } from "@/data/DummyData";
 import MarkdownViewer from "@/components/MarkdownComponent";
 import { parseMarketSizeData } from "@/data/DataMapping";
+import ResponseContentViewer from "@/components/common/ResponseContentViewer";
 
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
 
   const streamDataKeys = {
+    "Analyzing Business Idea:": ResponseContentViewer,
     "Node: market_size_report": MarkdownViewer,
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
-    "Node: generate_competitors_chart": MarkdownViewer,
+    "Node: generate_competitors_chart": ResponseContentViewer,
   };
   
   function extractStreamData(inputString: string): { component: React.FC<any>, content: string } | null {
@@ -50,17 +52,17 @@ export default function Home() {
       <Navbar />
       <BusinessAnalysisForm setStreamData={setStreamData}/>
       {streamData.length > 0 && (
-        <div className="mt-6 p-4 bg-gray-100 rounded-md shadow-md">
-          <h2 className="text-lg font-bold mb-2">Analysis Results:</h2>
-          <ul className="list-disc ml-5">
+        <div className="mt-6 p-4 rounded-md shadow-md">
+          
+          <div className=" ml-5">
             {streamData.map((data, index) => {
               const extracted = extractStreamData(data);
               if (extracted) {
                 const { component: Component, content } = extracted;
                 return (
-                  <li key={index} className="mb-1">
+                  <div key={index} className="mb-1">
                     <Component content={content} />
-                  </li>
+                  </div>
                 );
               }
               return (
@@ -69,7 +71,7 @@ export default function Home() {
                 </li>
               );
             })}
-          </ul>
+          </div>
         </div>
       )}
      
@@ -79,6 +81,7 @@ export default function Home() {
        
       /> */}
       {/* <CompetitorAnalysisTable analysis_data={analysis_data} /> */}
+      
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
       <CompetitiorAnalysisGraph/>
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>
