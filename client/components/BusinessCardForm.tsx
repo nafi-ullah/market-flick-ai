@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface FormData {
   businessSector: string;
@@ -7,14 +7,24 @@ interface FormData {
   location: string;
 }
 
-const BusinessAnalysisForm: React.FC = () => {
+// interface StreamContextType {
+//   streamData: string[];
+//   setStreamData: React.Dispatch<React.SetStateAction<string[]>>;
+// }
+
+const BusinessAnalysisForm= ({ setStreamData }: { setStreamData: React.Dispatch<React.SetStateAction<string[]>> }) => {
   const [formData, setFormData] = useState<FormData>({
-    businessSector: '',
-    businessIdea: '',
-    location: '',
+    businessSector: "",
+    businessIdea: "",
+    location: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  //const [streamData, setStreamData] = useState<string[]>([]); // State to hold streamed data
+  const [isStreaming, setIsStreaming] = useState(false); // State to track streaming status
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -22,10 +32,45 @@ const BusinessAnalysisForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form Data Submitted:', formData);
-    // Add your form submission logic here (e.g., API call)
+    setStreamData([]); // Reset previous streamed data
+    setIsStreaming(true);
+
+    const payload = {
+      sector: formData.businessSector,
+      idea: formData.businessIdea,
+      location: formData.location,
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/business-analysis", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch streaming data");
+      }
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+
+      while (reader) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        setStreamData((prev) => [...prev, chunk]); // Append new data chunk
+      }
+    } catch (error) {
+      console.error("Error streaming data:", error);
+    } finally {
+      setIsStreaming(false); // End streaming
+    }
   };
 
   return (
@@ -34,11 +79,14 @@ const BusinessAnalysisForm: React.FC = () => {
       <p className="text-gray-600 mb-6">
         Make informed business decisions with real market data analysis
       </p>
-      
+
       <form className="space-y-6" onSubmit={handleSubmit}>
         {/* Business Sector */}
         <div>
-          <label htmlFor="businessSector" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="businessSector"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Business Sector
           </label>
           <select
@@ -53,13 +101,15 @@ const BusinessAnalysisForm: React.FC = () => {
             <option value="Finance">Finance</option>
             <option value="Healthcare">Healthcare</option>
             <option value="Retail">Retail</option>
-            {/* Add more options as needed */}
           </select>
         </div>
 
         {/* Business Idea */}
         <div>
-          <label htmlFor="businessIdea" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="businessIdea"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Business Idea
           </label>
           <textarea
@@ -75,7 +125,10 @@ const BusinessAnalysisForm: React.FC = () => {
 
         {/* Location */}
         <div>
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="location"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Location
           </label>
           <input
@@ -95,10 +148,13 @@ const BusinessAnalysisForm: React.FC = () => {
             type="submit"
             className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:ring-2 focus:ring-offset-2 focus:ring-black"
           >
-            Analyze Market
+            {isStreaming ? "Analyzing..." : "Analyze Market"}
           </button>
         </div>
       </form>
+
+      {/* Streamed Data Display */}
+      
     </div>
   );
 };
