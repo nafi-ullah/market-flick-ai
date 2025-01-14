@@ -102,7 +102,7 @@ export default function Home() {
       /> */}
       {/* <CompetitorAnalysisTable analysis_data={analysis_data} /> */}
       {/* <CompetitiorAnalysisGraph/> */}
-      <SWOTAnalysis swot_data={SWOTanalysisData}/>
+      {/* <SWOTAnalysis swot_data={SWOTanalysisData}/>
       
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>
       <StrategicInsigtsCard/>
@@ -113,7 +113,7 @@ export default function Home() {
       <MarketTrends/>
       <SevenSModel data={sevenSData} />
       <MarketGapAnalysis/>
-      <AdvancedWebAnalyticsSuite/>
+      <AdvancedWebAnalyticsSuite/> */}
     </div>
   );
 }
