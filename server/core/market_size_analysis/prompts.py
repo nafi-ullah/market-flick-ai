@@ -78,6 +78,9 @@ market_size_human_message = """
     Business Sector: {business_sector}
     Business Idea: {business_idea}
     Business Location: {business_location}
+
+
+    Save the search queries using this search id: {search_id}
 """
 
 graph_and_table_generator_system_message = """
@@ -109,6 +112,8 @@ graph_and_table_generator_human_message = """
     {knowledge_base}
 
     Generate graph using this plot id: {plot_id}
+
+    Save the search queries using this search id: {search_id}
 """
 
 
@@ -132,4 +137,6 @@ competitors_table_generator_human_message = """
     {knowledge_base}
 
     Generate table using this table id: {table_id}
+
+    Save the search queries using this search id: {search_id}
 """

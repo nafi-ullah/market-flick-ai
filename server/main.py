@@ -52,6 +52,9 @@ async def business_analysis_stream(
                 "market_size_plot_id": "",
                 "market_player_table_data": "",
                 "market_player_table_id": "",
+                "search_queries": "",
+                "competitors_chart_id": "",
+                "competitors_chart_data": "",
                 "is_last_step": False
             }
 
@@ -61,31 +64,38 @@ async def business_analysis_stream(
             
             # Stream the graph execution
             async for event in graph.astream(initial_state):
-                output_str = ""
-                for node, output in event.items():
+                try:
+                    output_str = ""
+                    for node, output in event.items():
 
-                    output_str += f"Node: {node}\n"
+                        output_str += f"Node: {node}\n"
                     
-                    # Handle messages
-                    if "messages" in output:
-                        for message in output["messages"]:
-                            output_str += f"{message.content}\n"
+                        # Handle messages
+                        if "messages" in output:
+                            for message in output["messages"]:
+                                # check if message has content
+                                output_str += f"{message}\n"
+                        
+                        # Handle knowledge base ID
+                        for key in [
+                            "messages", "knowledge_base_id", "knowledge_base", 
+                            "market_size_data_points", "market_size_plot_id",
+                            "market_player_table_data", "market_player_table_id", "search_queries", "explanation", 
+                            "competitors_chart_id", "competitors_chart_data"
+                        ]:
+                            if key in output:
+                                output_str += f"{key}: {output[key]}\n"
+                
+                    # Yield the output as a server-sent event
+                    if output_str:
+                        yield f"{output_str}\n\n"
                     
-                    # Handle knowledge base ID
-                    for key in [
-                        "messages", "knowledge_base_id", "knowledge_base", 
-                        "market_size_data_points", "market_size_plot_id",
-                        "market_player_table_data", "market_player_table_id"
-                    ]:
-                        if key in output:
-                            output_str += f"{key}: {output[key]}\n"
-                
-                # Yield the output as a server-sent event
-                if output_str:
-                    yield f"{output_str}\n\n"
-                
-                # Optional: add a small delay to prevent overwhelming the client
-                await asyncio.sleep(0.1)
+                    # Optional: add a small delay to prevent overwhelming the client
+                    await asyncio.sleep(0.1)
+
+                except Exception as e:
+                    yield f"data: Error: {str(e)}\n\n"
+                    continue    
             
             # Final event to indicate stream completion
             yield "data: [DONE]\n\n"
