@@ -1,4 +1,5 @@
 "use client";
+import { BACKENDURL } from "@/utils/constants";
 import React, { useState } from "react";
 
 interface FormData {
@@ -44,7 +45,7 @@ const BusinessAnalysisForm= ({ setStreamData }: { setStreamData: React.Dispatch<
     };
 
     try {
-      const response = await fetch("http://localhost:8000/business-analysis", {
+      const response = await fetch(`${BACKENDURL}/business-analysis`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

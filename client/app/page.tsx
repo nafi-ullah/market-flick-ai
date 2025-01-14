@@ -18,27 +18,60 @@ import StrategicInsigtsCard from "@/components/StrategicInsigts";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
 import SWOTfullComponent from "@/components/SWOTfullComponent";
 import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData, sevenSData } from "@/data/DummyData";
+import MarkdownViewer from "@/components/MarkdownComponent";
 
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
 
+  const streamDataKeys = {
+    "Node: market_size_report": MarkdownViewer,
+    "Node: market_size_graph": MarkdownViewer,
+    "Node: competitors_table": MarkdownViewer,
+    "Node: generate_competitors_chart": MarkdownViewer,
+  };
+  
+  function extractStreamData(inputString: string): { component: React.FC<any>, content: string } | null {
+    for (const [key, component] of Object.entries(streamDataKeys)) {
+      const matchIndex = inputString.indexOf(key);
+      if (matchIndex !== -1) {
+        // Extract content starting after the key
+        const content = inputString.slice(matchIndex + key.length).trim();
+        return { component, content };
+      }
+    }
+    return null; // Return null if no match is found
+  }
+  
+  
 
   return (
     <div className=" font-[family-name:var(--font-geist-sans)] pt-24">
       <Navbar />
+      <BusinessAnalysisForm setStreamData={setStreamData}/>
       {streamData.length > 0 && (
         <div className="mt-6 p-4 bg-gray-100 rounded-md shadow-md">
           <h2 className="text-lg font-bold mb-2">Analysis Results:</h2>
           <ul className="list-disc ml-5">
-            {streamData.map((data, index) => (
-              <li key={index} className="mb-1">
-                {data}
-              </li>
-            ))}
+            {streamData.map((data, index) => {
+              const extracted = extractStreamData(data);
+              if (extracted) {
+                const { component: Component, content } = extracted;
+                return (
+                  <li key={index} className="mb-1">
+                    <Component content={content} />
+                  </li>
+                );
+              }
+              return (
+                <li key={index} className="mb-1">
+                  {data}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
-      <BusinessAnalysisForm setStreamData={setStreamData}/>
+     
       <MarketSizeAnalysisCard
         title="Market Size Analysis"
         subtitle="TAM, SAM, SOM"
