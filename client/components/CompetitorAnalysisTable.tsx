@@ -1,4 +1,5 @@
-import React from 'react';
+import { parseMarketPlayerData } from '@/data/DataMapping';
+import React, { useState } from 'react';
 
 interface AnalysisData {
   company: string;
@@ -8,10 +9,14 @@ interface AnalysisData {
 }
 
 interface CompetitorAnalysisTableProps {
-  analysis_data: AnalysisData[];
+  content: string;
+
 }
 
-const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ analysis_data }) => {
+const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ content }) => {
+   const [analysis_data, setAnalysis_data]= useState(parseMarketPlayerData(content));
+
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
       <h2 className="text-xl font-bold mb-4">Competitor Analysis & Market Players</h2>

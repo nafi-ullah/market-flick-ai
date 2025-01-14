@@ -27,7 +27,7 @@ export default function Home() {
   const streamDataKeys = {
     "Node: market_size_report": MarkdownViewer,
     "Node: market_size_graph": MarketSizeAnalysisCard,
-    "Node: competitors_table": MarkdownViewer,
+    "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": MarkdownViewer,
   };
   
@@ -78,7 +78,7 @@ export default function Home() {
         content={parseMarketSizeData(content)}
        
       /> */}
-      <CompetitorAnalysisTable analysis_data={analysis_data} />
+      {/* <CompetitorAnalysisTable analysis_data={analysis_data} /> */}
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
       <CompetitiorAnalysisGraph/>
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>

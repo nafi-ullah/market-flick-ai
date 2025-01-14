@@ -50,5 +50,34 @@ interface MarketSizeAnalysisCardchartData {
   }
   
   // Example Usage
+
+
+  interface AnalysisData {
+    company: string;
+    valuation: string;
+    money_raised: string;
+    key_focus: string;
+  }
+  
+  export function parseMarketPlayerData(content: string): AnalysisData[] {
+    // Extract the market_player_table_data part using a regex
+    const marketPlayerDataMatch = content.match(/market_player_table_data: (\[.*?\])/);
+    if (!marketPlayerDataMatch) {
+      throw new Error("No market_player_table_data found in contentData");
+    }
+  
+    // Parse the extracted JSON string into an array
+    const marketPlayerData = JSON.parse(marketPlayerDataMatch[1].replace(/'/g, '"')); // Replace single quotes with double quotes for valid JSON
+  
+    // Map the data to the desired analysis_data format
+    const analysisData: AnalysisData[] = marketPlayerData.map((player: any) => ({
+      company: player.company_name || "N/A",
+      valuation: player.valuation || "N/A",
+      money_raised: player.money_raised || "N/A",
+      key_focus: player.key_focus || "N/A",
+    }));
+  
+    return analysisData;
+  }
   
   
