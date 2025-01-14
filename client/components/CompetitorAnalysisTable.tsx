@@ -1,12 +1,7 @@
 import { parseMarketPlayerData } from '@/data/DataMapping';
 import React, { useState } from 'react';
 
-interface AnalysisData {
-  company: string;
-  valuation: string;
-  money_raised: string;
-  key_focus: string;
-}
+
 
 interface CompetitorAnalysisTableProps {
   content: string;
@@ -14,7 +9,7 @@ interface CompetitorAnalysisTableProps {
 }
 
 const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ content }) => {
-   const [analysis_data, setAnalysis_data]= useState(parseMarketPlayerData(content));
+   const [analysis_data]= useState(parseMarketPlayerData(content));
 
 
   return (

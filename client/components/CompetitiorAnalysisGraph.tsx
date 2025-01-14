@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import MarketShareCard from './MarketShareCardComponent'
-import { MarketPositionMappingCardchartData, marketSharedData, MarketSharedetails, MarketSharedsources, PricePositioningChartData, FeatureComparisonChartData } from "@/data/DummyData";
+import { MarketSharedetails, MarketSharedsources } from "@/data/DummyData";
 import PricePositioningCard from './PricePositionCard';
 import FeatureComparisonCard from './FeatureComparisonCard';
 import MarketPositionMappingCard from './MarketPositionMappingCard';
@@ -14,7 +14,7 @@ type MarketSizeAnalysisCardProps = {
 };
 
 const CompetitiorAnalysisGraph: React.FC<MarketSizeAnalysisCardProps> = ({  content }) => {
-   const [chartData, setChartData]= useState(createChartData(content));
+   const [chartData]= useState(createChartData(content));
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
       <h2 className="text-lg font-bold mb-4">Competitor Analysis Graph</h2>

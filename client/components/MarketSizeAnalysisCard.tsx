@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import LineChartComponent from "./charts/LineChart";
 import { parseMarketSizeData } from "@/data/DataMapping";
@@ -10,12 +10,12 @@ type MarketSizeAnalysisCardProps = {
 };
 
 const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  content }) => {
-  const [chartData, setChartData]= useState(parseMarketSizeData(content));
+  const [chartData]= useState(parseMarketSizeData(content));
   
-  useEffect(()=>{
-    console.log(chartData);
-    console.log(content);
-  },[chartData])
+  // useEffect(()=>{
+  //   console.log(chartData);
+  //   console.log(content);
+  // },[chartData])
   
   return (
     <div className="p-6 bg-white rounded-md shadow-md max-w-4xl mx-auto">

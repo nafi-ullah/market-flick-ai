@@ -1,5 +1,5 @@
 import { parseMarkdownContentData } from "@/data/DataMapping";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 interface MarkdownViewerProps {
@@ -7,11 +7,11 @@ interface MarkdownViewerProps {
 }
 
 const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content }) => {
-     const [chartData, setChartData]= useState(parseMarkdownContentData(content));
+     const [chartData]= useState(parseMarkdownContentData(content));
 
-     useEffect(()=>{
-      chartData
-     },[chartData])
+    //  useEffect(()=>{
+    //   chartData
+    //  },[chartData])
 
   return (
     <div className="markdown-content p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">

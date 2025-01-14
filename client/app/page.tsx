@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import AdvancedWebAnalyticsSuite from "@/components/advancedanalytics/AdvancedWebAnalyticsSuite";
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
@@ -17,24 +17,35 @@ import SevenSModel from "@/components/SevenModelComponent";
 import StrategicInsigtsCard from "@/components/StrategicInsigts";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
 import SWOTfullComponent from "@/components/SWOTfullComponent";
-import { AIDAanalysisData, analysis_data, MarketSizeAnalysisCardchartData, MarketSharedsources, SWOTanalysisData, sevenSData } from "@/data/DummyData";
+import { AIDAanalysisData,  SWOTanalysisData, sevenSData } from "@/data/DummyData";
 import MarkdownViewer from "@/components/MarkdownComponent";
-import { parseMarketSizeData } from "@/data/DataMapping";
+
 import ResponseContentViewer from "@/components/common/ResponseContentViewer";
+
+type Props = {
+  "Analyzing Business Idea:": { content: string };
+  "Node: market_size_report": { content: string };
+  "Node: market_size_graph": { content: string };
+  "Node: competitors_table": { content: string };
+  "Node: generate_competitors_chart": { content: string };
+};
 
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
 
-  const streamDataKeys = {
+  const streamDataKeys: {
+    [K in keyof Props]: React.FC<Props[K]>;
+  } = {
     "Analyzing Business Idea:": ResponseContentViewer,
     "Node: market_size_report": MarkdownViewer,
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
-    
   };
   
-  function extractStreamData(inputString: string): { component: React.FC<any>, content: string } | null {
+  function extractStreamData(
+    inputString: string
+  ): { component: React.FC<{ content: string }>; content: string } | null {
     for (const [key, component] of Object.entries(streamDataKeys)) {
       const matchIndex = inputString.indexOf(key);
       if (matchIndex !== -1) {
@@ -46,9 +57,10 @@ export default function Home() {
     return null; // Return null if no match is found
   }
 
-  useEffect(()=>{
-    console.log(streamData);
-  },[streamData])
+
+  // useEffect(()=>{
+  //   console.log(streamData);
+  // },[streamData])
   
   
 
