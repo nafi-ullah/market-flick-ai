@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import AdvancedWebAnalyticsSuite from "@/components/advancedanalytics/AdvancedWebAnalyticsSuite";
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
@@ -30,7 +30,8 @@ export default function Home() {
     "Node: market_size_report": MarkdownViewer,
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
-    "Node: generate_competitors_chart": ResponseContentViewer,
+    "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
+    
   };
   
   function extractStreamData(inputString: string): { component: React.FC<any>, content: string } | null {
@@ -44,6 +45,10 @@ export default function Home() {
     }
     return null; // Return null if no match is found
   }
+
+  useEffect(()=>{
+    console.log(streamData);
+  },[streamData])
   
   
 
@@ -52,7 +57,7 @@ export default function Home() {
       <Navbar />
       <BusinessAnalysisForm setStreamData={setStreamData}/>
       {streamData.length > 0 && (
-        <div className="mt-6 p-4 rounded-md shadow-md">
+        <div className="mt-6 p-4 rounded-md ">
           
           <div className=" ml-5">
             {streamData.map((data, index) => {
@@ -81,9 +86,9 @@ export default function Home() {
        
       /> */}
       {/* <CompetitorAnalysisTable analysis_data={analysis_data} /> */}
-      
+      {/* <CompetitiorAnalysisGraph/> */}
       <SWOTAnalysis swot_data={SWOTanalysisData}/>
-      <CompetitiorAnalysisGraph/>
+      
       <AIDAAnalysis analysis_data={AIDAanalysisData}/>
       <StrategicInsigtsCard/>
       <PASTELIAnalysis/>
