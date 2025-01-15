@@ -1,5 +1,3 @@
-
-
 from pydantic import BaseModel, Field
 from typing import List
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -17,7 +15,7 @@ market_size_system_message = """
     2. Define and Estimate Market Size:
     Research and provide estimates for the following market size metrics:
 
-    - TAM (Total Addressable Market): The total market demand for the product/service if 100% of the market were captured.
+    - TAM (Total Addressable Market): The total market demand for the product/service if 100%% of the market were captured.
 
     - SAM (Serviceable Available Market): The portion of TAM that is relevant to the specific business model.
 
@@ -79,8 +77,8 @@ market_size_human_message = """
     Business Idea: {business_idea}
     Business Location: {business_location}
 
-
-    Save the search queries using this search id: {search_id}
+    Keep it concise and to the point.
+    Save the search queries in a JSON file using this search id: {search_id} and relevant save search tool.
 """
 
 graph_and_table_generator_system_message = """
@@ -115,7 +113,6 @@ graph_and_table_generator_human_message = """
 
     Save the search queries using this search id: {search_id}
 """
-
 
 
 competitors_table_generator_system_message = """

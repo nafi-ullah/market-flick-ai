@@ -4,3 +4,4 @@ venv
 **/__pycache__/
 knowledge_base/
 figures/
+responses/
