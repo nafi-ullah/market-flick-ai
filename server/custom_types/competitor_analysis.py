@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 
 class ChartData(BaseModel):
@@ -41,3 +41,50 @@ class SWOTAnalysis(BaseModel):
     weakness: List[str] = Field(default_factory=list, description="List of weaknesses of the business")
     opportunity: List[str] = Field(default_factory=list, description="List of opportunities of the business")
     threat: List[str] = Field(default_factory=list, description="List of threats of the business")
+
+
+class AnalysisEntry(BaseModel):
+    """
+    Represents a single analysis entry with a description and an impact level.
+    """
+    description: str  # A brief explanation of the factor being analyzed
+    impact_level: Literal["Very Low", "Low", "Medium", "High", "Very High"]  # The impact level of the factor
+
+class PESTLEAnalysis(BaseModel):
+    """
+    Represents a PESTLE analysis with categories for Political, Economic, Social, 
+    Technological, Legal, and Environmental factors. Each category contains a list 
+    of analysis entries with a description and impact level.
+    """
+    political: List[AnalysisEntry] = Field(
+        default_factory=list,
+        description="Factors related to government policies, stability, and regulations."
+    )
+    economic: List[AnalysisEntry] = Field(
+        default_factory=list,
+        description="Factors affecting the economy, such as inflation, growth, and exchange rates."
+    )
+    social: List[AnalysisEntry] = Field(
+        default_factory=list,
+        description="Factors related to cultural trends, demographics, and societal behaviors."
+    )
+    technological: List[AnalysisEntry] = Field(
+        default_factory=list,
+        description="Factors concerning technological innovation, adoption, and infrastructure."
+    )
+    legal: List[AnalysisEntry] = Field(
+        default_factory=list,
+        description="Factors related to laws, regulations, and legal frameworks impacting the business."
+    )
+    environmental: List[AnalysisEntry] = Field(
+        default_factory=list,
+        description="Factors related to environmental concerns, sustainability, and climate impact."
+    )
+
+    sources: List[str] = Field(
+        default_factory=list,
+        description="List of weblink sources for the analysis."
+    )
+
+    
+    

@@ -3,6 +3,8 @@ from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import create_react_agent
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from core.competitor_analysis.pestali_analysis import extract_pestali_analysis, pestali_analysis_tool
+from core.competitor_analysis.swot_analysis import extract_swot_analysis, swot_analysis_tool
 from custom_types.market_analysis import BusinessAnalysisInput
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
@@ -10,7 +12,7 @@ import uuid
 from core.market_size_analysis.utils import extract_plot_data, extract_search_queries, extract_table_data, print_and_save_stream, extract_knowledge_base, print_stream, save_search_queries, save_response_to_json
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from core.market_size_analysis.market_player_table import generate_market_player_table
-from core.competitor_analysis.prompts import competitors_chart_system_message, competitors_chart_human_message
+from core.competitor_analysis.prompts import competitors_chart_system_message, competitors_chart_human_message, swot_analysis_system_message, swot_analysis_human_message, pestali_analysis_system_message, pestali_analysis_human_message
 import operator
 from typing import (
     Annotated,
@@ -78,10 +80,69 @@ def swot_analysis_node(state: BusinessAnalysisState):
     market_size_data_points = state['market_size_data_points']
     market_player_table_data = state['market_player_table_data']
     competitors_charts = state['competitors_chart_data']
+    swot_id = state['knowledge_base_id']
 
 
-    agent = create_react_agent(llm, tools=[search_tool, export_business_analysis_charts], state_schema=BusinessAnalysisState)
+    agent = create_react_agent(llm, tools=[swot_analysis_tool], state_schema=BusinessAnalysisState)
 
-    pass
+    inputs = {"messages": [
+        SystemMessage(swot_analysis_system_message), 
+        HumanMessage(swot_analysis_human_message.format(
+            knowledge_base=knowledge_base,
+            market_size_data_points = market_size_data_points,
+            market_player_table_data = market_player_table_data,
+            competitors_charts = competitors_charts,
+            swot_id=swot_id,
+        ))
+    ]}
+    
+    print_stream(agent.stream(inputs, stream_mode="values"))
+
+    response = {
+        "messages": state['messages'][-1],
+        "swot_id": swot_id,
+        "swot_analysis": extract_swot_analysis(swot_id),
+    }
+
+    responses_to_save = {
+        **response,
+    }
+    del responses_to_save["messages"]
+    save_response_to_json(responses_to_save, f"swot_analysis_{swot_id}")
+
+    return response
+
+
+def pestali_analysis_node(state: BusinessAnalysisState):
+    knowledge_base = state['knowledge_base']
+    market_player_table_data = state['market_player_table_data']
+    pestali_id = state['knowledge_base_id']
+
+    agent = create_react_agent(llm, tools=[search_tool, pestali_analysis_tool], state_schema=BusinessAnalysisState)
+
+    inputs = {"messages": [
+        SystemMessage(pestali_analysis_system_message), 
+        HumanMessage(pestali_analysis_human_message.format(
+            knowledge_base=knowledge_base,
+            market_player_table_data = market_player_table_data,
+            pestali_id=pestali_id,
+        ))
+    ]}
+    
+    print_stream(agent.stream(inputs, stream_mode="values"))
+
+    response = {
+        "messages": state['messages'][-1],
+        "pestali_id": pestali_id,
+        "pestali_analysis": extract_pestali_analysis(pestali_id),
+    }
+
+    responses_to_save = {
+        **response,
+    }
+    del responses_to_save["messages"]
+    save_response_to_json(responses_to_save, f"pestali_analysis_{pestali_id}")
+
+    return response
 
     

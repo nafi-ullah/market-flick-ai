@@ -27,7 +27,7 @@ from core.market_size_analysis.prompts import (
     competitors_table_generator_system_message,
     competitors_table_generator_human_message,
 )
-from core.competitor_analysis.agent import generate_competitors_chart_node
+from core.competitor_analysis.agent import generate_competitors_chart_node, swot_analysis_node, pestali_analysis_node
 import operator
 from typing import (
     Annotated,
@@ -189,13 +189,17 @@ def build_business_analysis_graph():
     graph_builder.add_node("market_size_graph", market_size_graph_node)
     graph_builder.add_node("competitors_table", competitors_table_node)
     graph_builder.add_node("generate_competitors_chart", generate_competitors_chart_node)
+    graph_builder.add_node("swot_analysis_report", swot_analysis_node)
+    graph_builder.add_node("pestali_analysis_report", pestali_analysis_node)
 
     # Define the flow
     graph_builder.add_edge(START, "market_size_report")
     graph_builder.add_edge("market_size_report", "market_size_graph")
     graph_builder.add_edge("market_size_graph", "competitors_table")
     graph_builder.add_edge("competitors_table", "generate_competitors_chart")
-    graph_builder.add_edge("generate_competitors_chart", END)
+    graph_builder.add_edge("generate_competitors_chart", "swot_analysis_report")
+    graph_builder.add_edge("swot_analysis_report", "pestali_analysis_report")
+    graph_builder.add_edge("pestali_analysis_report", END)
 
     # Compile the graph
     return graph_builder.compile()

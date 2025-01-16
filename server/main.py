@@ -60,6 +60,8 @@ async def business_analysis_stream(
                 "sources": "",
                 "competitors_chart_id": "",
                 "competitors_chart_data": "",
+                "swot_analysis": "",
+                "pestali_analysis": "",
                 "is_last_step": False,
             }
 
@@ -95,6 +97,8 @@ async def business_analysis_stream(
                             "explanation",
                             "competitors_chart_id",
                             "competitors_chart_data",
+                            "swot_analysis",
+                            "pestali_analysis"
                         ]:
                             if key in output:
                                 output_str += f"{key}: {output[key]}\n"
@@ -139,6 +143,12 @@ def get_all_saved_responses(knowledge_base_id: str):
         "generate_competitors_chart": load_response_from_json(
             f"competitors_chart_{knowledge_base_id}"
         ),
+        "swot_analysis": load_response_from_json(
+            f"swot_analysis_{knowledge_base_id}"
+        ),
+        "pestali_analysis": load_response_from_json(
+            f"pestali_analysis_{knowledge_base_id}"
+        ),
     }
 
 
@@ -173,6 +183,8 @@ async def previous_analysis_stream(
                         "explanation",
                         "competitors_chart_id",
                         "competitors_chart_data",
+                        "swot_analysis",
+                        "pestali_analysis"
                     ]:
                         if key in response:
                             output_str += f"{key}: {json.dumps(response[key])}\n"
