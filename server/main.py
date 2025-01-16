@@ -1,4 +1,5 @@
 import json
+from constants import RESPONSE_PATH
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -7,6 +8,7 @@ from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
+import os
 
 
 app = FastAPI()
@@ -194,3 +196,36 @@ async def previous_analysis_stream(
 
     # Return a StreamingResponse with the async generator
     return StreamingResponse(generate_stream(), media_type="text/event-stream")
+
+
+@app.get("/analyses")
+async def get_analyses():
+    """
+    Endpoint to list all file names in the KNOWLEDGEBASE_PATH.
+
+    Returns:
+        List[str]: A list of file names in the knowledge base directory.
+    """
+    try:
+        # Get a list of files in the knowledge base directory
+        file_names = os.listdir(RESPONSE_PATH)
+
+        # Filter only files (exclude directories)
+        file_names = [file for file in file_names if os.path.isfile(os.path.join(RESPONSE_PATH, file))]
+
+        filtered_files = [
+            file.split("market_size_report_")[1].replace(".json", "") for file in file_names
+            if os.path.isfile(os.path.join(RESPONSE_PATH, file)) and "market_size_report" in file.lower()
+        ]
+
+
+        return {
+            "analyses": filtered_files
+        }
+
+    except FileNotFoundError:
+        return {"error": "PATH not found"}
+    except Exception as e:
+        return {"error": str(e)}
+
+    
