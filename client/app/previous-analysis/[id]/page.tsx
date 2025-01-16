@@ -72,7 +72,7 @@ export default function Home() {
  useEffect(()=>{
   const knowledge_base_id = id;
   fetch(`${BACKENDURL}/previous-analysis/${knowledge_base_id}`, {
-    method: "GET",
+    method: "POST",
     body: JSON.stringify({knowledge_base_id})
   })
   .then(async (response) => {
@@ -80,6 +80,7 @@ export default function Home() {
       throw new Error("Failed to fetch streaming data");
     }
 
+    console.log({response});
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
     const chunks: string[] = [];
@@ -108,6 +109,7 @@ export default function Home() {
               const extracted = extractStreamData(data);
               if (extracted) {
                 const { component: Component, content } = extracted;
+                console.log({content});
                 return (
                   <div key={index} className="mb-1">
                     <Component content={content} />
