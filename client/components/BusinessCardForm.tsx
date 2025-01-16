@@ -1,6 +1,7 @@
 "use client";
 import { BACKENDURL } from "@/utils/constants";
 import React, { useState } from "react";
+import AnalyseLoader from "./loaders/AnalyzeLoader";
 
 interface FormData {
   businessSector: string;
@@ -91,18 +92,25 @@ const BusinessAnalysisForm= ({ setStreamData }: { setStreamData: React.Dispatch<
             Business Sector
           </label>
           <select
-            id="businessSector"
-            name="businessSector"
-            value={formData.businessSector}
-            onChange={handleChange}
-            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          >
-            <option value="">Select a sector</option>
-            <option value="Technology">Technology</option>
-            <option value="Finance">Finance</option>
-            <option value="Healthcare">Healthcare</option>
-            <option value="Retail">Retail</option>
-          </select>
+        id="businessSector"
+        name="businessSector"
+        value={formData.businessSector}
+        onChange={handleChange}
+        className="
+          block w-full rounded-md border border-gray-700
+          bg-white px-4 py-2 text-gray-800 shadow-sm
+          focus:border-indigo-500 focus:ring-indigo-500
+          transition-colors duration-200
+        "
+      >
+        <option value="" disabled>
+          Select a sector
+        </option>
+        <option value="Technology">Technology</option>
+        <option value="Finance">Finance</option>
+        <option value="Healthcare">Healthcare</option>
+        <option value="Retail">Retail</option>
+      </select>
         </div>
 
         {/* Business Idea */}
@@ -118,7 +126,7 @@ const BusinessAnalysisForm= ({ setStreamData }: { setStreamData: React.Dispatch<
             name="businessIdea"
             value={formData.businessIdea}
             onChange={handleChange}
-            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            className="block p-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             rows={4}
             placeholder="Describe your business idea..."
           ></textarea>
@@ -138,7 +146,7 @@ const BusinessAnalysisForm= ({ setStreamData }: { setStreamData: React.Dispatch<
             name="location"
             value={formData.location}
             onChange={handleChange}
-            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            className="block p-2 w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Enter location"
           />
         </div>
@@ -149,7 +157,7 @@ const BusinessAnalysisForm= ({ setStreamData }: { setStreamData: React.Dispatch<
             type="submit"
             className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:ring-2 focus:ring-offset-2 focus:ring-black"
           >
-            {isStreaming ? "Analyzing..." : "Analyze Market"}
+            {isStreaming ? <AnalyseLoader/> : "Analyze Market"}
           </button>
         </div>
       </form>
