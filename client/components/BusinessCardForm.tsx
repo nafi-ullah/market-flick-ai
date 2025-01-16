@@ -137,7 +137,7 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
             id="businessSector"
             value={formData.businessSector}
             label="Business Sector"
-            onChange={(e) => handleChange('businessSector')(e, null)}
+            onChange={(e: any) => handleChange('businessSector')(e, null)}
           >
             {BUSINESS_SECTORS.map((sector) => (
               <MenuItem key={sector} value={sector}>
