@@ -14,6 +14,7 @@ import {
   Paper,
   Box
 } from '@mui/material';
+import StackedAnimatedLoader from "./loaders/AiLoader";
 
 interface FormData {
   businessSector: string;
@@ -191,7 +192,7 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
           }}
           disabled={isStreaming}
         >
-          {isStreaming ? <AnalyseLoader /> : "Analyze Market"}
+          {isStreaming ? <StackedAnimatedLoader/> : "Analyze Market"}
         </Button>
       </Box>
     </Paper>

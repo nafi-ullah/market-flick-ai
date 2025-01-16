@@ -81,3 +81,20 @@ body {
   }
 }
 
+
+::-webkit-scrollbar {
+  width: 4px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5E5EED; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff; 
+}
