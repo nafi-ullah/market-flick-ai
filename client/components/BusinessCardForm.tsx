@@ -122,7 +122,7 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
       p: 6 
     }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Market Flick AI
+        Market Flick AI 🚀
       </Typography>
       <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
         Make informed business decisions with real market data analysis
@@ -152,7 +152,7 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
           id="businessIdea"
           label="Business Idea"
           multiline
-          rows={8}
+          rows={5}
           value={formData.businessIdea}
           onChange={(e) => handleChange('businessIdea')(e, null)}
           placeholder="Describe your business idea..."
