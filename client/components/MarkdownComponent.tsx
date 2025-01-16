@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { parseMarkdownContentData } from "@/data/DataMapping";
-import rehypeRaw from 'rehype-raw'
-
 
 interface MarkdownViewerProps {
   content: string;
@@ -18,7 +16,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content }) => {
     );
   }
   return (
-    <div className="markdown-content p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
+    <div className="markdown-content p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
       {/* Inline styles for scoped CSS */}
       <style>
         {`
@@ -70,7 +68,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content }) => {
         `}
       </style>
       <div className="text-2xl font-bold text-gray-800 mb-4 text-center">Market Analysis Report</div>
-      <div className="markdown-content p-4 bg-white rounded-md max-w-4xl max-h-[500px] overflow-y-auto mx-auto my-6">
+      <div className="markdown-content p-4 bg-white rounded-md border border-gray-100 max-w-4xl max-h-[500px] overflow-y-auto mx-auto my-6">
         <ReactMarkdown 
           components={{
             a: LinkRenderer

@@ -13,6 +13,9 @@ import os
 
 app = FastAPI()
 
+
+
+
 origins = [
     "http://localhost:3000",
     "https://yourfrontenddomain.com",
