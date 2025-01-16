@@ -24,6 +24,8 @@ import ResponseContentViewer from "@/components/common/ResponseContentViewer";
 import ShowNothing from "@/components/common/ShowNothing";
 import MarketSizeAnalysisCardSkeleton from "@/components/loaders/MarketSizeAnlyzerLoader";
 import IndividualLoader from "@/components/loaders/IndividualLoader";
+import ArticleSkeleton from "@/components/loaders/ArticleSkeleton";
+import StackedAnimatedLoader from "@/components/loaders/AiLoader";
 
 
 type Props = {
@@ -111,6 +113,7 @@ export default function Home() {
           </div>
         </div>
       )}
+    
     </div>
   );
 }

@@ -2,7 +2,8 @@ import React from 'react';
 
 const ArticleSkeleton: React.FC = () => {
   return (
-    <div className="animate-pulse space-y-4 p-4 max-h-[60vh] overflow-hidden">
+    <div className='w-full '>
+    <div className="animate-pulse space-y-4 p-4 max-h-[60vh] overflow-hidden max-w-7xl mx-auto">
       {/* Heading Placeholder */}
       <div className="h-6 bg-gray-300 rounded w-3/4"></div>
 
@@ -28,6 +29,7 @@ const ArticleSkeleton: React.FC = () => {
         <div className="h-4 bg-gray-300 rounded w-full"></div>
         <div className="h-4 bg-gray-300 rounded w-4/5"></div>
       </div>
+    </div>
     </div>
   );
 };
