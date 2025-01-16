@@ -84,28 +84,30 @@ interface MarketSizeAnalysisCardchartData {
 
 
   interface ParsedData {
-    markdowndata: string;
+    markdowndata: string[];
     references_array: { [key: string]: string };
   }
   
   export function parseMarkdownContentData(contentData: string): ParsedData {
     // Adjust regex to avoid using the /s flag
-    const markdownMatch = contentData.match(/knowledge_base: (###[\s\S]*?)(?=search_queries:|$)/);
-    const markdowndata = markdownMatch ? markdownMatch[1].trim() : "";
-  
+    const markdownMatch = contentData.match(/knowledge_base: ([\s\S]*?)(?=search_queries:|$)/);
+    let markdownContent = markdownMatch ? markdownMatch[1].trim() : "";
+    // remove first and last quotes if present
+    markdownContent = markdownContent.replace(/^"|"$/g, "");
+        
     // Extract references section
-    const referencesMatch = markdowndata.match(/#### 6. References\n([\s\S]*?)(?=\n####|$)/);
-    const referencesSection = referencesMatch ? referencesMatch[1].trim() : "";
+    // const referencesMatch = markdowndata.match(/#### 6. References\n([\s\S]*?)(?=\n####|$)/);
+    // const referencesSection = referencesMatch ? referencesMatch[1].trim() : "";
   
     // Parse references into an object
     const references_array: { [key: string]: string } = {};
-    const referenceRegex = /- \[(.*?)\]\((.*?)\)/g;
-    let match;
-    while ((match = referenceRegex.exec(referencesSection)) !== null) {
-      const [_, name, url] = match;
-      references_array[name] = url;
-    }
+    // const referenceRegex = /- \[(.*?)\]\((.*?)\)/g;
+    // let match;
+    // while ((match = referenceRegex.exec(referencesSection)) !== null) {
+    //   const [_, name, url] = match;
+    //   references_array[name] = url;
+    // }
   
-    return { markdowndata, references_array };
+    return { markdowndata: markdownContent.split("\\n"), references_array };
   }
   

@@ -132,7 +132,7 @@ def get_all_saved_responses(knowledge_base_id: str):
         "competitors_table": load_response_from_json(
             f"competitors_table_{knowledge_base_id}"
         ),
-        "competitors_chart": load_response_from_json(
+        "generate_competitors_chart": load_response_from_json(
             f"competitors_chart_{knowledge_base_id}"
         ),
     }
@@ -146,29 +146,6 @@ async def previous_analysis_stream(
         try:
             # Create the graph
             saved_responses = get_all_saved_responses(knowledge_base_id)
-
-            # Initial state
-            initial_state = {
-                "business_analysis_input": saved_responses["market_size_report"][
-                    "business_analysis_input"
-                ],
-                "messages": "",
-                "knowledge_base_id": "",
-                "knowledge_base": "",
-                "market_size_data_points": "",
-                "market_size_plot_id": "",
-                "market_player_table_data": "",
-                "market_player_table_id": "",
-                "search_queries": "",
-                "competitors_chart_id": "",
-                "competitors_chart_data": "",
-                "is_last_step": False,
-            }
-
-            yield "Analyzing Business Idea: {}\n".format(
-                saved_responses["market_size_report"]["business_analysis_input"]
-            )
-
             yield "Generating market size report...\n"
 
             # Stream the graph execution
@@ -178,12 +155,7 @@ async def previous_analysis_stream(
 
                     output_str += f"Node: {key}\n"
 
-                    # # Handle messages
-                    # if "messages" in output:
-                    #     for message in output["messages"]:
-                    #         # check if message has content
-                    #         output_str += f"{message}\n"
-
+                    print("!!! ", output_str)
                     # Handle knowledge base ID
                     for key in [
                         "messages",
