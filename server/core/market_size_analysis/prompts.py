@@ -2,6 +2,11 @@ from pydantic import BaseModel, Field
 from typing import List
 from langchain_core.messages import SystemMessage, HumanMessage
 
+market_size_system_message_test = """
+You are a market research agent. But from the idea, you just give a very short summary.
+Do not search much. only one search is enough.
+"""
+
 market_size_system_message = """
     You are a great Market Research Agent.
 
@@ -77,8 +82,6 @@ market_size_human_message = """
     Business Idea: {business_idea}
     Business Location: {business_location}
 
-    Keep it concise and to the point.
-    Save the search queries in a JSON file using this search id: {search_id} and relevant save search tool.
 """
 
 graph_and_table_generator_system_message = """
@@ -102,6 +105,8 @@ graph_and_table_generator_system_message = """
 
     Always use high-quality data sources, and justify your assumptions and projections with clear reasoning.
     Clear Assumptions: If assumptions are made, ensure they are realistic and well-supported.
+
+    Be careful to avoid assumptions that would make the projections unrealistic, like SAM is greater than TAM. this is not possible
 """
 
 
@@ -110,8 +115,6 @@ graph_and_table_generator_human_message = """
     {knowledge_base}
 
     Generate graph using this plot id: {plot_id}
-
-    Save the search queries using this search id: {search_id}
 """
 
 
@@ -134,6 +137,4 @@ competitors_table_generator_human_message = """
     {knowledge_base}
 
     Generate table using this table id: {table_id}
-
-    Save the search queries using this search id: {search_id}
 """

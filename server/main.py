@@ -1,4 +1,5 @@
 import json
+from constants import RESPONSE_PATH
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -8,17 +9,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
-from dotenv import load_dotenv
+
 
 app = FastAPI()
 
-load_dotenv()
 
-print("MONGODB_URI:", os.getenv("MONGODB_URI"))
-print("OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
-print("PPLX_API_KEY:", os.getenv("PPLX_API_KEY"))
-print("TAVILY_API_KEY:", os.getenv("TAVILY_API_KEY"))
-print("NVIDIA_API_KEY:", os.getenv("NVIDIA_API_KEY"))
 
 
 origins = [
@@ -65,8 +60,11 @@ async def business_analysis_stream(
                 "market_player_table_data": "",
                 "market_player_table_id": "",
                 "search_queries": "",
+                "sources": "",
                 "competitors_chart_id": "",
                 "competitors_chart_data": "",
+                "swot_analysis": "",
+                "pestali_analysis": "",
                 "is_last_step": False,
             }
 
@@ -98,9 +96,12 @@ async def business_analysis_stream(
                             "market_player_table_data",
                             "market_player_table_id",
                             "search_queries",
+                            "sources",
                             "explanation",
                             "competitors_chart_id",
                             "competitors_chart_data",
+                            "swot_analysis",
+                            "pestali_analysis"
                         ]:
                             if key in output:
                                 output_str += f"{key}: {output[key]}\n"
@@ -145,6 +146,12 @@ def get_all_saved_responses(knowledge_base_id: str):
         "generate_competitors_chart": load_response_from_json(
             f"competitors_chart_{knowledge_base_id}"
         ),
+        "swot_analysis": load_response_from_json(
+            f"swot_analysis_{knowledge_base_id}"
+        ),
+        "pestali_analysis": load_response_from_json(
+            f"pestali_analysis_{knowledge_base_id}"
+        ),
     }
 
 
@@ -179,6 +186,8 @@ async def previous_analysis_stream(
                         "explanation",
                         "competitors_chart_id",
                         "competitors_chart_data",
+                        "swot_analysis",
+                        "pestali_analysis"
                     ]:
                         if key in response:
                             output_str += f"{key}: {json.dumps(response[key])}\n"
@@ -202,3 +211,36 @@ async def previous_analysis_stream(
 
     # Return a StreamingResponse with the async generator
     return StreamingResponse(generate_stream(), media_type="text/event-stream")
+
+
+@app.get("/analyses")
+async def get_analyses():
+    """
+    Endpoint to list all file names in the KNOWLEDGEBASE_PATH.
+
+    Returns:
+        List[str]: A list of file names in the knowledge base directory.
+    """
+    try:
+        # Get a list of files in the knowledge base directory
+        file_names = os.listdir(RESPONSE_PATH)
+
+        # Filter only files (exclude directories)
+        file_names = [file for file in file_names if os.path.isfile(os.path.join(RESPONSE_PATH, file))]
+
+        filtered_files = [
+            file.split("market_size_report_")[1].replace(".json", "") for file in file_names
+            if os.path.isfile(os.path.join(RESPONSE_PATH, file)) and "market_size_report" in file.lower()
+        ]
+
+
+        return {
+            "analyses": filtered_files
+        }
+
+    except FileNotFoundError:
+        return {"error": "PATH not found"}
+    except Exception as e:
+        return {"error": str(e)}
+
+    
