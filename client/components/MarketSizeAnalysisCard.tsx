@@ -18,7 +18,7 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  conten
   // },[chartData])
   
   return (
-    <div className="p-6 bg-white rounded-md shadow-md max-w-4xl mx-auto">
+    <div className="p-6 bg-white rounded-md shadow-md max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Market Size Analysis</h2>
