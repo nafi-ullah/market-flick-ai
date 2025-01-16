@@ -7,9 +7,19 @@ from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
-
+import os
+from dotenv import load_dotenv
 
 app = FastAPI()
+
+load_dotenv()
+
+print("MONGODB_URI:", os.getenv("MONGODB_URI"))
+print("OPENAI_API_KEY:", os.getenv("OPENAI_API_KEY"))
+print("PPLX_API_KEY:", os.getenv("PPLX_API_KEY"))
+print("TAVILY_API_KEY:", os.getenv("TAVILY_API_KEY"))
+print("NVIDIA_API_KEY:", os.getenv("NVIDIA_API_KEY"))
+
 
 origins = [
     "http://localhost:3000",

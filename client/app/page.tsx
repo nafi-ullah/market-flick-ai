@@ -22,6 +22,9 @@ import MarkdownViewer from "@/components/MarkdownComponent";
 
 import ResponseContentViewer from "@/components/common/ResponseContentViewer";
 import ShowNothing from "@/components/common/ShowNothing";
+import MarketSizeAnalysisCardSkeleton from "@/components/loaders/MarketSizeAnlyzerLoader";
+import IndividualLoader from "@/components/loaders/IndividualLoader";
+
 
 type Props = {
   "Analyzing Business Idea:": { content: string };
@@ -43,16 +46,19 @@ export default function Home() {
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
-    "data: [DONE]": ShowNothing
+    "data: [DONE]": ShowNothing,
   };
-  
+
+  /**
+   * Given the entire chunk string, checks if it includes a known key
+   * and if so, extracts the content that comes after the key.
+   */
   function extractStreamData(
     inputString: string
   ): { component: React.FC<{ content: string }>; content: string } | null {
     for (const [key, component] of Object.entries(streamDataKeys)) {
       const matchIndex = inputString.indexOf(key);
       if (matchIndex !== -1) {
-        // Extract content starting after the key
         const content = inputString.slice(matchIndex + key.length).trim();
         return { component, content };
       }
@@ -60,60 +66,51 @@ export default function Home() {
     return null; // Return null if no match is found
   }
 
-
-  // useEffect(()=>{
-  //   console.log(streamData);
-  // },[streamData])
-  
-  
-
   return (
-    <div className=" font-[family-name:var(--font-geist-sans)] pt-24">
+    <div className="font-[family-name:var(--font-geist-sans)] pt-24">
       <Navbar />
-      <BusinessAnalysisForm setStreamData={setStreamData}/>
+      
+      {/* Form that updates streamData */}
+      <BusinessAnalysisForm setStreamData={setStreamData} />
+
+      {/* We only show the container if there's at least one piece of data,
+          but you can remove this check if you want to show loaders from the start */}
       {streamData.length > 0 && (
-        <div className="mt-6 p-4 rounded-md ">
-          
-          <div className=" ml-5">
-            {streamData.map((data, index) => {
-              const extracted = extractStreamData(data);
-              if (extracted) {
-                const { component: Component, content } = extracted;
-                return (
-                  <div key={index} className="mb-1">
-                    <Component content={content} />
-                  </div>
-                );
+        <div className="mt-6 p-4 rounded-md">
+          <div className="ml-5">
+            {/* 
+              1) We iterate over each key in `streamDataKeys`.
+              2) Check if that key exists in `streamData`.
+              3) If it exists, render the extracted content. Otherwise show a loader.
+            */}
+            {Object.entries(streamDataKeys).map(([key, Component]) => {
+              // Find the first string in streamData that contains this key:
+              const matchedString = streamData.find((chunk) =>
+                chunk.includes(key)
+              );
+
+              if (matchedString) {
+                // Extract that chunk's content
+                const extracted = extractStreamData(matchedString);
+                if (extracted) {
+                  return (
+                    <div key={key} className="mb-3">
+                      <extracted.component content={extracted.content} />
+                    </div>
+                  );
+                }
               }
+
+              // If we reach here, we did not find content for this key => show loader
               return (
-                <li key={index} className="mb-1">
-                  {data}
-                </li>
+                <div key={key} className="mb-3">
+                  <IndividualLoader label={key} />
+                </div>
               );
             })}
           </div>
         </div>
       )}
-     
-      {/* <MarketSizeAnalysisCard
-      
-        content={parseMarketSizeData(content)}
-       
-      /> */}
-      {/* <CompetitorAnalysisTable analysis_data={analysis_data} /> */}
-      {/* <CompetitiorAnalysisGraph/> */}
-      {/* <SWOTAnalysis swot_data={SWOTanalysisData}/>
-      
-      <AIDAAnalysis analysis_data={AIDAanalysisData}/>
-      <StrategicInsigtsCard/>
-      <PASTELIAnalysis/>
-      <SWOTfullComponent/>
-      <FiveForceAnalysis/>
-      <MarketMixAnalysis/>
-      <MarketTrends/>
-      <SevenSModel data={sevenSData} />
-      <MarketGapAnalysis/>
-      <AdvancedWebAnalyticsSuite/> */}
     </div>
   );
 }

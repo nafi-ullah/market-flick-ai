@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { parseMarkdownContentData } from "@/data/DataMapping";
-import rehypeRaw from 'rehype-raw'
-
 
 interface MarkdownViewerProps {
   content: string;
