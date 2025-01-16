@@ -15,6 +15,7 @@ from core.market_size_analysis.utils import (
     extract_knowledge_base,
     print_stream,
     save_search_queries,
+    save_response_to_json
 )
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from core.market_size_analysis.market_player_table import generate_market_player_table
@@ -26,7 +27,7 @@ from core.market_size_analysis.prompts import (
     competitors_table_generator_system_message,
     competitors_table_generator_human_message,
 )
-from core.competitor_analysis.agent import generate_competitors_chart
+from core.competitor_analysis.agent import generate_competitors_chart_node
 import operator
 from typing import (
     Annotated,
@@ -49,22 +50,7 @@ search_tool = TavilySearchResults(
 )
 
 
-def save_response_to_json(response: str, unique_id: str):
-    for key in response:
-        if (
-            isinstance(response[key], str)
-            or isinstance(response[key], int)
-            or isinstance(response[key], float)
-        ):
-            continue
-        else:
-            try:
-                json.dumps(response[key])
-            except:
-                response[key] = str(response[key])
 
-    with open(f"{RESPONSE_PATH}/{unique_id}.json", "w") as f:
-        json.dump(response, f)
 
 
 def market_size_report_node(state: BusinessAnalysisState):
@@ -209,7 +195,7 @@ def build_business_analysis_graph():
     graph_builder.add_node("market_size_report", market_size_report_node)
     graph_builder.add_node("market_size_graph", market_size_graph_node)
     graph_builder.add_node("competitors_table", competitors_table_node)
-    graph_builder.add_node("generate_competitors_chart", generate_competitors_chart)
+    graph_builder.add_node("generate_competitors_chart", generate_competitors_chart_node)
 
     # Define the flow
     graph_builder.add_edge(START, "market_size_report")

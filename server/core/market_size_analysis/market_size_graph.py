@@ -57,6 +57,8 @@ def plot_market_projection(data_points: List[MarketDataPoint], plot_id: str):
     with open(f"{FIGURE_PATH}/market_projection_{plot_id}.json", "w") as f:
         json.dump(json_output, f)       
 
+    print(f"Data points saved in {FIGURE_PATH}/market_projection_{plot_id}.json")
+
     return {
         "market_size_plot_id": plot_id,
         "market_size_data_points": str(json_output)

@@ -132,6 +132,9 @@ def get_all_saved_responses(knowledge_base_id: str):
         "competitors_table": load_response_from_json(
             f"competitors_table_{knowledge_base_id}"
         ),
+        "competitors_chart": load_response_from_json(
+            f"competitors_chart_{knowledge_base_id}"
+        ),
     }
 
 

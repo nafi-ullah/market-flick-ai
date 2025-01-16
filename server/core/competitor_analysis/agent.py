@@ -7,7 +7,7 @@ from custom_types.market_analysis import BusinessAnalysisInput
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
 import uuid
-from core.market_size_analysis.utils import extract_plot_data, extract_search_queries, extract_table_data, print_and_save_stream, extract_knowledge_base, print_stream, save_search_queries
+from core.market_size_analysis.utils import extract_plot_data, extract_search_queries, extract_table_data, print_and_save_stream, extract_knowledge_base, print_stream, save_search_queries, save_response_to_json
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from core.market_size_analysis.market_player_table import generate_market_player_table
 from core.competitor_analysis.prompts import competitors_chart_system_message, competitors_chart_human_message
@@ -33,15 +33,16 @@ search_tool = TavilySearchResults(
 
 
 
-def generate_competitors_chart(state: BusinessAnalysisState):
+def generate_competitors_chart_node(state: BusinessAnalysisState):
     """Generate competitors table"""
     knowledge_base = state['knowledge_base']
     market_size_data_points = state['market_size_data_points']
     market_player_table_data = state['market_player_table_data']
+    chart_id = state['knowledge_base_id']
                               
     agent = create_react_agent(llm, tools=[search_tool, export_business_analysis_charts], state_schema=BusinessAnalysisState)
     
-    chart_id = str(uuid.uuid4())
+    
 
     inputs = {"messages": [
         SystemMessage(competitors_chart_system_message), 
@@ -54,10 +55,18 @@ def generate_competitors_chart(state: BusinessAnalysisState):
     ]}
     
     print_stream(agent.stream(inputs, stream_mode="values"))
-    
-    return {
+
+    response = {
         "messages": state['messages'][-1],
         "competitors_chart_id": chart_id,
         "competitors_chart_data": extract_competitors_chart_data(chart_id),
     }
+
+    responses_to_save = {
+        **response,
+    }
+    del responses_to_save["messages"]
+    save_response_to_json(responses_to_save, f"competitors_chart_{chart_id}")
+    
+    return response
 
