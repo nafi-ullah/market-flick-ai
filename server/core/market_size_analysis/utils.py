@@ -1,4 +1,4 @@
-from constants import KNOWLEDGE_BASE_PATH
+from constants import KNOWLEDGE_BASE_PATH, RESPONSE_PATH
 from constants import FIGURE_PATH
 import json
 
@@ -48,6 +48,23 @@ def save_search_queries(queries: list[str], search_id: str):
     with open(f"{KNOWLEDGE_BASE_PATH}/search_queries_{search_id}.json", "w") as f:
         json.dump(queries, f)
     print(f"Search queries saved to {KNOWLEDGE_BASE_PATH}/search_queries_{search_id}.json")
+
+def save_response_to_json(response: str, unique_id: str):
+    for key in response:
+        if (
+            isinstance(response[key], str)
+            or isinstance(response[key], int)
+            or isinstance(response[key], float)
+        ):
+            continue
+        else:
+            try:
+                json.dumps(response[key])
+            except:
+                response[key] = str(response[key])
+
+    with open(f"{RESPONSE_PATH}/{unique_id}.json", "w") as f:
+        json.dump(response, f)
 
 def extract_search_queries(search_id: str):
     with open(f"{KNOWLEDGE_BASE_PATH}/search_queries_{search_id}.json", "r") as f:
