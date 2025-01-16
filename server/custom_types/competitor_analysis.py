@@ -32,3 +32,12 @@ class Chart(BaseModel):
     data: List[ChartData] = Field(default_factory=list, description="List of data points for basic charts")
     radarData: List[RadarChartData] = Field(default_factory=list, description="List of data points for radar charts")
     bubbleData: List[BubbleChartData] = Field(default_factory=list, description="List of data points for bubble charts")
+    sources: List[str] = Field(default_factory=list, description="List of sources for the chart")
+
+
+
+class SWOTAnalysis(BaseModel):
+    strength: List[str] = Field(default_factory=list, description="List of strengths of the business")
+    weakness: List[str] = Field(default_factory=list, description="List of weaknesses of the business")
+    opportunity: List[str] = Field(default_factory=list, description="List of opportunities of the business")
+    threat: List[str] = Field(default_factory=list, description="List of threats of the business")

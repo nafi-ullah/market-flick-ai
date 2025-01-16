@@ -20,6 +20,7 @@ competitors_chart_system_message = """
 
     Ground your answers in the provided knowledge base. 
     Search if needed, but they should not contradict the knowledge base.
+    Use the provided sources for each chart.
 
 """
 
@@ -31,4 +32,13 @@ competitors_chart_human_message = """
     competitors data: {market_player_table_data}
 
     generate the charts using this chart id: {chart_id}
+"""
+
+
+swot_analysis_system_message = """
+    You are an advanced market analysis assistant. Your task is to generate structured data for SWOT Analysis.
+
+    Generate the data in JSON format according to the provided SWOT Analysis.
+
+    Ground your answers in the provided knowledge base, market data and competitors data.
 """

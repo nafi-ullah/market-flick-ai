@@ -3,19 +3,19 @@ from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import create_react_agent
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from custom_types.market_analysis import BusinessAnalysisInput, BusinessAnalysisState
+from custom_types.market_analysis import BusinessAnalysisState
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
 import uuid
 from core.market_size_analysis.utils import (
     extract_plot_data,
-    extract_search_queries,
+    extract_sources,
     extract_table_data,
     print_and_save_stream,
     extract_knowledge_base,
     print_stream,
-    save_search_queries,
-    save_response_to_json
+    save_response_to_json,
+    save_sources
 )
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from core.market_size_analysis.market_player_table import generate_market_player_table
@@ -57,7 +57,7 @@ def market_size_report_node(state: BusinessAnalysisState):
     """Generate market size report"""
     agent = create_react_agent(
         llm,
-        tools=[search_tool, save_search_queries],
+        tools=[search_tool],
         state_schema=BusinessAnalysisState,
     )
 
@@ -71,7 +71,6 @@ def market_size_report_node(state: BusinessAnalysisState):
                     business_sector=state["business_analysis_input"].sector,
                     business_idea=state["business_analysis_input"].idea,
                     business_location=state["business_analysis_input"].location,
-                    search_id=unique_id,
                 )
             ),
         ]
@@ -87,7 +86,6 @@ def market_size_report_node(state: BusinessAnalysisState):
         "business_analysis_input": state[
             "business_analysis_input"
         ],  # preserve the input
-        "search_queries": extract_search_queries(unique_id),
         "knowledge_base": extract_knowledge_base(unique_id),
     }
 
@@ -105,20 +103,19 @@ def market_size_graph_node(state: BusinessAnalysisState):
     knowledge_base = extract_knowledge_base(state["knowledge_base_id"])
     agent = create_react_agent(
         llm,
-        tools=[search_tool, plot_market_projection, save_search_queries],
+        tools=[search_tool, plot_market_projection],
         state_schema=BusinessAnalysisState,
     )
 
     unique_id = state["knowledge_base_id"]
     plot_id = unique_id
-    search_id = unique_id
 
     inputs = {
         "messages": [
             SystemMessage(graph_and_table_generator_system_message),
             HumanMessage(
                 graph_and_table_generator_human_message.format(
-                    knowledge_base=knowledge_base, plot_id=plot_id, search_id=search_id
+                    knowledge_base=knowledge_base, plot_id=plot_id
                 )
             ),
         ]
@@ -130,7 +127,6 @@ def market_size_graph_node(state: BusinessAnalysisState):
 
     response = {
         "messages": state["messages"][-1],
-        "search_queries": extract_search_queries(search_id),
         "market_size_data_points": data_points,
         "market_size_plot_id": plot_id,
     }
@@ -149,11 +145,10 @@ def competitors_table_node(state: BusinessAnalysisState):
     knowledge_base = extract_knowledge_base(state["knowledge_base_id"])
     agent = create_react_agent(
         llm,
-        tools=[search_tool, generate_market_player_table, save_search_queries],
+        tools=[search_tool, generate_market_player_table],
         state_schema=BusinessAnalysisState,
     )
     table_id = state["knowledge_base_id"]
-    search_id = state["knowledge_base_id"]
 
     inputs = {
         "messages": [
@@ -162,7 +157,6 @@ def competitors_table_node(state: BusinessAnalysisState):
                 competitors_table_generator_human_message.format(
                     knowledge_base=knowledge_base,
                     table_id=table_id,
-                    search_id=search_id,
                 )
             ),
         ]
@@ -172,7 +166,6 @@ def competitors_table_node(state: BusinessAnalysisState):
 
     response = {
         "messages": state["messages"][-1],
-        "search_queries": extract_search_queries(search_id),
         "market_player_table_id": table_id,
         "market_player_table_data": extract_table_data(table_id),
     }
@@ -182,7 +175,7 @@ def competitors_table_node(state: BusinessAnalysisState):
     }
     del responses_to_save["messages"]
 
-    save_response_to_json(responses_to_save, f"competitors_table_{search_id}")
+    save_response_to_json(responses_to_save, f"competitors_table_{table_id}")
 
     return response
 

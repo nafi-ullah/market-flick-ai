@@ -60,6 +60,7 @@ def generate_competitors_chart_node(state: BusinessAnalysisState):
         "messages": state['messages'][-1],
         "competitors_chart_id": chart_id,
         "competitors_chart_data": extract_competitors_chart_data(chart_id),
+        
     }
 
     responses_to_save = {
@@ -70,3 +71,17 @@ def generate_competitors_chart_node(state: BusinessAnalysisState):
     
     return response
 
+
+
+def swot_analysis_node(state: BusinessAnalysisState):
+    knowledge_base = state['knowledge_base']
+    market_size_data_points = state['market_size_data_points']
+    market_player_table_data = state['market_player_table_data']
+    competitors_charts = state['competitors_chart_data']
+
+
+    agent = create_react_agent(llm, tools=[search_tool, export_business_analysis_charts], state_schema=BusinessAnalysisState)
+
+    pass
+
+    

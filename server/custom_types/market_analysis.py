@@ -51,5 +51,6 @@ class BusinessAnalysisState(TypedDict):
     search_queries: str = ""
     competitors_chart_id: str = ""
     competitors_chart_data: str = ""
+    sources: str = ""
     business_analysis_input: BusinessAnalysisInput
     is_last_step: IsLastStep = False

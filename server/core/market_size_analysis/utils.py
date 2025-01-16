@@ -57,6 +57,26 @@ def save_search_queries(queries: list[str], search_id: str):
         f"Search queries saved to {KNOWLEDGE_BASE_PATH}/search_queries_{search_id}.json"
     )
 
+def save_sources(sources: list[str], prefix: str,source_id: str):
+    """
+    save sources links to a JSON file.
+
+    Args:
+        sources (list[str]): A list of sources links.
+        prefix (str): A unique identifier for the sources links. 
+        source_id (str): A unique identifier for the sources links. 
+
+    """
+    with open(f"{KNOWLEDGE_BASE_PATH}/sources_{prefix}_{source_id}.json", "w") as f:
+        json.dump(sources, f)
+    print(f"Sources saved to {KNOWLEDGE_BASE_PATH}/sources_{prefix}_{source_id}.json")
+
+
+def extract_sources(prefix: str,source_id: str):
+    with open(f"{KNOWLEDGE_BASE_PATH}/sources_{prefix}_{source_id}.json", "r") as f:
+        return json.load(f)
+
+        
 
 def save_response_to_json(response: dict, unique_id: str):
     """
