@@ -3,7 +3,7 @@ import { FaInfoCircle } from "react-icons/fa";
 
 const MarketSizeAnalysisCardSkeleton: React.FC = () => {
   return (
-    <div className="p-6 bg-white rounded-md shadow-md max-w-4xl mx-auto animate-pulse">
+    <div className="p-6 bg-white rounded-md shadow-md max-w-7xl mx-auto animate-pulse">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div className="h-6 bg-gray-300 rounded w-40"></div>

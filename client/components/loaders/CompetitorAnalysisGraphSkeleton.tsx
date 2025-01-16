@@ -18,7 +18,7 @@ type MarketSizeAnalysisCardProps = {
 const CompetitiorAnalysisGraphSkeleton = () => {
  
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-4xl mx-auto my-6">
+    <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
       
        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
        <MarketShareCardSkeleton

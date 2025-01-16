@@ -53,8 +53,8 @@ export default function StackedAnimatedLoader() {
         ))}
         <div className="w-full bg-gray-200 rounded-full h-2.5 mt-6">
           <div 
-            className="bg-blue-500 h-2.5 rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${((currentTextIndex + 1) / loadingTexts.length) * 100}%` }}
+            className="bg-indigo-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+            style={{ width: `${((currentTextIndex ) / loadingTexts.length) * 100}%` }}
           ></div>
         </div>
       </div>
