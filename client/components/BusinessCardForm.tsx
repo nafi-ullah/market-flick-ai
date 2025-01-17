@@ -75,21 +75,7 @@ const LOCATIONS = [
   "Hong Kong",
   "Seoul",
   "Amsterdam",
-  "Madrid",
-  "Milan",
-  "Mexico City",
-  "Toronto",
-  "Singapore",
-  "Dubai",
-  "Mumbai",
-  "São Paulo",
-  "Cape Town",
-  "Shanghai",
-  "Hong Kong",
-  "Seoul",
-  "Amsterdam",
-  "Madrid",
-  "Milan"
+  "Madrid", 
 ];
 
 const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch<React.SetStateAction<string[]>> }) => {
