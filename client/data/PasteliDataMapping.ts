@@ -124,6 +124,7 @@ interface PestaliItem {
       .replace(/\bFalse\b/g, 'false');
 
       analysisJsonStr = analysisJsonStr.replace(/'/g, '"').replace(/"(?=s\b)/g, "'");
+      analysisJsonStr = analysisJsonStr.replace(/\\/g, '');
   
     // 5. Parse the JSON
     let parsedAnalysis: PestaliAnalysis;

@@ -44,13 +44,18 @@ interface RawSWOT {
     // 5. Convert Python-style single quotes to JSON-friendly double quotes
     //    WARNING: This breaks if you have single quotes inside text paragraphs.
     //    For typical SWOT bullet lists, it generally works.
-    swotObjectString = swotObjectString.replace(/'/g, '"');
+    swotObjectString = swotObjectString.replace(/\\'/g, '"');
   
     // 6. Parse the cleaned string as JSON
     let rawSwotData: RawSWOT;
     try {
+      console.log(
+        {swotObjectString}
+      )
       rawSwotData = JSON.parse(swotObjectString);
     } catch (error) {
+
+      
       console.error("Error parsing the extracted SWOT JSON:", error);
       throw error;
     }

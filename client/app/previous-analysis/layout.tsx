@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Drawer,
@@ -16,21 +16,11 @@ import {
   TrendingUp as TrendingUpIcon
 } from '@mui/icons-material';
 import { usePathname, useRouter } from 'next/navigation';
+import { BACKENDURL } from '@/utils/constants';
+import IndividualLoader from '@/components/loaders/IndividualLoader';
 
 const DRAWER_WIDTH = 240;
-
-const MENU_ITEMS = [
-  {
-    text: 'Item 1',
-    icon: <TrendingUpIcon />,
-    path: '/previous-analysis/64cb3eeb-36fc-4959-a437-37f8a16700eb'
-  },
-  {
-    text: 'Item 2',
-    icon: <TrendingUpIcon />,
-    path: '/previous-analysis/93bbb14c-06a1-477b-ba14-32a94e33bba4'
-  }
-];
+ 
 
 export default function PreviousAnalysisLayout({
   children,
@@ -40,6 +30,21 @@ export default function PreviousAnalysisLayout({
   const theme = useTheme();
   const router = useRouter();
   const pathname = usePathname();
+
+  const [analyses, setAnalyses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${BACKENDURL}/analyses`)
+    .then(res => res.json())
+    .then(data => {
+      setAnalyses(data.analyses);
+      setIsLoading(false);
+    })
+    .catch(error => console.error('Error fetching analyses:', error));
+  }, []);
+
+ 
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -55,6 +60,7 @@ export default function PreviousAnalysisLayout({
             backgroundColor: theme.palette.background.paper,
           },
         }}
+        
       >
         <Box sx={{ overflow: 'auto', mt: 8 }}>  {/* Added margin top to account for navbar */}
           <Typography
@@ -68,11 +74,14 @@ export default function PreviousAnalysisLayout({
             Previous Analysis
           </Typography>
           <List className='mt-4'>
-            {MENU_ITEMS.map((item) => (
-              <ListItem key={item.text} disablePadding>
+            {analyses.map((uid, idx) => {
+            const path = `/previous-analysis/${uid}`;
+            
+            return (
+              <ListItem key={`Item ${idx + 1}`} disablePadding>
                 <ListItemButton
-                  selected={pathname === item.path}
-                  onClick={() => router.push(item.path)}
+                  selected={pathname === path}
+                  onClick={() => router.push(path)}
                   sx={{
                     '&.Mui-selected': {
                       backgroundColor: 'rgba(0, 0, 0, 0.04)',
@@ -82,22 +91,24 @@ export default function PreviousAnalysisLayout({
                     },
                   }}
                 >
-                  <ListItemIcon sx={{ color: pathname === item.path ? 'primary.main' : 'inherit' }}>
-                    {item.icon}
+                  <ListItemIcon sx={{ color: pathname === path ? 'primary.main' : 'inherit' }}>
+                    <BarChartIcon />
                   </ListItemIcon>
                   <ListItemText 
-                    primary={item.text}
+                    primary={`Item ${idx + 1}`}
                     sx={{
                       '& .MuiTypography-root': {
-                        color: pathname === item.path ? 'primary.main' : 'inherit',
-                        fontWeight: pathname === item.path ? 500 : 400,
+                        color: pathname === path ? 'primary.main' : 'inherit',
+                        fontWeight: pathname === path ? 500 : 400,
                       },
                     }}
                   />
                 </ListItemButton>
               </ListItem>
-            ))}
+            )
+            })}
           </List>
+          {isLoading && <IndividualLoader />}
         </Box>
       </Drawer>
       <Box

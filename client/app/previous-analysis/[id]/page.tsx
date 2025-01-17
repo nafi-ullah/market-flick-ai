@@ -13,6 +13,8 @@ import ArticleSkeleton from "@/components/loaders/ArticleSkeleton";
 import MarketShareCardSkeleton from "@/components/loaders/MarketShareSkeleton";
 import CompetitorAnalysisTableSkeleton from "@/components/loaders/CompetitorAnalysisLoader";
 import { RoadmapCard } from "@/components/RoadmapCard";
+import SWOTAnalysis from "@/components/SWOTAnalysisCard";
+import PASTELIAnalysis from "@/components/PastelAnalysis";
 
 type Props = {
   "Analyzing Business Idea:": { content: string };
@@ -20,6 +22,8 @@ type Props = {
   "Node: market_size_graph": { content: string };
   "Node: competitors_table": { content: string };
   "Node: generate_competitors_chart": { content: string };
+  "Node: swot_analysis": { content: string };
+  "Node: pestali_analysis": { content: string };
   "Node: roadmap": { content: string };
   "data: [DONE]": { content: string };
 };
@@ -36,8 +40,10 @@ export default function Home() {
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
+    "Node: swot_analysis": SWOTAnalysis,
+    "Node: pestali_analysis": PASTELIAnalysis,
     "Node: roadmap": RoadmapCard,
-    "data: [DONE]": ShowNothing
+    "data: [DONE]": ShowNothing,
   };
   
   function extractStreamData(

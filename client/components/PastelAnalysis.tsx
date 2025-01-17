@@ -1,4 +1,5 @@
 // pages/index.tsx
+"use client"
 
 import { useState } from "react";
 import ImpactGrid from "./common/PastelCard";
@@ -13,7 +14,6 @@ interface ImpactGridProps {
 }
 
 const PASTELIAnalysis: React.FC<ImpactGridProps> = ({ content }) => {
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [sources] = useState(parsePestaliData(content).sources)
     const handleOpenModal = () => {
@@ -23,6 +23,7 @@ const PASTELIAnalysis: React.FC<ImpactGridProps> = ({ content }) => {
     const handleCloseModal = () => {
       setIsModalOpen(false);
     };
+    
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
       <h2 className="text-lg font-bold mb-4">PASTELI Analysis</h2>

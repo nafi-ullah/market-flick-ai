@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react";
 import SWOTAnalysisCard from "./subcomponent/SwotColorCard";
 import { parseSwotData } from "@/data/SwotMapping";
