@@ -1,5 +1,7 @@
 import { parseMarketPlayerData } from '@/data/DataMapping';
 import React, { useState } from 'react';
+import { FaInfoCircle } from 'react-icons/fa';
+import SourcesModal from './common/SourcesModal';
 
 
 
@@ -10,6 +12,15 @@ interface CompetitorAnalysisTableProps {
 
 const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ content }) => {
    const [analysis_data]= useState(parseMarketPlayerData(content));
+   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
 
   return (
@@ -26,7 +37,7 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ conte
             </tr>
           </thead>
           <tbody>
-            {analysis_data.map((item, index) => (
+            {analysis_data.competitors.map((item, index) => (
               <tr key={index} className="border-t">
                 <td className="py-2 px-4">{item.company}</td>
                 <td className="py-2 px-4">{item.valuation}</td>
@@ -36,6 +47,15 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ conte
             ))}
           </tbody>
         </table>
+        <div className="flex justify-end">
+          <button 
+          onClick={handleOpenModal}
+          className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
+            <FaInfoCircle className="mr-2" />
+            Sources
+          </button>
+        </div>
+        {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={analysis_data.sources} />}
       </div>
     </div>
   );

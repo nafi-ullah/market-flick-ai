@@ -40,7 +40,7 @@ def extract_plot_data(plot_id):
 
 def extract_table_data(table_id):
     with open(f"{KNOWLEDGE_BASE_PATH}/market_player_table_{table_id}.json", "r") as f:
-        return f.read()
+        return json.load(f)
 
 
 def save_search_queries(queries: list[str], search_id: str):
