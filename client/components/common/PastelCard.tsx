@@ -1,5 +1,6 @@
 // components/ImpactGrid.tsx
-import React from 'react';
+import { parsePestaliData } from '@/data/PasteliDataMapping';
+import React, { useState } from 'react';
 
 interface ImpactItem {
   title: string;
@@ -9,13 +10,16 @@ interface ImpactItem {
 }
 
 interface ImpactGridProps {
-  data: ImpactItem[];
+  content: string;
 }
 
-const ImpactGrid: React.FC<ImpactGridProps> = ({ data }) => {
+const ImpactGrid: React.FC<ImpactGridProps> = ({ content }) => {
+  const [pasteliData] = useState(parsePestaliData(content).pestaliData)
+  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {data.map((item, index) => {
+      {pasteliData.map((item, index) => {
         const impactText =
           item.impact_level >= 75
             ? 'Very High'
