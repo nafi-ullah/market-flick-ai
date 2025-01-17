@@ -54,5 +54,7 @@ class BusinessAnalysisState(TypedDict):
     sources: str = ""
     swot_analysis: str = ""
     pestali_analysis: str = ""
+    roadmap_id: str = ""
+    roadmap: str = ""
     business_analysis_input: BusinessAnalysisInput
     is_last_step: IsLastStep = False

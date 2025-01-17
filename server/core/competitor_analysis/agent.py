@@ -4,6 +4,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import create_react_agent
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from core.competitor_analysis.pestali_analysis import extract_pestali_analysis, pestali_analysis_tool
+from core.competitor_analysis.roadmap import extract_roadmap, roadmap_tool
 from core.competitor_analysis.swot_analysis import extract_swot_analysis, swot_analysis_tool
 from custom_types.market_analysis import BusinessAnalysisInput
 from langchain_openai import ChatOpenAI
@@ -12,7 +13,7 @@ import uuid
 from core.market_size_analysis.utils import extract_plot_data, extract_search_queries, extract_table_data, print_and_save_stream, extract_knowledge_base, print_stream, save_search_queries, save_response_to_json
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from core.market_size_analysis.market_player_table import generate_market_player_table
-from core.competitor_analysis.prompts import competitors_chart_system_message, competitors_chart_human_message, swot_analysis_system_message, swot_analysis_human_message, pestali_analysis_system_message, pestali_analysis_human_message
+from core.competitor_analysis.prompts import competitors_chart_system_message, competitors_chart_human_message, swot_analysis_system_message, swot_analysis_human_message, pestali_analysis_system_message, pestali_analysis_human_message, roadmap_system_message, roadmap_human_message
 import operator
 from typing import (
     Annotated,
@@ -146,3 +147,38 @@ def pestali_analysis_node(state: BusinessAnalysisState):
     return response
 
     
+def roadmap_node(state: BusinessAnalysisState):
+    knowledge_base = state['knowledge_base']
+    swot_analysis = state['swot_analysis']
+    pestali_analysis = state['pestali_analysis']
+    roadmap_id = state['knowledge_base_id']
+
+    agent = create_react_agent(llm, tools=[roadmap_tool], state_schema=BusinessAnalysisState)
+
+    inputs = {"messages": [
+        SystemMessage(roadmap_system_message), 
+        HumanMessage(roadmap_human_message.format(
+            knowledge_base=knowledge_base,
+            swot_analysis = swot_analysis,
+            pestali_analysis = pestali_analysis,
+            roadmap_id=roadmap_id,
+        ))
+    ]}
+    
+    print_stream(agent.stream(inputs, stream_mode="values"))
+
+    response = {
+        "messages": state['messages'][-1],
+        "roadmap_id": roadmap_id,
+        "roadmap": extract_roadmap(roadmap_id),
+
+    }
+
+    responses_to_save = {
+        **response,
+    }
+    del responses_to_save["messages"]
+    save_response_to_json(responses_to_save, f"roadmap_{roadmap_id}")
+
+    return response 
+

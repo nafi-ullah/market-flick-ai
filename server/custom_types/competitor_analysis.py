@@ -86,5 +86,11 @@ class PESTLEAnalysis(BaseModel):
         description="List of weblink sources for the analysis."
     )
 
-    
-    
+
+class RoadMapElement(BaseModel):
+    title: str = Field(..., description="Title of the road map element")
+    description: str = Field(..., description="Description of the road map element")
+
+class RoadMap(BaseModel):
+    title: str = Field(..., description="Title of the road map")
+    elements: List[RoadMapElement] = Field(..., description="List of road map elements")
