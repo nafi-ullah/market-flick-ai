@@ -21,28 +21,75 @@ interface FormData {
   businessIdea: string;
   location: string;
 }
-
 const BUSINESS_SECTORS = [
-  "Technology",
-  "Finance",
+  "IT & Technology",
+  "AI & Machine Learning",
+  "Real Estate",
+  "Finance", 
   "Healthcare",
   "Retail",
-  "Renewable Energy"
+  "Renewable Energy",
+  "Education",
+  "Food & Beverage",
+  "Energy & Utilities",
+  "Entertainment",
+  "Transportation",
+  "Manufacturing",
+  "Agriculture",
+  "Construction",
+  "Tourism & Hospitality",
+  "Professional Services",
+  "Media & Communications",
+  "Automotive",
+  "Fashion & Apparel",
+  "Sports & Recreation",
+  "Beauty & Wellness",
+  "Other"
 ];
-
 const LOCATIONS = [
-  "New York, USA",
-  "London, UK",
-  "Tokyo, Japan",
-  "Paris, France",
-  "Berlin, Germany",
-  "Sydney, Australia",
-  "Toronto, Canada",
+  "Global",
+  "Bangladesh",
+  "United States",
+  "United Kingdom",
+  "Japan",
+  "France",
+  "Germany",
+  "Australia",
+  "Canada",
+  "India",
+  "Brazil",
+  "South Africa",
+  "China",
+  "Korea",
+  "Netherlands",
+  "Spain",
+  "Italy",
+  "Russia",
+  "Mexico",
   "Singapore",
-  "Dubai, UAE",
-  "Mumbai, India",
-  "São Paulo, Brazil",
-  "Cape Town, South Africa"
+  "Dubai",
+  "Mumbai",
+  "São Paulo",
+  "Cape Town",
+  "Shanghai",
+  "Hong Kong",
+  "Seoul",
+  "Amsterdam",
+  "Madrid",
+  "Milan",
+  "Mexico City",
+  "Toronto",
+  "Singapore",
+  "Dubai",
+  "Mumbai",
+  "São Paulo",
+  "Cape Town",
+  "Shanghai",
+  "Hong Kong",
+  "Seoul",
+  "Amsterdam",
+  "Madrid",
+  "Milan"
 ];
 
 const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch<React.SetStateAction<string[]>> }) => {
@@ -132,22 +179,21 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
 
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {/* Business Sector */}
-        <FormControl fullWidth>
-          <InputLabel id="business-sector-label">Business Sector</InputLabel>
-          <Select
-            labelId="business-sector-label"
-            id="businessSector"
-            value={formData.businessSector}
-            label="Business Sector"
-            onChange={(e: any) => handleChange('businessSector')(e, null)}
-          >
-            {BUSINESS_SECTORS.map((sector) => (
-              <MenuItem key={sector} value={sector}>
-                {sector}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Autocomplete
+          id="businessSector"
+          options={BUSINESS_SECTORS}
+          value={formData.businessSector}
+          onChange={(_, newValue) => handleChange('businessSector')(null, newValue || '')}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Business Sector"
+              placeholder="Search for a sector..."
+            />
+          )}
+          freeSolo
+          fullWidth
+        />
 
         {/* Business Idea */}
         <TextField

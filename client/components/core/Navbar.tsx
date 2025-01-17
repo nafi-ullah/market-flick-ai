@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react";
 import { FiShare } from "react-icons/fi";
 import Image from "next/image";
