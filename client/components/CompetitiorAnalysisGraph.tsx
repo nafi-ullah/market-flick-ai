@@ -23,28 +23,28 @@ const CompetitiorAnalysisGraph: React.FC<MarketSizeAnalysisCardProps> = ({  cont
         title="Market Share"
         subtitle="Q4 2023"
         chartData={chartData.pieData}
-        sources={MarketSharedsources}
+        sources={chartData.pieData.soures}
         details={MarketSharedetails}
       />
       <PricePositioningCard
         title="Price Positioning"
         subtitle="Relative Index"
         chartData={chartData.barChartData}
-        sources={MarketSharedsources}
+        sources={chartData.barChartData.soures}
         details={MarketSharedetails}
       />
        <FeatureComparisonCard
         title="Feature Comparison"
         subtitle="vs Industry"
         chartData={chartData.radarChartData}
-        sources={MarketSharedsources}
+        sources={chartData.radarChartData.soures}
         details={MarketSharedetails}
       />
        <MarketPositionMappingCard
         title="Market Position Mapping"
         subtitle="Growth vs Market Share"
         chartData={chartData.bubbleChartData}
-        sources={MarketSharedsources}
+        sources={chartData.bubbleChartData.soures}
         details={MarketSharedetails}
       />
       

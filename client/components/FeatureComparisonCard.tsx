@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdDetails } from "react-icons/md";
 import RadarChartComponent from "./charts/RadarChart";
+import SourcesModal from "./common/SourcesModal";
 
 
 type FeatureComparisonCardProps = {
@@ -28,8 +29,18 @@ const FeatureComparisonCard: React.FC<FeatureComparisonCardProps> = ({
   details,
 }) => {
   console.log(sources, details)
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    }
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-sm mx-auto">
+    <div className="p-4 bg-white rounded-md shadow-md w-full mx-auto">
       {/* Title */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">{title}</h2>
@@ -37,7 +48,7 @@ const FeatureComparisonCard: React.FC<FeatureComparisonCardProps> = ({
       </div>
 
       {/* Chart */}
-      <div className="mb-4">
+      <div className="mb-4 min-h-[10vh]">
         <RadarChartComponent
           labels={chartData.labels}
           datasets={chartData.datasets}
@@ -46,7 +57,9 @@ const FeatureComparisonCard: React.FC<FeatureComparisonCardProps> = ({
 
       {/* Buttons */}
       <div className="flex justify-between">
-        <button className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
+        <button 
+        onClick={handleOpenModal}
+        className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
           <FaInfoCircle className="mr-2" />
           Sources
         </button>
@@ -55,6 +68,7 @@ const FeatureComparisonCard: React.FC<FeatureComparisonCardProps> = ({
           Details
         </button>
       </div>
+      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
     </div>
   );
 };

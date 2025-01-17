@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { MdDetails } from "react-icons/md";
 import BarChartComponent from "./charts/BarChart";
+import SourcesModal from "./common/SourcesModal";
 
 
 type PricePositioningCardProps = {
@@ -24,9 +25,18 @@ const PricePositioningCard: React.FC<PricePositioningCardProps> = ({
   details,
 }) => {
   console.log(sources, details);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    };
 
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-sm mx-auto flex flex-col justify-between">
+    <div className="p-4 bg-white rounded-md shadow-md w-full mx-auto flex flex-col justify-between">
       {/* Title */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">{title}</h2>
@@ -34,7 +44,7 @@ const PricePositioningCard: React.FC<PricePositioningCardProps> = ({
       </div>
 
       {/* Chart */}
-      <div className="mb-4">
+      <div className="mb-4 min-h-[20vh]">
         <BarChartComponent
           labels={chartData.labels}
           dataValues={chartData.dataValues}
@@ -44,7 +54,9 @@ const PricePositioningCard: React.FC<PricePositioningCardProps> = ({
 
       {/* Buttons */}
       <div className="flex justify-between">
-        <button className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
+        <button 
+        onClick={handleOpenModal}
+        className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
           <FaInfoCircle className="mr-2" />
           Sources
         </button>
@@ -53,6 +65,7 @@ const PricePositioningCard: React.FC<PricePositioningCardProps> = ({
           Details
         </button>
       </div>
+      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
     </div>
   );
 };

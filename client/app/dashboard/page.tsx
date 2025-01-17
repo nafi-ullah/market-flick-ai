@@ -35,6 +35,8 @@ type Props = {
   "Node: market_size_graph": { content: string };
   "Node: competitors_table": { content: string };
   "Node: generate_competitors_chart": { content: string };
+  "Node: swot_analysis_report": { content: string };
+  "Node: pestali_analysis_report": { content: string };
   "Node: roadmap": { content: string };
   "data: [DONE]": { content: string };
 };
@@ -50,6 +52,8 @@ export default function Home() {
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
+    "Node: swot_analysis_report": ResponseContentViewer,
+    "Node: pestali_analysis_report": ResponseContentViewer,
     "Node: roadmap": RoadmapCard,
     "data: [DONE]": ShowNothing,
   };

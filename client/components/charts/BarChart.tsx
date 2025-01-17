@@ -45,7 +45,7 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
   };
 
   return (
-    <div style={{ height: "100%" }}>
+    <div className="w-full">
       {/* Chart will occupy full height of this container */}
       <Bar data={data} options={options} />
     </div>

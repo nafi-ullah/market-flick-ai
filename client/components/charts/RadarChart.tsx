@@ -35,7 +35,7 @@ const RadarChartComponent: React.FC<RadarChartComponentProps> = ({ labels, datas
     },
   };
 
-  return <Radar data={data} options={options} />;
+  return <div> <Radar data={data} options={options} /></div>;
 };
 
 export default RadarChartComponent;

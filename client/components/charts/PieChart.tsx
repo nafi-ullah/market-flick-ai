@@ -35,7 +35,7 @@ const PieChartComponent: React.FC<PieChartComponentProps> = ({
     },
   };
 
-  return <Pie data={data} options={options} />;
+  return <div className=""> <Pie data={data} options={options} /></div>;
 };
 
 export default PieChartComponent;

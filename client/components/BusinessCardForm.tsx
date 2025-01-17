@@ -26,7 +26,8 @@ const BUSINESS_SECTORS = [
   "Technology",
   "Finance",
   "Healthcare",
-  "Retail"
+  "Retail",
+  "Renewable Energy"
 ];
 
 const LOCATIONS = [

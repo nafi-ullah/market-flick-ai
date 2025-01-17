@@ -2,6 +2,7 @@ import React, {  useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import LineChartComponent from "./charts/LineChart";
 import { parseMarketSizeData } from "@/data/DataMapping";
+import SourcesModal from "./common/SourcesModal";
 
 type MarketSizeAnalysisCardProps = {
 
@@ -10,8 +11,17 @@ type MarketSizeAnalysisCardProps = {
 };
 
 const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  content }) => {
-  const [chartData]= useState(parseMarketSizeData(content));
-  
+  const [chartData]= useState(parseMarketSizeData(content)?.chartData);
+  const [sources]= useState(parseMarketSizeData(content)?.sources);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   // useEffect(()=>{
   //   console.log(chartData);
   //   console.log(content);
@@ -32,11 +42,14 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  conten
 
       {/* Sources */}
       <div className="flex justify-end">
-        <button className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
+        <button 
+         onClick={handleOpenModal}
+        className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
           <FaInfoCircle className="mr-2" />
           Sources
         </button>
       </div>
+      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
     </div>
   );
 };
