@@ -22,21 +22,12 @@ Market Flick AI is a comprehensive business analysis platform that helps entrepr
 - **Strategic Recommendations**: AI-generated actionable insights
 - **Custom Reports**: Exportable reports in multiple formats (PDF, Excel, CSV)
 
-## Tech Stack
+## Technical Documentation
+Link to our [Technical Documentation](./Technical_Documentation.md)
 
-### Frontend
-- **Framework**: Next.js 15.1.3
-- **UI Library**: Material-UI (MUI) v5
-- **State Management**: React Hooks
-- **Data Visualization**: Chart.js, Recharts
-- **Styling**: Tailwind CSS, Emotion
+## Video Demo
+Link to our [Video Demo](https://www.loom.com/share/145e85e6659d47f2b00a0f2ef0703586)
 
-### Backend
-- **Framework**: FastAPI
-- **AI Integration**: OpenAI GPT-4, LangChain
-- **Database**: MongoDB
-- **Data Processing**: LangGraph
-- **Authentication**: JWT
 
 ## Getting Started
 
@@ -82,58 +73,15 @@ uvicorn main:app --reload
 
 ### Environment Variables
 
-#### Frontend (.env)
-```env
-NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
-```
-
 #### Backend (.env)
 ```env
-OPENAI_API_KEY=your_openai_api_key
-MONGODB_URI=your_mongodb_uri
+MONGODB_URI="mongodb+srv://shawonmajid:shawonmajid@cluster0.akth5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+OPENAI_API_KEY=""
+PPLX_API_KEY=""
+TAVILY_API_KEY=""
+NVIDIA_API_KEY=""
 ```
 
-## Project Structure
-
-```
-market-flick-ai/
-├── client/                # Frontend application
-│   ├── app/              # Next.js pages
-│   ├── components/       # React components
-│   │   ├── core/        # Core UI components
-│   │   ├── charts/      # Data visualization
-│   │   └── loaders/     # Loading animations
-│   └── utils/           # Utility functions
-└── server/              # Backend application
-    ├── core/            # Core business logic
-    ├── database/        # Database connections
-    ├── responses/       # Analysis results
-    └── knowledge_base/  # Stored analyses
-```
-
-## API Endpoints
-
-### Business Analysis
-```http
-POST /business-analysis
-Content-Type: application/json
-
-{
-  "sector": "string",
-  "idea": "string",
-  "location": "string"
-}
-```
-
-### Previous Analysis
-```http
-POST /previous-analysis/{knowledge_base_id}
-```
-
-### Analysis History
-```http
-GET /analyses
-```
 
 ## Contributing
 
@@ -159,23 +107,6 @@ GET /analyses
 - Use proper type definitions
 - Follow Material-UI best practices
 
-## Deployment
-
-### Frontend
-```bash
-# Build the application
-npm run build
-
-# Start production server
-npm start
-```
-
-### Backend
-```bash
-# Start production server
-fastapi dev
-```
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -193,4 +124,4 @@ For support, email support@marketflickai.com or join our Slack channel.
 
 ---
 
-Made with ❤️ by the Market Flick AI Team
+Made with ❤️ by the Team Define Coders
