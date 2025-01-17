@@ -125,3 +125,8 @@ For support, email support@marketflickai.com or join our Slack channel.
 ---
 
 Made with ❤️ by the Team Define Coders
+Team Members
+1. Ovishek Paul
+2. Shawon Majid
+3. Nafi Ullah Shafin
+4. Sourav Suvra
