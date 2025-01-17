@@ -132,7 +132,11 @@ interface PestaliItem {
       parsedAnalysis = JSON.parse(analysisJsonStr);
     } catch (error) {
       console.error('Failed to parse pestali_analysis JSON:', error);
-      throw error;
+      // throw error;
+      return {
+        pestaliData: [],
+        sources: []
+      }
     }
   
     // 6. Update pestaliData with descriptions and impact levels from parsed data

@@ -57,7 +57,7 @@ interface RawSWOT {
 
       
       console.error("Error parsing the extracted SWOT JSON:", error);
-      throw error;
+      return []
     }
   
     // 7. Create your final swotdata array using your static UI fields
