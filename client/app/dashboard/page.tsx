@@ -17,7 +17,7 @@ import SevenSModel from "@/components/SevenModelComponent";
 import StrategicInsigtsCard from "@/components/StrategicInsigts";
 import SWOTAnalysis from "@/components/SWOTAnalysisCard";
 import SWOTfullComponent from "@/components/SWOTfullComponent";
-import { AIDAanalysisData,  SWOTanalysisData, sevenSData } from "@/data/DummyData";
+import { AIDAanalysisData,  SWOTanalysisData, sevenSData, streamDummyData } from "@/data/DummyData";
 import MarkdownViewer from "@/components/MarkdownComponent";
 
 import ResponseContentViewer from "@/components/common/ResponseContentViewer";

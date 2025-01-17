@@ -8,15 +8,39 @@ interface MarketSizeAnalysisCardchartData {
   }[];
 }
 
+
+interface MarketSizeDataPoint {
+  point_date: string;
+  tam: number;
+  sam: number;
+  som: number;
+}
+
+interface MarketSizeData {
+  sources: string[];
+  data_points: MarketSizeDataPoint[];
+}
+
+interface ChartDataset {
+  label: string;
+  data: number[];
+  borderColor: string;
+  backgroundColor: string;
+}
+
+interface MarketSizeAnalysisCardchartData {
+  labels: string[];
+  datasets: ChartDataset[];
+}
+
 export function parseMarketSizeData(
   contentData: string
-): MarketSizeAnalysisCardchartData {
-  // Extract the market_size_data_points part
-  const marketSizeDataMatch = contentData.match(
-    /market_size_data_points: (\[.*?\])/
-  );
-  if (!marketSizeDataMatch) {
-    // throw new Error("No market_size_data_points found in contentData");
+): MarketSizeAnalysisCardchartData | null {
+  // 1. Extract the substring that contains market size data points.
+  const regex = /market_size_data_points:\s(\{[\s\S]*?\})\s*market_size_plot_id:/;
+  const match = contentData.match(regex);
+  if (!match || match.length < 2) {
+    console.error("Unable to locate market_size_data_points in content_data");
     console.log("No market_size_data_points found in contentData");
     return {
       labels: [],
@@ -24,20 +48,58 @@ export function parseMarketSizeData(
     };
   }
 
-  const marketSizeDataPoints = JSON.parse(
-    marketSizeDataMatch[1].replace(/'/g, '"')
-  ); // Replace single quotes with double quotes for valid JSON
+  let marketSizeDataString: string = match[1];
 
-  // Extract labels and data for TAM, SAM, and SOM
-  const labels: string[] = marketSizeDataPoints.map(
-    (point: any) => point.point_date.split("-")[0]
-  );
-  const tamData: number[] = marketSizeDataPoints.map((point: any) => point.tam);
-  const samData: number[] = marketSizeDataPoints.map((point: any) => point.sam);
-  const somData: number[] = marketSizeDataPoints.map((point: any) => point.som);
+  // 2. Convert Python-style dictionary to JSON-style string.
+  //    a. Replace single quotes around keys/values with double quotes
+  //    b. Make sure the structure is valid JSON.
+  marketSizeDataString = marketSizeDataString
+    .replace(/'/g, '"')
+    .replace(/\bTrue\b/g, "true")
+    .replace(/\bFalse\b/g, "false")
+    .replace(/None/g, "null");
 
-  // Return the structured object
-  return {
+  // 3. Parse the cleaned-up JSON string
+  let marketSizeData: MarketSizeData;
+  try {
+    marketSizeData = JSON.parse(marketSizeDataString);
+  } catch (err) {
+    console.error("Error parsing JSON from market_size_data_points:", err);
+    console.log("No market_size_data_points found in contentData");
+    return {
+      labels: [],
+      datasets: [],
+    };
+  }
+
+  // 4. Extract data_points array
+  const { data_points } = marketSizeData;
+  if (!Array.isArray(data_points)) {
+    console.log("No market_size_data_points found in contentData");
+    return {
+      labels: [],
+      datasets: [],
+    };
+  }
+
+  // 5. Prepare labels and data arrays for TAM, SAM, and SOM
+  const labels: string[] = [];
+  const tamData: number[] = [];
+  const samData: number[] = [];
+  const somData: number[] = [];
+
+  data_points.forEach((dp) => {
+    // Each dp has structure: { point_date, tam, sam, som }
+    // Extract just the year (e.g., "2024" from "2024-01-01")
+    const year = dp.point_date.split("-")[0];
+    labels.push(year);
+    tamData.push(dp.tam);
+    samData.push(dp.sam);
+    somData.push(dp.som);
+  });
+
+  // 6. Build the final chart data object using your desired colors
+  const MarketSizeAnalysisCardchartData: MarketSizeAnalysisCardchartData = {
     labels,
     datasets: [
       {
@@ -60,6 +122,78 @@ export function parseMarketSizeData(
       },
     ],
   };
+
+  return MarketSizeAnalysisCardchartData;
+}
+
+// Example usage:
+// const content_data = `Node: market_size_graph ('content', 'Market size report generated with ID: 48fec11d-da36-4737-84fd-c9e605aa2229') ('additional_kwargs', {}) ('response_metadata', {}) ('type', 'ai') ('name', None) ('id', '6c466bad-1a64-487f-a480-f376356e06a4') ('example', False) ('tool_calls', []) ('invalid_tool_calls', []) ('usage_metadata', None) messages: content='Market size report generated with ID: 48fec11d-da36-4737-84fd-c9e605aa2229' additional_kwargs={} response_metadata={} id='6c466bad-1a64-487f-a480-f376356e06a4' market_size_data_points: {'sources': ['Assumptions based on typical market growth rates and demographic distribution'], 'data_points': [{'point_date': '2024-01-01', 'tam': 100.0, 'sam': 15.0, 'som': 1.5}, {'point_date': '2025-01-01', 'tam': 105.0, 'sam': 15.75, 'som': 1.53}, {'point_date': '2026-01-01', 'tam': 110.25, 'sam': 16.5375, 'som': 1.56}, {'point_date': '2027-01-01', 'tam': 115.7625, 'sam': 17.364375, 'som': 1.59}, {'point_date': '2028-01-01', 'tam': 121.550625, 'sam': 18.23259375, 'som': 1.62}]} market_size_plot_id: 48fec11d-da36-4737-84fd-c9e605aa2229`;
+
+// const chartData = convertContentDataToMarketSizeAnalysisCardchartData(content_data);
+// console.log(chartData);
+
+
+export function PreveiousparseMarketSizeData(
+  contentData: string
+): MarketSizeAnalysisCardchartData {
+  // Extract the market_size_data_points part
+
+
+
+  
+
+  const marketSizeDataPointsString = "gg";
+  if (!marketSizeDataPointsString) {
+    // throw new Error("No market_size_data_points found in contentData");
+    console.log("No market_size_data_points found in contentData");
+    return {
+      labels: [],
+      datasets: [],
+    };
+  }
+
+
+
+
+
+  const marketSizeDataPoints = JSON.parse(
+    marketSizeDataPointsString.replace(/'/g, '"')
+  );
+
+  // Extract relevant data
+  const labels: string[] = marketSizeDataPoints.data_points.map((dp: any) =>
+    dp.point_date.split("-")[0]
+  );
+  const tamData: number[] = marketSizeDataPoints.data_points.map((dp: any) => dp.tam);
+  const samData: number[] = marketSizeDataPoints.data_points.map((dp: any) => dp.sam);
+  const somData: number[] = marketSizeDataPoints.data_points.map((dp: any) => dp.som);
+
+  // Create the MarketSizeAnalysisCardchartData object
+  const MarketSizeAnalysisCardchartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "TAM",
+        data: tamData,
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+      },
+      {
+        label: "SAM",
+        data: samData,
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+      },
+      {
+        label: "SOM",
+        data: somData,
+        borderColor: "rgba(255, 206, 86, 1)",
+        backgroundColor: "rgba(255, 206, 86, 0.2)",
+      },
+    ],
+  };
+
+  return MarketSizeAnalysisCardchartData;
 }
 
 // Example Usage
