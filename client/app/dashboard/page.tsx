@@ -26,6 +26,7 @@ import MarketSizeAnalysisCardSkeleton from "@/components/loaders/MarketSizeAnlyz
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import ArticleSkeleton from "@/components/loaders/ArticleSkeleton";
 import StackedAnimatedLoader from "@/components/loaders/AiLoader";
+import { RoadmapCard } from "@/components/RoadmapCard";
 
 
 type Props = {
@@ -34,6 +35,7 @@ type Props = {
   "Node: market_size_graph": { content: string };
   "Node: competitors_table": { content: string };
   "Node: generate_competitors_chart": { content: string };
+  "Node: roadmap": { content: string };
   "data: [DONE]": { content: string };
 };
 
@@ -48,6 +50,7 @@ export default function Home() {
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
+    "Node: roadmap": RoadmapCard,
     "data: [DONE]": ShowNothing,
   };
 
