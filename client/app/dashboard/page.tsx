@@ -47,7 +47,6 @@ export default function Home() {
   const streamDataKeys: {
     [K in keyof Props]: React.FC<Props[K]>;
   } = {
-    "Analyzing Business Idea:": ResponseContentViewer,
     "Node: market_size_report": MarkdownViewer,
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,

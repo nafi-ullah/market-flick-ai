@@ -58,10 +58,7 @@ const MarketPositionMappingCard: React.FC<MarketPositionMappingCardProps> = ({
           <FaInfoCircle className="mr-2" />
           Sources
         </button>
-        <button className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
-          <MdDetails className="mr-2" />
-          Details
-        </button>
+      
       </div>
       {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
     </div>
