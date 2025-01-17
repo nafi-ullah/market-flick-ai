@@ -12,13 +12,13 @@ export function parseRoadmap(content: string): RoadmapProps {
   }
 
   const roadmapJson = roadmapMatch[1];
-  console.log("Roadmap JSON:", roadmapJson);
+  //   console.log("Roadmap JSON:", roadmapJson);
 
   try {
     // Parse the JSON string into a RoadmapProps object
     const jsonString = roadmapJson.replace(/'/g, '"').replace(/"(?=s\b)/g, "'");
 
-    console.log("Parsed JSON:", jsonString);
+    // console.log("Parsed JSON:", jsonString);
     const roadmap = JSON.parse(jsonString);
     return {
       title: roadmap.title,

@@ -31,7 +31,8 @@ export function parseMarketSizeData(
   content_data: string
 ): MarketSizeAnalysisOutput | null {
   // 1. Extract the substring that contains market size data points.
-  const regex = /market_size_data_points:\s(\{[\s\S]*?\})\s*market_size_plot_id:/;
+  const regex =
+    /market_size_data_points:\s(\{[\s\S]*?\})\s*market_size_plot_id:/;
   const match = content_data.match(regex);
   if (!match || match.length < 2) {
     console.error("Unable to locate market_size_data_points in content_data");
@@ -112,25 +113,36 @@ export function parseMarketSizeData(
   };
 }
 
-
-
 // Example Usage
 
-interface AnalysisData {
+interface TableData {
   company: string;
   valuation: string;
   money_raised: string;
   key_focus: string;
 }
 
-export function parseMarketPlayerData(content: string): AnalysisData[] {
+interface AnalysisData {
+  competitors: TableData[];
+  sources: string[];
+}
+
+export function parseMarketPlayerData(content: string): AnalysisData {
   // Extract the market_player_table_data part using a regex
+  console.log("Content:", content);
   const marketPlayerDataMatch = content.match(
-    /market_player_table_data: (\[.*?\])/
+    /market_player_table_data:\s*(\{.*\})/
   );
   if (!marketPlayerDataMatch) {
-    throw new Error("No market_player_table_data found in contentData");
+    // throw new Error("No market_player_table_data found in contentData");
+    console.log("No market_player_table_data found in contentData");
+    return {
+      competitors: [],
+      sources: [],
+    };
   }
+
+  console.log(marketPlayerDataMatch[1]);
 
   // Parse the extracted JSON string into an array
   const marketPlayerData = JSON.parse(
@@ -138,12 +150,21 @@ export function parseMarketPlayerData(content: string): AnalysisData[] {
   ); // Replace single quotes with double quotes for valid JSON
 
   // Map the data to the desired analysis_data format
-  const analysisData: AnalysisData[] = marketPlayerData.map((player: any) => ({
-    company: player.company_name || "N/A",
-    valuation: player.valuation || "N/A",
-    money_raised: player.money_raised || "N/A",
-    key_focus: player.key_focus || "N/A",
-  }));
+  const competitors: TableData[] = marketPlayerData.competitors.map(
+    (player: any) => ({
+      company: player.company_name || "N/A",
+      valuation: player.valuation || "N/A",
+      money_raised: player.money_raised || "N/A",
+      key_focus: player.key_focus || "N/A",
+    })
+  );
+
+  const sources: string[] = marketPlayerData.sources;
+
+  const analysisData: AnalysisData = {
+    competitors,
+    sources,
+  };
 
   return analysisData;
 }
