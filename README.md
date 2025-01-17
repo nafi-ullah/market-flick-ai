@@ -173,7 +173,7 @@ npm start
 ### Backend
 ```bash
 # Start production server
-uvicorn main:app --host 0.0.0.0 --port 8000
+fastapi dev
 ```
 
 ## License
