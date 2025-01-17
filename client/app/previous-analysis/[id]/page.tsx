@@ -9,12 +9,10 @@ import ResponseContentViewer from "@/components/common/ResponseContentViewer";
 import ShowNothing from "@/components/common/ShowNothing";
 import { useParams } from "next/navigation";
 import { BACKENDURL } from "@/utils/constants";
-import FireLoader from "@/components/loaders/FireLoader";
-import { Box, Typography } from "@mui/material";
-import AnalyseLoader from "@/components/loaders/AnalyzeLoader";
 import ArticleSkeleton from "@/components/loaders/ArticleSkeleton";
 import MarketShareCardSkeleton from "@/components/loaders/MarketShareSkeleton";
 import CompetitorAnalysisTableSkeleton from "@/components/loaders/CompetitorAnalysisLoader";
+import { RoadmapCard } from "@/components/RoadmapCard";
 
 type Props = {
   "Analyzing Business Idea:": { content: string };
@@ -22,6 +20,7 @@ type Props = {
   "Node: market_size_graph": { content: string };
   "Node: competitors_table": { content: string };
   "Node: generate_competitors_chart": { content: string };
+  "Node: roadmap": { content: string };
   "data: [DONE]": { content: string };
 };
 
@@ -37,6 +36,7 @@ export default function Home() {
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
+    "Node: roadmap": RoadmapCard,
     "data: [DONE]": ShowNothing
   };
   
