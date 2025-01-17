@@ -52,8 +52,8 @@ export default function Home() {
     "Node: market_size_graph": MarketSizeAnalysisCard,
     "Node: competitors_table": CompetitorAnalysisTable,
     "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
-    "Node: swot_analysis_report": ResponseContentViewer,
-    "Node: pestali_analysis_report": ResponseContentViewer,
+    "Node: swot_analysis_report": SWOTAnalysis,
+    "Node: pestali_analysis_report": PASTELIAnalysis,
     "Node: roadmap": RoadmapCard,
     "data: [DONE]": ShowNothing,
   };

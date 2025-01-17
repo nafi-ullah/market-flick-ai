@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 /**
  * HeroSection component represents the landing page's main hero section.
@@ -16,6 +17,8 @@ const HeroSection: React.FC = () => {
   const [businessConcept, setBusinessConcept] = useState('');
   const [targetMarketLocation, setTargetMarketLocation] = useState('');
   const [animatedTypingText, setAnimatedTypingText] = useState('');
+
+  const router = useRouter();
 
   // Memoized array of placeholder texts for animated typing effect
   const placeholderTexts = useMemo(() => [
@@ -200,6 +203,16 @@ const HeroSection: React.FC = () => {
           >
             <i className="hero-section__market-analysis-button-icon fas fa-chart-line text-green-500"></i>
             Analyze Market
+          </motion.button>
+
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="hero-section__market-analysis-button w-full rounded-xl bg-custom py-4 text-black font-semibold hover:bg-custom/90 flex items-center justify-center gap-3 transform transition-all duration-300 shadow-lg mt-6"
+            onClick={()=>{router.push('/dashboard')}}
+          >
+            <i className="hero-section__market-analysis-button-icon fas fa-chart-line text-green-500"></i>
+            Try free trial
           </motion.button>
 
           <div className="hero-section__how-it-works-panel bg-gray-50 p-6 rounded-xl border border-gray-200 mt-8">
