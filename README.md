@@ -2,6 +2,8 @@
 
 Market Flick AI is a comprehensive business analysis platform that helps entrepreneurs and businesses make data-driven decisions through AI-powered market analysis. The platform provides real-time market insights, competitor analysis, and strategic recommendations using advanced AI models.
 
+### Live Link: [http://98.85.58.122:3000/](http://98.85.58.122:3000/)
+
 ## Features
 
 ### 1. Real-time Market Analysis
