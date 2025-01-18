@@ -55,7 +55,7 @@ export function parseSwotData(content_data: string): SwotItem[] {
       rawSwotData = JSON.parse(swotObjectString);
     } catch (error) {
       console.error("Error parsing the extracted SWOT JSON:", error);
-      return [];
+      return []
     }
 
     // 7. Create your final swotdata array using your static UI fields
