@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactMarkdown from "react-markdown";
 import { parseMarkdownContentData } from "@/data/DataMapping";
 
-interface MarkdownViewerProps {
-  content: string;
+export interface MarkdownViewerProps {
+  data: {
+    key: string;
+    data: string;
+    status: string;
+  };
 }
 
-const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ content }) => {
-  const [chartData] = useState(parseMarkdownContentData(content));
+const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
+  const chartData = parseMarkdownContentData(data["data"]);
+
+  console.log({chartData, data});
   function LinkRenderer(props: any) {
     return (
       <a href={props.href} target="_blank" rel="noreferrer">

@@ -5,13 +5,30 @@ import SourcesModal from './common/SourcesModal';
 
 
 
-interface CompetitorAnalysisTableProps {
-  content: string;
-
+export interface CompetitorAnalysisTableProps {
+  data: {
+    key: string;
+    data: {
+      competitors: {
+          company_name: string;
+          valuation: string;
+          money_raised: string;
+          key_focus: string;
+      }[];
+      sources: string[];
+    };
+    status: string;
+  };
 }
 
-const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ content }) => {
-   const [analysis_data]= useState(parseMarketPlayerData(content));
+const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ data }) => {
+  const {
+    competitors,
+    sources
+  } = parseMarketPlayerData(data.data) ?? {
+    competitors: [],
+    sources: []
+  }
    const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -37,7 +54,7 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ conte
             </tr>
           </thead>
           <tbody>
-            {analysis_data.competitors.map((item, index) => (
+            {competitors.map((item, index) => (
               <tr key={index} className="border-t">
                 <td className="py-2 px-4">{item.company}</td>
                 <td className="py-2 px-4">{item.valuation}</td>
@@ -55,7 +72,7 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ conte
             Sources
           </button>
         </div>
-        {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={analysis_data.sources} />}
+        {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
       </div>
     </div>
   );

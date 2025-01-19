@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
-import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
+import CompetitiorAnalysisGraph, { CompetitiorAnalysisGraphProps } from "@/components/CompetitiorAnalysisGraph";
+import CompetitorAnalysisTable, { CompetitorAnalysisTableProps } from "@/components/CompetitorAnalysisTable";
 import Navbar from "@/components/core/Navbar";
-import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
-import MarkdownViewer from "@/components/MarkdownComponent";
+import MarketSizeAnalysisCard, { MarketSizeAnalysisCardProps } from "@/components/MarketSizeAnalysisCard";
+import MarkdownViewer, { MarkdownViewerProps } from "@/components/MarkdownComponent";
 import ResponseContentViewer from "@/components/common/ResponseContentViewer";
 import ShowNothing from "@/components/common/ShowNothing";
 import { useParams } from "next/navigation";
@@ -12,20 +12,18 @@ import { BACKENDURL } from "@/utils/constants";
 import ArticleSkeleton from "@/components/loaders/ArticleSkeleton";
 import MarketShareCardSkeleton from "@/components/loaders/MarketShareSkeleton";
 import CompetitorAnalysisTableSkeleton from "@/components/loaders/CompetitorAnalysisLoader";
-import { RoadmapCard } from "@/components/RoadmapCard";
-import SWOTAnalysis from "@/components/SWOTAnalysisCard";
-import PASTELIAnalysis from "@/components/PastelAnalysis";
+import { RoadmapCard, RoadmapCardProps } from "@/components/RoadmapCard";
+import SWOTAnalysis, { SWOTAnalysisProps } from "@/components/SWOTAnalysisCard";
+import PASTELIAnalysis, { PASTELIAnalysisProps } from "@/components/PastelAnalysis";
 
 type Props = {
-  "Analyzing Business Idea:": { content: string };
-  "Node: market_size_report": { content: string };
-  "Node: market_size_graph": { content: string };
-  "Node: competitors_table": { content: string };
-  "Node: generate_competitors_chart": { content: string };
-  "Node: swot_analysis": { content: string };
-  "Node: pestali_analysis": { content: string };
-  "Node: roadmap": { content: string };
-  "data: [DONE]": { content: string };
+  "knowledge_base": MarkdownViewerProps;
+  "market_size_data_points": MarketSizeAnalysisCardProps;
+  "market_player_table_data": CompetitorAnalysisTableProps;
+  "competitors_chart_data": CompetitiorAnalysisGraphProps;
+  "swot_analysis": SWOTAnalysisProps;
+  "pestali_analysis": PASTELIAnalysisProps;
+  "roadmap": RoadmapCardProps;
 };
 
 export default function Home() {
@@ -35,25 +33,23 @@ export default function Home() {
   const streamDataKeys: {
     [K in keyof Props]: React.FC<Props[K]>;
   } = {
-    "Analyzing Business Idea:": ResponseContentViewer,
-    "Node: market_size_report": MarkdownViewer,
-    "Node: market_size_graph": MarketSizeAnalysisCard,
-    "Node: competitors_table": CompetitorAnalysisTable,
-    "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
-    "Node: swot_analysis": SWOTAnalysis,
-    "Node: pestali_analysis": PASTELIAnalysis,
-    "Node: roadmap": RoadmapCard,
-    "data: [DONE]": ShowNothing,
+    "knowledge_base": MarkdownViewer,
+    "market_size_data_points": MarketSizeAnalysisCard,
+    "market_player_table_data": CompetitorAnalysisTable,
+    "competitors_chart_data": CompetitiorAnalysisGraph,
+    "swot_analysis": SWOTAnalysis,
+    "pestali_analysis": PASTELIAnalysis,
+    "roadmap": RoadmapCard,
   };
   
   function extractStreamData(
-    inputString: string
-  ): { component: React.FC<{ content: string }>; content: string } | null {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    obj: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): { component: React.FC<{ data: any }>; data: any } | null {
     for (const [key, component] of Object.entries(streamDataKeys)) {
-      const matchIndex = inputString.indexOf(key);
-      if (matchIndex !== -1) {
-        const content = inputString.slice(matchIndex + key.length).trim();
-        return { component, content };
+      if (key === obj["key"]) { 
+        return { component, data: obj };
       }
     }
     return null;
@@ -120,18 +116,15 @@ export default function Home() {
             {streamData.map((data, index) => {
               const extracted = extractStreamData(data);
               if (extracted) {
-                const { component: Component, content } = extracted;
+                const { component: Component, data } = extracted;
+              
                 return (
-                  <div key={index} className="mb-1">
-                    <Component content={content} />
+                  <div key={data["key"]} className="mb-1">
+                    <Component data={data} />
                   </div>
                 );
               }
-              return (
-                <li key={index} className="mb-1">
-                  {data}
-                </li>
-              );
+               
             })}
           </div>
         </div>

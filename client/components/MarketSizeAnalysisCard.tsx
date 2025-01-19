@@ -4,16 +4,38 @@ import LineChartComponent from "./charts/LineChart";
 import { parseMarketSizeData } from "@/data/DataMapping";
 import SourcesModal from "./common/SourcesModal";
 
-type MarketSizeAnalysisCardProps = {
-
-  content: string;
-  
+export type MarketSizeAnalysisCardProps = {
+  data: {
+    key: string;
+    data: {
+      sources: string[];
+      data_points: {
+        point_date: string;
+        tam: number;
+        sam: number;
+        som: number;
+      }[];
+    };
+    status: string;
+  };
 };
 
-const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  content }) => {
-  const [chartData]= useState(parseMarketSizeData(content)?.chartData);
-  const [sources]= useState(parseMarketSizeData(content)?.sources);
+const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data }) => {
+  const {
+    chartData,
+    sources
+  } = parseMarketSizeData(data.data) ?? {
+    chartData: {
+      labels: [],
+      datasets: []
+    },
+    sources: []
+  }
+
+  console.log({chartData, sources});
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -22,14 +44,11 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({  conten
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-  // useEffect(()=>{
-  //   console.log(chartData);
-  //   console.log(content);
-  // },[chartData])
+ 
   
   return (
     <div className="p-6 bg-white rounded-md shadow-md max-w-7xl mx-auto">
-      {/* Header */}
+      Header
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Market Size Analysis</h2>
         <p className="text-sm text-gray-500">TAM, SAM, SOM</p>

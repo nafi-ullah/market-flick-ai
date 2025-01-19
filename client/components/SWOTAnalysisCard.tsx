@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React from "react";
 import SWOTAnalysisCard from "./subcomponent/SwotColorCard";
 import { parseSwotData } from "@/data/SwotMapping";
 
@@ -11,13 +11,16 @@ type SWOTItem = {
   color: string;
 };
 
-type SWOTAnalysisProps = {
-  content: string;
+export type SWOTAnalysisProps = {
+  data: {
+    key: string;
+    data: string;
+    status: string;
+  }
 };
 
-const SWOTAnalysis: React.FC<SWOTAnalysisProps> = ({ content }) => {
-  const [swot_data] = useState(parseSwotData(content))
-
+const SWOTAnalysis: React.FC<SWOTAnalysisProps> = ({ data }) => {
+  const swot_data = parseSwotData(data.data)
 
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
