@@ -74,42 +74,42 @@ async def business_analysis_stream(
                         for key in important_keys:
                             if key in output:
                                 try:
-                                    yield {
+                                    yield json.dumps({
                                         "key": key,
                                         "data": json.loads(output[key]),
                                         "status": "success"
-                                    }
+                                    })
                                 except Exception as e:
-                                    yield {
+                                    yield json.dumps({
                                         "key": key,
                                         "data": output[key],
                                         "status": "error"
-                                    }
+                                    })
 
                     # Optional: add a small delay to prevent overwhelming the client
                     await asyncio.sleep(0.1)
 
                 except Exception as e:
-                    yield {
+                    yield json.dumps({
                         "key": "error",
                         "data": str(e),
                         "status": "error"
-                    }
+                    })
                     continue
 
             # Final event to indicate stream completion
-            yield {
+            yield json.dumps({
                 "key": "data",
                 "data": "[DONE]",
                 "status": "success"
-            }
+            })
 
         except Exception as e:
-            yield {
+            yield json.dumps({
                 "key": "error",
                 "data": str(e),
                 "status": "error"
-            }
+            })
 
     # Return a StreamingResponse with the async generator
     return StreamingResponse(generate_stream(), media_type="application/json")
@@ -152,50 +152,48 @@ async def previous_analysis_stream(
 ) -> StreamingResponse:
     async def generate_stream() -> AsyncGenerator[str, None]:
         try:
+            yield json.dumps({
+                "key": "start",
+                "data": "Waaassuupp?",
+                "status": "success"
+            })
             # Create the graph
             saved_responses = get_all_saved_responses(knowledge_base_id)
             # Stream the graph execution
             for key, response in saved_responses.items():
                 try:
-                    output_str = ""
-
-                    output_str += f"Node: {key}\n"
-
-                    print("!!! ", output_str)
-                    # Handle knowledge base ID
                     for key in important_keys:
                         if key in response:
-                            output_str += f"{key}: {json.dumps(response[key])}\n"
-                            yield {
+                            yield json.dumps({
                                 "key": key,
                                 "data": response[key],
                                 "status": "success"
-                            }
+                            })
 
                     # Optional: add a small delay to prevent overwhelming the client
                     await asyncio.sleep(0.1)
 
                 except Exception as e:
-                    yield {
+                    yield json.dumps({
                         "key": "error",
                         "data": str(e),
                         "status": "error"
-                    }
+                    })
                     continue
 
             # Final event to indicate stream completion
-            yield {
+            yield json.dumps({
                 "key": "data",
                 "data": "[DONE]",
                 "status": "success"
-            }
+            })
 
         except Exception as e:
-            yield {
+            yield json.dumps({
                 "key": "error",
                 "data": str(e),
                 "status": "error"
-            }
+            })
 
     # Return a StreamingResponse with the async generator
     return StreamingResponse(generate_stream(), media_type="application/json")
