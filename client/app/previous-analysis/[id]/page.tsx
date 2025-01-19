@@ -77,11 +77,36 @@ export default function Home() {
       while (reader) {
         const { value, done } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value);
-        chunks.push(chunk);
+        const chunkstr = decoder.decode(value);
+        console.log("~~~ chunk", chunkstr);
+        const splitted_chunkstr = chunkstr.split("}{")
+        splitted_chunkstr.forEach((chunk, index) => {
+          if (splitted_chunkstr.length == 1) {
+            chunks.push(chunk);
+            return;
+          }
+          if (index === 0) {
+            chunks.push(`${chunk}}`);
+          } else if (index === splitted_chunkstr.length - 1) {
+            chunks.push(`{${chunk}`);
+          } else {
+            chunks.push(`{${chunk}}`);
+          }
+        });
       }
 
-      setStreamData(chunks);
+      const chunks_json = chunks.map(chunk => {
+        try {
+          return JSON.parse(chunk);
+        } catch (error) {
+          console.error("Error parsing JSON:", error, chunk);
+          return null;
+        }
+      }).filter(Boolean);
+
+      console.log("~~~ chunks_json", chunks_json);
+
+      setStreamData(chunks_json);
     })
     .catch(error => console.error("Error streaming data:", error));
   }, [id]);

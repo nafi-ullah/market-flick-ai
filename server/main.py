@@ -116,8 +116,11 @@ async def business_analysis_stream(
 
 
 def load_response_from_json(file_name: str):
-    with open(f"responses/{file_name}.json", "r") as f:
-        return json.load(f)
+    try:
+        with open(f"responses/{file_name}.json", "r") as f:
+            return json.load(f)
+    except Exception as e:
+        return None
 
 
 def get_all_saved_responses(knowledge_base_id: str):
