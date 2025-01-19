@@ -20,6 +20,7 @@ const BubbleChartComponent: React.FC<BubbleChartComponentProps> = ({ datasets })
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
@@ -36,14 +37,14 @@ const BubbleChartComponent: React.FC<BubbleChartComponentProps> = ({ datasets })
     },
     scales: {
       x: {
-        beginAtZero: true,
+        beginAtZero: false,
         title: {
           display: true,
           text: "Market Share (%)",
         },
       },
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
         title: {
           display: true,
           text: "Growth Rate (%)",
@@ -52,8 +53,7 @@ const BubbleChartComponent: React.FC<BubbleChartComponentProps> = ({ datasets })
     },
   };
 
-  return  <div style={{ height: "100%" }}>  <Bubble data={data} options={options} />;
-    </div>
+  return  <div style={{ height: "100%", minHeight: "400px" }}>  <Bubble data={data} options={options} /></div>
 };
 
 export default BubbleChartComponent;
