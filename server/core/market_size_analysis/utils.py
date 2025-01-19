@@ -75,17 +75,7 @@ def save_sources(sources: list[str], prefix: str,source_id: str):
 def extract_sources(prefix: str,source_id: str):
     with open(f"{KNOWLEDGE_BASE_PATH}/sources_{prefix}_{source_id}.json", "r") as f:
         return json.load(f)
-
-        
-
-def save_response_to_json(response: dict, unique_id: str):
-    """
-    Save response to a JSON file after ensuring all values are JSON serializable.
-
-    Args:
-        response (dict): Response dictionary to save
-        unique_id (str): Unique identifier for the file name
-    """
+def get_serializable_response(response: dict):
     # Convert any non-serializable values to strings
     serializable_response = {}
     for key, value in response.items():
@@ -98,8 +88,23 @@ def save_response_to_json(response: dict, unique_id: str):
                 serializable_response[key] = value
         elif isinstance(value, (str, int, float, bool, list, dict, type(None))):
             serializable_response[key] = value
+        elif hasattr(value, 'content'):  # Handle AIMessage objects
+            serializable_response[key] = value.content
         else:
             serializable_response[key] = str(value)
+    return serializable_response
+
+
+def save_response_to_json(response: dict, unique_id: str):
+    """
+    Save response to a JSON file after ensuring all values are JSON serializable.
+
+    Args:
+        response (dict): Response dictionary to save
+        unique_id (str): Unique identifier for the file name
+    """
+    # Convert any non-serializable values to strings
+    serializable_response = get_serializable_response(response)
 
     os.makedirs(RESPONSE_PATH, exist_ok=True)
     with open(f"{RESPONSE_PATH}/{unique_id}.json", "w") as f:

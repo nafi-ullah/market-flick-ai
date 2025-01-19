@@ -134,14 +134,40 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
-
+      
       while (reader) {
         const { value, done } = await reader.read();
         if (done) break;
+        const chunkstr = decoder.decode(value);
+        const splitted_chunkstr = chunkstr.split("}{")
+        
+        const chunks: string[] = [];
+        splitted_chunkstr.forEach((chunk, index) => {
+          if (splitted_chunkstr.length == 1) {
+            chunks.push(chunk);
+          }
+          else if (index === 0) {
+            chunks.push(`${chunk}}`);
+          } else if (index === splitted_chunkstr.length - 1) {
+            chunks.push(`{${chunk}`);
+          } else {
+            chunks.push(`{${chunk}}`);
+          }
+        });
 
-        const chunk = decoder.decode(value);
-        setStreamData((prev) => [...prev, chunk]);
+        setStreamData(prev => [...prev, ...chunks.map(chunk => {
+          try {
+            return JSON.parse(chunk);
+          } catch (error) {
+            console.error("Error parsing JSON:", error, chunk);
+            return null;
+          }
+        }).filter(Boolean)]);
       }
+
+  
+ 
+
     } catch (error) {
       console.error("Error streaming data:", error);
     } finally {

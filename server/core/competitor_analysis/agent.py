@@ -60,7 +60,6 @@ def generate_competitors_chart_node(state: BusinessAnalysisState):
     print_stream(agent.stream(inputs, stream_mode="values"))
 
     response = {
-        "messages": state['messages'][-1],
         "competitors_chart_id": chart_id,
         "competitors_chart_data": extract_competitors_chart_data(chart_id),
         
@@ -69,7 +68,6 @@ def generate_competitors_chart_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
     save_response_to_json(responses_to_save, f"competitors_chart_{chart_id}")
     
     return response
@@ -100,7 +98,6 @@ def swot_analysis_node(state: BusinessAnalysisState):
     print_stream(agent.stream(inputs, stream_mode="values"))
 
     response = {
-        "messages": state['messages'][-1],
         "swot_id": swot_id,
         "swot_analysis": extract_swot_analysis(swot_id),
     }
@@ -108,7 +105,6 @@ def swot_analysis_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
     save_response_to_json(responses_to_save, f"swot_analysis_{swot_id}")
 
     return response
@@ -133,7 +129,6 @@ def pestali_analysis_node(state: BusinessAnalysisState):
     print_stream(agent.stream(inputs, stream_mode="values"))
 
     response = {
-        "messages": state['messages'][-1],
         "pestali_id": pestali_id,
         "pestali_analysis": extract_pestali_analysis(pestali_id),
     }
@@ -141,7 +136,6 @@ def pestali_analysis_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
     save_response_to_json(responses_to_save, f"pestali_analysis_{pestali_id}")
 
     return response
@@ -168,7 +162,6 @@ def roadmap_node(state: BusinessAnalysisState):
     print_stream(agent.stream(inputs, stream_mode="values"))
 
     response = {
-        "messages": state['messages'][-1],
         "roadmap_id": roadmap_id,
         "roadmap": extract_roadmap(roadmap_id),
 
@@ -177,7 +170,6 @@ def roadmap_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
     save_response_to_json(responses_to_save, f"roadmap_{roadmap_id}")
 
     return response 

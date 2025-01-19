@@ -80,9 +80,6 @@ def market_size_report_node(state: BusinessAnalysisState):
 
     response = {
         "knowledge_base_id": unique_id,
-        "messages": [
-            AIMessage(content=f"Market size report generated with ID: {unique_id}")
-        ],
         "business_analysis_input": state[
             "business_analysis_input"
         ],  # preserve the input
@@ -92,7 +89,6 @@ def market_size_report_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
     save_response_to_json(responses_to_save, f"market_size_report_{unique_id}")
 
     return response
@@ -126,7 +122,6 @@ def market_size_graph_node(state: BusinessAnalysisState):
     data_points = extract_plot_data(plot_id)
 
     response = {
-        "messages": state["messages"][-1],
         "market_size_data_points": data_points,
         "market_size_plot_id": plot_id,
     }
@@ -134,7 +129,7 @@ def market_size_graph_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
+ 
     save_response_to_json(responses_to_save, f"market_size_graph_{unique_id}")
 
     return response
@@ -165,7 +160,6 @@ def competitors_table_node(state: BusinessAnalysisState):
     print_stream(agent.stream(inputs, stream_mode="values"))
 
     response = {
-        "messages": state["messages"][-1],
         "market_player_table_id": table_id,
         "market_player_table_data": extract_table_data(table_id),
     }
@@ -173,7 +167,6 @@ def competitors_table_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    del responses_to_save["messages"]
 
     save_response_to_json(responses_to_save, f"competitors_table_{table_id}")
 

@@ -11,6 +11,8 @@ from custom_types.market_analysis import BusinessAnalysisInput
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
 
+from core.market_size_analysis.utils import get_serializable_response
+
 
 app = FastAPI()
 
@@ -42,13 +44,18 @@ async def business_analysis_stream(
 ) -> StreamingResponse:
     async def generate_stream() -> AsyncGenerator[str, None]:
         try:
+            
+            yield json.dumps({
+                "key": "start",
+                "data": "Waaassuupp?",
+                "status": "success"
+            })
             # Create the graph
             graph = build_business_analysis_graph()
 
             # Initial state
             initial_state = {
                 "business_analysis_input": business_input,
-                "messages": "",
                 "knowledge_base_id": "",
                 "knowledge_base": "",
                 "market_size_data_points": "",
@@ -71,12 +78,15 @@ async def business_analysis_stream(
                     output_str = ""
                     for node, output in event.items():
                         # Handle knowledge base ID
+                        
+                        print("streaming", "-"*100)
+                        print(output)
                         for key in important_keys:
                             if key in output:
                                 try:
                                     yield json.dumps({
                                         "key": key,
-                                        "data": json.loads(output[key]),
+                                        "data": get_serializable_response(output[key]),
                                         "status": "success"
                                     })
                                 except Exception as e:
