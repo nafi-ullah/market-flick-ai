@@ -39,53 +39,14 @@ interface ParsedChartData {
   bubbleChartData: BubbleChartData;
 }
 
-/**
- * Helper function to parse the "competitors_chart_data" array
- * from the raw content_data string.
- */
-function extractCompetitorsChartData(content_data: string): any[] {
-  const startKey = "competitors_chart_data:";
-  const startIndex = content_data.indexOf(startKey);
-
-  if (startIndex === -1) {
-    console.warn("No competitors_chart_data found in content_data.");
-    return [];
-  }
-
-  const substringFromData = content_data.slice(startIndex + startKey.length).trim();
-  const firstBracketIndex = substringFromData.indexOf("[");
-  const lastBracketIndex = substringFromData.lastIndexOf("]");
-
-  if (firstBracketIndex === -1 || lastBracketIndex === -1) {
-    console.warn("Malformed competitors_chart_data array in content_data.");
-    return [];
-  }
-
-  // Extract just the array portion
-  const arrayString = substringFromData.slice(firstBracketIndex, lastBracketIndex + 1).trim();
-
-  // Convert single quotes to double quotes
-  // Then convert Pythonic keywords to JSON keywords
-  let jsonString = arrayString
-    .replace(/'/g, '"')
-    .replace(/\bNone\b/g, "null")
-    .replace(/\bTrue\b/g, "true")
-    .replace(/\bFalse\b/g, "false");
-
-  try {
-    return JSON.parse(jsonString);
-  } catch (err) {
-    console.error("Failed to parse JSON for competitors_chart_data:", err);
-    return [];
-  }
-}
+ 
 
 /**
  * Main function to structure the data into pieData, barChartData,
  * radarChartData, and bubbleChartData, also returning the `soures` 
  * array from each chart definition.
  */
-export function createChartData(content_data: string): ParsedChartData {
+export function createChartData(chartDataArray: any[]): ParsedChartData {
   // Initialize with some default empty structures:
   let pieData: PieChartData = {
     labels: [],
@@ -126,7 +87,6 @@ export function createChartData(content_data: string): ParsedChartData {
   };
 
   // 1) Extract the array of competitor chart data from the content_data
-  const chartDataArray = extractCompetitorsChartData(content_data);
 
   // 2) Iterate over each chart definition and transform
   chartDataArray.forEach((chart) => {

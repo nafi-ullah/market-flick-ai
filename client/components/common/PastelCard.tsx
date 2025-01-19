@@ -10,16 +10,18 @@ interface ImpactItem {
 }
 
 interface ImpactGridProps {
-  content: string;
+  pestali_data: {
+    pestaliData: any[];
+    sources: any[];
+  };
 }
 
-const ImpactGrid: React.FC<ImpactGridProps> = ({ content }) => {
-  const [pasteliData] = useState(parsePestaliData(content).pestaliData)
+const ImpactGrid: React.FC<ImpactGridProps> = ({ pestali_data }) => {
+  const pestaliData = pestali_data.pestaliData
   
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {pasteliData.map((item, index) => {
+      {pestaliData.map((item, index) => {
         const impactText =
           item.impact_level >= 75
             ? 'Very High'

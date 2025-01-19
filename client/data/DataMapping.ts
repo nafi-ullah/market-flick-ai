@@ -28,38 +28,12 @@ interface MarketSizeAnalysisOutput {
 }
 
 export function parseMarketSizeData(
-  content_data: string
+  marketSizeData: {
+    sources: string[];
+    data_points: MarketSizeDataPoint[];
+  }
 ): MarketSizeAnalysisOutput | null {
-  // 1. Extract the substring that contains market size data points.
-  const regex =
-    /market_size_data_points:\s(\{[\s\S]*?\})\s*market_size_plot_id:/;
-  const match = content_data.match(regex);
-  if (!match || match.length < 2) {
-    console.error("Unable to locate market_size_data_points in content_data");
-    return null;
-  }
-
-  let marketSizeDataString: string = match[1];
-
-  // 2. Convert Python-style dictionary to JSON-style string:
-  //    - Replace single quotes with double quotes
-  //    - Convert Python booleans (True/False) to JS (true/false)
-  //    - Convert None to null
-  marketSizeDataString = marketSizeDataString
-    .replace(/'/g, '"')
-    .replace(/\bTrue\b/g, "true")
-    .replace(/\bFalse\b/g, "false")
-    .replace(/None/g, "null");
-
-  // 3. Parse the JSON string into an object
-  let marketSizeData: MarketSizeData;
-  try {
-    marketSizeData = JSON.parse(marketSizeDataString);
-  } catch (err) {
-    console.error("Error parsing JSON from market_size_data_points:", err);
-    return null;
-  }
-
+  
   const { sources, data_points } = marketSizeData;
   if (!Array.isArray(data_points)) {
     console.error("data_points is not an array");
@@ -127,28 +101,16 @@ interface AnalysisData {
   sources: string[];
 }
 
-export function parseMarketPlayerData(content: string): AnalysisData {
-  // Extract the market_player_table_data part using a regex
-  console.log("Content:", content);
-  const marketPlayerDataMatch = content.match(
-    /market_player_table_data:\s*(\{.*\})/
-  );
-  if (!marketPlayerDataMatch) {
-    // throw new Error("No market_player_table_data found in contentData");
-    console.log("No market_player_table_data found in contentData");
-    return {
-      competitors: [],
-      sources: [],
-    };
-  }
-
-  console.log(marketPlayerDataMatch[1]);
-
-  // Parse the extracted JSON string into an array
-  const marketPlayerData = JSON.parse(
-    marketPlayerDataMatch[1].replace(/'/g, '"')
-  ); // Replace single quotes with double quotes for valid JSON
-
+export function parseMarketPlayerData(marketPlayerData: {
+  competitors:  {
+    company_name: string;
+    valuation: string;
+    money_raised: string;
+    key_focus: string;
+  }[];
+  sources: string[];
+}): AnalysisData {
+   
   // Map the data to the desired analysis_data format
   const competitors: TableData[] = marketPlayerData.competitors.map(
     (player: any) => ({
@@ -158,7 +120,6 @@ export function parseMarketPlayerData(content: string): AnalysisData {
       key_focus: player.key_focus || "N/A",
     })
   );
-
   const sources: string[] = marketPlayerData.sources;
 
   const analysisData: AnalysisData = {
@@ -175,11 +136,8 @@ interface ParsedData {
 }
 
 export function parseMarkdownContentData(contentData: string): ParsedData {
-  // Adjust regex to avoid using the /s flag
-  const markdownMatch = contentData.match(
-    /knowledge_base: ([\s\S]*?)(?=search_queries:|$)/
-  );
-  let markdownContent = markdownMatch ? markdownMatch[1].trim() : "";
+ 
+  let markdownContent = contentData
   // remove first and last quotes if present
   markdownContent = markdownContent.replace(/^"|"$/g, "");
 

@@ -17,47 +17,9 @@ interface SwotItem {
 }
 
 // The function that transforms your big string into swotdata[]
-export function parseSwotData(content_data: string): SwotItem[] {
+export function parseSwotData(rawSwotData: any): SwotItem[] {
   try {
-    const swotKey = "swot_analysis:";
-    const startIdx = content_data.indexOf(swotKey);
-    if (startIdx === -1) {
-      throw new Error("No 'swot_analysis:' key found in the given string.");
-    }
-
-    // 2. Extract the substring that should contain the object
-    //    e.g. {'strength': [...], 'weakness': [...], 'opportunity': [...], 'threat': [...]}
-    //    We'll grab everything from "swot_analysis:" to the end of the string.
-    const swotPart = content_data.substring(startIdx + swotKey.length).trim();
-
-    // 3. Find the first '{' and the matching '}' from the end.
-    //    This is naive but usually works if the SWOT object is enclosed in a single set of braces.
-    const braceStart = swotPart.indexOf("{");
-    const braceEnd = swotPart.lastIndexOf("}");
-    if (braceStart === -1 || braceEnd === -1 || braceEnd <= braceStart) {
-      throw new Error(
-        "Could not find a valid {...} block for 'swot_analysis' object."
-      );
-    }
-
-    // 4. Extract just the object substring (including braces)
-    let swotObjectString = swotPart.substring(braceStart, braceEnd + 1);
-
-    // 5. Convert Python-style single quotes to JSON-friendly double quotes
-    //    WARNING: This breaks if you have single quotes inside text paragraphs.
-    //    For typical SWOT bullet lists, it generally works.
-    swotObjectString = swotObjectString.replace(/\\'/g, '"');
-
-    // 6. Parse the cleaned string as JSON
-    let rawSwotData: RawSWOT;
-    try {
-      console.log({ swotObjectString });
-      rawSwotData = JSON.parse(swotObjectString);
-    } catch (error) {
-      console.error("Error parsing the extracted SWOT JSON:", error);
-      return []
-    }
-
+     
     // 7. Create your final swotdata array using your static UI fields
     const swotdata: SwotItem[] = [
       {

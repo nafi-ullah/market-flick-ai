@@ -6,12 +6,16 @@ import RoadmapComponent from "./RoadmapComponent";
 
 
 export type RoadmapCardProps = {
-  content: string;
+  data: {
+    key: string;
+    data: any;
+    status: string;
+  }
 };
 
 
-export const RoadmapCard: React.FC<RoadmapCardProps> = ({ content }) => {
-    const [roadmapData]= useState(parseRoadmap(content));
+export const RoadmapCard: React.FC<RoadmapCardProps> = ({ data }) => {
+    const roadmapData = parseRoadmap(data.data)
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
         <RoadmapComponent title={roadmapData.title} elements={roadmapData.elements} />

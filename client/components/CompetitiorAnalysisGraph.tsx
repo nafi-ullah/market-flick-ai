@@ -7,14 +7,16 @@ import MarketPositionMappingCard from './MarketPositionMappingCard';
 import { createChartData } from '@/data/GraphDataMapping';
 
 
-type MarketSizeAnalysisCardProps = {
-
-  content: string;
-  
+export type CompetitiorAnalysisGraphProps = {
+   data: {
+    key: string;
+    data: any[];
+    status: string;
+   }  
 };
 
-const CompetitiorAnalysisGraph: React.FC<MarketSizeAnalysisCardProps> = ({  content }) => {
-   const [chartData]= useState(createChartData(content));
+const CompetitiorAnalysisGraph: React.FC<CompetitiorAnalysisGraphProps> = ({  data }) => {
+  const chartData = createChartData(data.data);
   return (
     <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
       <h2 className="text-lg font-bold mb-4">Competitor Analysis Graph</h2>

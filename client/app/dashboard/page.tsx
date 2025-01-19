@@ -4,21 +4,21 @@ import React, { useState } from "react";
 import AdvancedWebAnalyticsSuite from "@/components/advancedanalytics/AdvancedWebAnalyticsSuite";
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
-import CompetitiorAnalysisGraph from "@/components/CompetitiorAnalysisGraph";
-import CompetitorAnalysisTable from "@/components/CompetitorAnalysisTable";
+import CompetitiorAnalysisGraph, { CompetitiorAnalysisGraphProps } from "@/components/CompetitiorAnalysisGraph";
+import CompetitorAnalysisTable, { CompetitorAnalysisTableProps } from "@/components/CompetitorAnalysisTable";
 import Navbar from "@/components/core/Navbar";
 import FiveForceAnalysis from "@/components/FiveForceAnalysis";
 import MarketGapAnalysis from "@/components/MarketGapAnalysis";
 import MarketMixAnalysis from "@/components/MarketMixAnalysis";
-import MarketSizeAnalysisCard from "@/components/MarketSizeAnalysisCard";
+import MarketSizeAnalysisCard, { MarketSizeAnalysisCardProps } from "@/components/MarketSizeAnalysisCard";
 import MarketTrends from "@/components/MarketTrends";
-import PASTELIAnalysis from "@/components/PastelAnalysis";
+import PASTELIAnalysis, { PASTELIAnalysisProps } from "@/components/PastelAnalysis";
 import SevenSModel from "@/components/SevenModelComponent";
 import StrategicInsigtsCard from "@/components/StrategicInsigts";
-import SWOTAnalysis from "@/components/SWOTAnalysisCard";
+import SWOTAnalysis, { SWOTAnalysisProps } from "@/components/SWOTAnalysisCard";
 import SWOTfullComponent from "@/components/SWOTfullComponent";
 import { AIDAanalysisData,  SWOTanalysisData, sevenSData, streamDummyData } from "@/data/DummyData";
-import MarkdownViewer from "@/components/MarkdownComponent";
+import MarkdownViewer, { MarkdownViewerProps } from "@/components/MarkdownComponent";
 
 import ResponseContentViewer from "@/components/common/ResponseContentViewer";
 import ShowNothing from "@/components/common/ShowNothing";
@@ -26,20 +26,18 @@ import MarketSizeAnalysisCardSkeleton from "@/components/loaders/MarketSizeAnlyz
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import ArticleSkeleton from "@/components/loaders/ArticleSkeleton";
 import StackedAnimatedLoader from "@/components/loaders/AiLoader";
-import { RoadmapCard } from "@/components/RoadmapCard";
-
+import { RoadmapCard, RoadmapCardProps } from "@/components/RoadmapCard";
 
 type Props = {
-  "Analyzing Business Idea:": { content: string };
-  "Node: market_size_report": { content: string };
-  "Node: market_size_graph": { content: string };
-  "Node: competitors_table": { content: string };
-  "Node: generate_competitors_chart": { content: string };
-  "Node: swot_analysis_report": { content: string };
-  "Node: pestali_analysis_report": { content: string };
-  "Node: roadmap": { content: string };
-  "data: [DONE]": { content: string };
+  "knowledge_base": MarkdownViewerProps;
+  "market_size_data_points": MarketSizeAnalysisCardProps;
+  "market_player_table_data": CompetitorAnalysisTableProps;
+  "competitors_chart_data": CompetitiorAnalysisGraphProps;
+  "swot_analysis": SWOTAnalysisProps;
+  "pestali_analysis": PASTELIAnalysisProps;
+  "roadmap": RoadmapCardProps;
 };
+
 
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
@@ -47,14 +45,13 @@ export default function Home() {
   const streamDataKeys: {
     [K in keyof Props]: React.FC<Props[K]>;
   } = {
-    "Node: market_size_report": MarkdownViewer,
-    "Node: market_size_graph": MarketSizeAnalysisCard,
-    "Node: competitors_table": CompetitorAnalysisTable,
-    "Node: generate_competitors_chart": CompetitiorAnalysisGraph,
-    "Node: swot_analysis_report": SWOTAnalysis,
-    "Node: pestali_analysis_report": PASTELIAnalysis,
-    "Node: roadmap": RoadmapCard,
-    "data: [DONE]": ShowNothing,
+    "knowledge_base": MarkdownViewer,
+    "market_size_data_points": MarketSizeAnalysisCard,
+    "market_player_table_data": CompetitorAnalysisTable,
+    "competitors_chart_data": CompetitiorAnalysisGraph,
+    "swot_analysis": SWOTAnalysis,
+    "pestali_analysis": PASTELIAnalysis,
+    "roadmap": RoadmapCard,
   };
 
   /**
@@ -62,17 +59,18 @@ export default function Home() {
    * and if so, extracts the content that comes after the key.
    */
   function extractStreamData(
-    inputString: string
-  ): { component: React.FC<{ content: string }>; content: string } | null {
-    for (const [key, component] of Object.entries(streamDataKeys)) {
-      const matchIndex = inputString.indexOf(key);
-      if (matchIndex !== -1) {
-        const content = inputString.slice(matchIndex + key.length).trim();
-        return { component, content };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      obj: any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ): { component: React.FC<{ data: any }>; data: any } | null {
+      for (const [key, component] of Object.entries(streamDataKeys)) {
+        if (key === obj["key"]) { 
+          return { component, data: obj };
+        }
       }
+      return null;
     }
-    return null; // Return null if no match is found
-  }
+  
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)] pt-24">
@@ -91,30 +89,16 @@ export default function Home() {
               2) Check if that key exists in `streamData`.
               3) If it exists, render the extracted content. Otherwise show a loader.
             */}
-            {Object.entries(streamDataKeys).map(([key, Component]) => {
-              // Find the first string in streamData that contains this key:
-              const matchedString = streamData.find((chunk) =>
-                chunk.includes(key)
-              );
-
-              if (matchedString) {
+            {streamData.map((data) => {
                 // Extract that chunk's content
-                const extracted = extractStreamData(matchedString);
+                const extracted = extractStreamData(data);
                 if (extracted) {
                   return (
-                    <div key={key} className="mb-3">
-                      <extracted.component content={extracted.content} />
+                    <div key={data["key"]} className="mb-3">
+                      <extracted.component data={extracted.data} />
                     </div>
                   );
                 }
-              }
-
-              // If we reach here, we did not find content for this key => show loader
-              return (
-                <div key={key} className="mb-3">
-                  <IndividualLoader label={key} />
-                </div>
-              );
             })}
           </div>
         </div>

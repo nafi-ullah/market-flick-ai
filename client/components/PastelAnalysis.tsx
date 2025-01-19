@@ -9,13 +9,17 @@ import SourcesModal from "./common/SourcesModal";
 import { parsePestaliData } from "@/data/PasteliDataMapping";
 
 
-interface ImpactGridProps {
-  content: string;
+export interface PASTELIAnalysisProps {
+  data: {
+    key: string;
+    data: any;
+    status: string;
+  }
 }
 
-const PASTELIAnalysis: React.FC<ImpactGridProps> = ({ content }) => {
+const PASTELIAnalysis: React.FC<PASTELIAnalysisProps> = ({ data }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [sources] = useState(parsePestaliData(content).sources)
+    const pestali_data = parsePestaliData(data.data)
     const handleOpenModal = () => {
       setIsModalOpen(true);
     };
@@ -29,7 +33,7 @@ const PASTELIAnalysis: React.FC<ImpactGridProps> = ({ content }) => {
       <h2 className="text-lg font-bold mb-4">PASTELI Analysis</h2>
       
       {/* You can pass that data on to other components */}
-      <ImpactGrid content={content} />
+      <ImpactGrid pestali_data={pestali_data} />
       <div className="flex justify-end">
         <button 
          onClick={handleOpenModal}
@@ -38,7 +42,7 @@ const PASTELIAnalysis: React.FC<ImpactGridProps> = ({ content }) => {
           Sources
         </button>
       </div>
-      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
+      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={pestali_data.sources} />}
     </div>
   );
 }
