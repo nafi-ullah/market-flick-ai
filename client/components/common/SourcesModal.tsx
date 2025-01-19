@@ -39,8 +39,12 @@ const SourcesModal: React.FC<ModalProps> = ({ handleClose, sources }) => {
   }, [sources]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      onClick={handleClose}
+    >
+      <div className="bg-white rounded-lg shadow-lg w-96 p-6 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
           onClick={handleClose}
