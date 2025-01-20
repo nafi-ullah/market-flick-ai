@@ -26,7 +26,7 @@ export default function IndividualLoader({ label }: LoaderProps) {
   const LoaderComponent = label ? componentKeys[label] : null;
 
   return (
-    <div className="py-2 px-4 border border-gray-200 rounded bg-gray-50">
+    <div className="py-2 px-4 border border-gray-200 rounded bg-gray-50 ">
       
       {LoaderComponent ? (
         <LoaderComponent />

@@ -29,6 +29,9 @@ import StackedAnimatedLoader from "@/components/loaders/AiLoader";
 import { RoadmapCard, RoadmapCardProps } from "@/components/RoadmapCard";
 import CompetitorAnalysisTableSkeleton from "@/components/loaders/CompetitorAnalysisLoader";
 import CompetitiorAnalysisGraphSkeleton from "@/components/loaders/CompetitorAnalysisGraphSkeleton";
+import SWOTAnalysisSkeleton from "@/components/loaders/SwotAnalysisLoader";
+import PASTELIAnalysisSkeleton from "@/components/loaders/PasteliAnalysisLoader";
+import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
 
 type Props = {
   "knowledge_base": MarkdownViewerProps;
@@ -66,15 +69,15 @@ export default function Home() {
     },
     swot_analysis: {
       component: SWOTAnalysis,
-      loader: CompetitiorAnalysisGraphSkeleton,
+      loader: SWOTAnalysisSkeleton,
     },
     pestali_analysis: {
       component: PASTELIAnalysis,
-      loader: CompetitiorAnalysisGraphSkeleton,
+      loader: PASTELIAnalysisSkeleton,
     },
     roadmap: {
       component: RoadmapCard,
-      loader: CompetitiorAnalysisGraphSkeleton,
+      loader: RoadmapComponentSkeleton,
     },
   };
 
@@ -128,6 +131,7 @@ export default function Home() {
           </div>
         </div>
       )}
+
     </div>
   );
 }

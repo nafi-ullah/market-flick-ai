@@ -62,7 +62,7 @@ export default function PreviousAnalysisLayout({
         }}
         
       >
-        <Box sx={{ overflow: 'auto', mt: 8 }}>  {/* Added margin top to account for navbar */}
+        <Box sx={{ overflow: 'auto', mt: 8, mx: 'auto' }}>  {/* Added margin top to account for navbar */}
           <Typography
             variant="h6"
             sx={{
