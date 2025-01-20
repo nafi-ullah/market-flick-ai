@@ -1,4 +1,16 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { 
+  FiBarChart2, 
+  FiGlobe, 
+  FiPieChart, 
+  FiTrendingUp,
+  FiFileText,
+  FiCheckCircle,
+  FiTarget,
+  FiGrid,
+  FiAward
+} from 'react-icons/fi';
 
 /**
  * DetailedFeaturesSection showcases key product capabilities and unique selling points.
@@ -10,197 +22,139 @@ import React from 'react';
  */
 const DetailedFeaturesSection: React.FC = () => {
   // Detailed feature list with comprehensive descriptions
-  const marketResearchCapabilities: {
-    icon: string;
-    title: string;
-    description: string;
-    color: string;
-  }[] = [
+  const marketResearchCapabilities = [
     {
-      icon: 'fa-chart-line', 
+      icon: <FiBarChart2 className="w-6 h-6" />,
       title: 'Comprehensive Market Analysis',
-      description: 'Assess your idea\'s viability with SWOT, PESTEL, and Porter\'s Five Forces evaluations, helping you prepare for challenges and seize opportunities.',
-      color: 'text-blue-500'
+      description: 'Assess your idea\'s viability with SWOT, PESTEL, and Porter\'s Five Forces evaluations.',
+      color: 'from-blue-600/20 to-purple-600/20'
     },
     {
-      icon: 'fa-lightbulb', 
+      icon: <FiTrendingUp className="w-6 h-6" />,
       title: 'Strategic Business Recommendations',
-      description: 'Receive AI-powered strategic recommendations and actionable insights to guide your business decisions and growth strategy.',
-      color: 'text-yellow-500'
+      description: 'Receive AI-powered strategic recommendations and actionable insights.',
+      color: 'from-yellow-600/20 to-orange-600/20'
     },
     {
-      icon: 'fa-briefcase', 
+      icon: <FiTarget className="w-6 h-6" />,
       title: 'Customized Business Strategies',
-      description: 'Get tailored strategies and frameworks for planning and execution, equipping you to bring your vision to life.',
-      color: 'text-purple-500'
+      description: 'Get tailored strategies and frameworks for planning and execution.',
+      color: 'from-purple-600/20 to-pink-600/20'
     },
     {
-      icon: 'fa-globe', 
-      title: 'Website Analysis and Optimization',
+      icon: <FiGlobe className="w-6 h-6" />,
+      title: 'Website Analysis',
       description: 'Evaluate online presence and optimize digital strategy.',
-      color: 'text-cyan-500'
+      color: 'from-cyan-600/20 to-blue-600/20'
     },
     {
-      icon: 'fa-robot', 
-      title: 'AI-Powered Business Consulting',
+      icon: <FiGrid className="w-6 h-6" />,
+      title: 'AI-Powered Consulting',
       description: 'Get AI-powered business advice and strategic guidance.',
-      color: 'text-emerald-500'
+      color: 'from-emerald-600/20 to-teal-600/20'
     },
     {
-      icon: 'fa-file-powerpoint', 
-      title: 'Pitch Deck Creation and Editing',
+      icon: <FiFileText className="w-6 h-6" />,
+      title: 'Pitch Deck Creation',
       description: 'Create compelling investor presentations with AI assistance.',
-      color: 'text-rose-500'
+      color: 'from-rose-600/20 to-pink-600/20'
     },
     {
-      icon: 'fa-file-export', 
-      title: 'Report Editing and Exporting',
+      icon: <FiPieChart className="w-6 h-6" />,
+      title: 'Report Generation',
       description: 'Customize and export professional market analysis reports.',
-      color: 'text-lime-600'
+      color: 'from-lime-600/20 to-green-600/20'
     },
     {
-      icon: 'fa-check-circle', 
-      title: 'Idea Viability Assessment',
+      icon: <FiCheckCircle className="w-6 h-6" />,
+      title: 'Idea Validation',
       description: 'Get instant feedback on your business idea\'s potential.',
-      color: 'text-green-600'
+      color: 'from-green-600/20 to-emerald-600/20'
     },
     {
-      icon: 'fa-chess', 
-      title: 'Competitive Market Analysis',
+      icon: <FiAward className="w-6 h-6" />,
+      title: 'Competitive Analysis',
       description: 'Analyze competitors and identify market advantages.',
-      color: 'text-amber-500'
+      color: 'from-amber-600/20 to-yellow-600/20'
     }
   ];
 
-  /**
-   * FeatureCard component represents a single feature card.
-   * 
-   * Props:
-   * - icon: Font Awesome icon class
-   * - iconColor: Tailwind color class for icon
-   * - title: Feature title
-   * - description: Feature description
-   */
-  interface FeatureCardProps {
-    icon: string;
-    iconColor: string;
-    title: string;
-    description: string;
-  }
-
-  /**
-   * FeatureCard component implementation.
-   */
-  const FeatureCard: React.FC<FeatureCardProps> = ({ 
-    icon, 
-    iconColor,
-    title, 
-    description 
-  }) => (
-    <article 
-      className="
-        p-6 bg-white rounded-xl 
-        border border-gray-200 
-        hover:border-custom/30 
-        hover:shadow-2xl 
-        transition-all duration-300 
-        group 
-        relative 
-        overflow-hidden
-      "
-    >
-      <div 
-        className="
-          absolute inset-0 
-          bg-gradient-to-r from-custom/10 to-custom/20 
-          opacity-0 
-          group-hover:opacity-100 
-          transition-opacity duration-300 
-          z-0
-        "
-      />
-      <div className="relative z-10">
-        <figure 
-          className="
-            w-12 h-12 
-            bg-custom/10 
-            rounded-lg 
-            flex items-center 
-            justify-center 
-            mb-4 
-            group-hover:bg-custom/20 
-            transition-colors 
-            duration-300
-          "
-        >
-          <i 
-            className={`
-              fas ${icon} 
-              text-xl 
-              ${iconColor}
-              group-hover:text-custom/80 
-              transition-colors 
-              duration-300
-            `}
-          ></i>
-        </figure>
-        <h3 
-          className="
-            text-xl 
-            font-semibold 
-            mb-3 
-            text-gray-900 
-            group-hover:text-custom 
-            transition-colors 
-            duration-300
-          "
-        >
-          {title}
-        </h3>
-        <p 
-          className="
-            text-gray-600 
-            group-hover:text-gray-800 
-            transition-colors 
-            duration-300
-          "
-        >
-          {description}
-        </p>
-      </div>
-    </article>
-  );
-
   return (
-    // Features section with gradient background
     <section 
       id="features-section"
       className="py-24 bg-white"
     >
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-2xl font-bold mb-4">
-            Unlock Your Business Potential with Market Flick AI
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Unlock Your Business Potential
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Turn your business idea into reality with tools offering in-depth analysis, 
-            strategic guidance, and actionable insights.
+            Transform your business idea into reality with our comprehensive suite of AI-powered tools
           </p>
-        </div>
+        </motion.div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {marketResearchCapabilities.map((capability, index) => (
-            <FeatureCard 
-              key={index} 
-              icon={capability.icon} 
-              iconColor={capability.color}
-              title={capability.title} 
-              description={capability.description} 
-            />
+            <motion.div
+              key={index}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 100
+                  }
+                }
+              }}
+              whileHover={{ y: -5 }}
+              className="p-6 bg-white rounded-xl border border-gray-200 hover:border-blue-500/30 hover:shadow-2xl transition-all duration-300 group"
+            >
+              <motion.div
+                animate={{
+                  y: [0, -5, 0],
+                  transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.1
+                  }
+                }}
+                className={`w-12 h-12 bg-gradient-to-r ${capability.color} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+              >
+                {capability.icon}
+              </motion.div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                {capability.title}
+              </h3>
+              <p className="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
+                {capability.description}
+              </p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

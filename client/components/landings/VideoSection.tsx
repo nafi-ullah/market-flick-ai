@@ -1,65 +1,80 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+import { RiAtLine, RiRobot2Line } from "react-icons/ri";
+import { FiGlobe } from "react-icons/fi";
 
-/**
- * ProductVideoSection showcases product capabilities through an embedded video
- * and key product highlights.
- * 
- * Key Features:
- * - Responsive video embed
- * - Animated product highlights
- * - Framer Motion animations
- * - Engaging product demonstration
- */
 const ProductVideoSection: React.FC = () => {
-  // Animation variants for section container
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const video = videoRef.current;
+        if (video) {
+          if (entry.isIntersecting) {
+            video.play(); // Play the video when in view
+          } else {
+            video.pause(); // Pause the video when out of view
+          }
+        }
+      },
+      { threshold: 0.5 } // Video must be at least 50% visible
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const sectionContainerAnimationVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         delayChildren: 0.3,
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
-  // Animation variants for individual section elements
   const sectionElementAnimationVariants = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
       transition: {
-        type: 'spring',
+        type: "spring",
         damping: 12,
-        stiffness: 100
-      }
-    }
+        stiffness: 100,
+      },
+    },
   };
 
-  // Product capability highlights
   const productCapabilityHighlights = [
     {
-      icon: 'fa-chart-line',
-      title: 'Advanced Market Analysis',
-      description: 'Discover deep insights with our AI-powered market research tools.'
+      icon: <RiAtLine className="w-6 h-6" />,
+      title: "Advanced Market Analysis",
+      description:
+        "Discover deep insights with our AI-powered market research tools.",
     },
     {
-      icon: 'fa-globe',
-      title: 'Global Market Intelligence',
-      description: 'Access comprehensive market data across multiple industries and regions.'
+      icon: <FiGlobe className="w-6 h-6" />,
+      title: "Global Market Intelligence",
+      description:
+        "Access comprehensive market data across multiple industries and regions.",
     },
     {
-      icon: 'fa-robot',
-      title: 'AI-Driven Recommendations',
-      description: 'Receive actionable strategic insights tailored to your business needs.'
-    }
+      icon: <RiRobot2Line className="w-6 h-6" />,
+      title: "AI-Driven Recommendations",
+      description:
+        "Receive actionable strategic insights tailored to your business needs.",
+    },
   ];
 
   return (
-    // Video section with gradient background
-    <motion.section 
+    <motion.section
       id="product-video-section"
       initial="hidden"
       animate="visible"
@@ -68,7 +83,7 @@ const ProductVideoSection: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <motion.div 
+        <motion.div
           variants={sectionElementAnimationVariants}
           className="text-center mb-16"
         >
@@ -76,54 +91,57 @@ const ProductVideoSection: React.FC = () => {
             See Our AI Market Research in Action
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover how our AI-powered platform transforms complex market data into actionable insights. 
-            Watch a quick demo to understand how we can help you make smarter business decisions.
+            Discover how our AI-powered platform transforms complex market data
+            into actionable insights. Watch a quick demo to understand how we
+            can help you make smarter business decisions.
           </p>
         </motion.div>
 
         {/* Video and Highlights Container */}
         <motion.div
           variants={sectionContainerAnimationVariants}
-          className="grid lg:grid-cols-2 gap-16 items-center"
+          className="grid lg:grid-cols-2 gap-16 items-start"
         >
           {/* Video Embed Column */}
-          <motion.div 
+          <motion.div
             variants={sectionElementAnimationVariants}
-            className="relative rounded-xl overflow-hidden shadow-xl"
+            className="sticky top-24 h-fit"
           >
-            <div className="aspect-w-16 aspect-h-9">
-              <iframe 
-                src="https://www.youtube.com/embed/3TXTRg4gN6A?autoplay=0&controls=1" 
-                title="Market Flick AI Market Research Demo"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-              ></iframe>
+            <div className="relative rounded-xl overflow-hidden  min-h-[60vh]">
+              <div className="relative w-full ">
+                {/* <video
+                  ref={videoRef}
+                  src="/demo-video.mp4"
+                  muted
+                  loop
+                  className="absolute inset-0 w-full h-full object-cover rounded-xl"
+                /> */}
+                <img src="assetdumm.png" alt="Demo Video" className="absolute inset-0 min-w-[40wh] min-h-[30vh]  rounded-xl" />
+              </div>
             </div>
           </motion.div>
 
           {/* Product Highlights Column */}
-          <motion.div 
+          <motion.div
             variants={sectionElementAnimationVariants}
             className="space-y-8"
           >
             {productCapabilityHighlights.map((highlight, index) => (
-              <div 
-                key={index} 
+              <motion.div
+                key={index}
+                whileHover={{ y: -5 }}
                 className="flex items-center space-x-6 bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
               >
-                <div className="text-4xl text-custom">
-                  <i className={`fas ${highlight.icon}`}></i>
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-full flex items-center justify-center text-blue-600">
+                  {highlight.icon}
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {highlight.title}
                   </h3>
-                  <p className="text-gray-600">
-                    {highlight.description}
-                  </p>
+                  <p className="text-gray-600">{highlight.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </motion.div>
