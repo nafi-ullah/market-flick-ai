@@ -1,8 +1,7 @@
-import json
-from typing import TypedDict, Annotated
+from datetime import datetime
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import create_react_agent
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from custom_types.market_analysis import BusinessAnalysisState
 from langchain_openai import ChatOpenAI
 from langchain_community.tools import TavilySearchResults
@@ -53,7 +52,7 @@ search_tool = TavilySearchResults(
 
 
 
-def market_size_report_node(state: BusinessAnalysisState):
+async def market_size_report_node(state: BusinessAnalysisState):
     """Generate market size report"""
     agent = create_react_agent(
         llm,
@@ -75,6 +74,17 @@ def market_size_report_node(state: BusinessAnalysisState):
             ),
         ]
     }
+
+    # title = llm.ainvoke(f"generate a title for this business idea:\n")
+
+    basic_info = {
+        "sector": state["business_analysis_input"].sector,
+        "idea": state["business_analysis_input"].idea,
+        "location": state["business_analysis_input"].location,
+        "date": datetime.now(),
+    }
+
+    save_response_to_json(basic_info, f"basic_info_{unique_id}")
 
     print_and_save_stream(agent.stream(inputs, stream_mode="values"), unique_id)
 

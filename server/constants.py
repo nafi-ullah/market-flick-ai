@@ -5,6 +5,10 @@ RESPONSE_PATH = "responses"
 
 important_keys = [
     "messages",
+    "sector",
+    "idea",
+    "location",
+    "date",
     "knowledge_base_id",
     "knowledge_base",
     "market_size_data_points",

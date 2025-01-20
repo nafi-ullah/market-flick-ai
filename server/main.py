@@ -2,6 +2,7 @@ import json
 from constants import RESPONSE_PATH, important_keys
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
+import re
 from fastapi.responses import StreamingResponse
 import asyncio
 from typing import AsyncGenerator
@@ -75,8 +76,7 @@ async def business_analysis_stream(
             # Stream the graph execution
             async for event in graph.astream(initial_state):
                 try:
-                    output_str = ""
-                    for node, output in event.items():
+                    for _, output in event.items():
                         # Handle knowledge base ID
                         
                         print("streaming", "-"*100)
@@ -135,6 +135,9 @@ def load_response_from_json(file_name: str):
 
 def get_all_saved_responses(knowledge_base_id: str):
     return {
+        "basic_info": load_response_from_json(
+            f"basic_info_{knowledge_base_id}"
+        ),
         "market_size_report": load_response_from_json(
             f"market_size_report_{knowledge_base_id}"
         ),
@@ -173,6 +176,18 @@ async def previous_analysis_stream(
             # Create the graph
             saved_responses = get_all_saved_responses(knowledge_base_id)
             # Stream the graph execution
+
+            if saved_responses["basic_info"] is None:
+                data = saved_responses["market_size_report"]["business_analysis_input"]
+                pattern = r"(\w+)=\'([^\']*)\'"
+                data_dict = {match.group(1): match.group(2) for match in re.finditer(pattern, data)}
+                saved_responses["basic_info"] = {
+                    "sector": data_dict["sector"],
+                    "idea": data_dict["idea"],
+                    "location": data_dict["location"],
+                    "date": "Unknown"
+                }
+
             for key, response in saved_responses.items():
                 try:
                     for key in important_keys:
@@ -232,9 +247,38 @@ async def get_analyses():
             if os.path.isfile(os.path.join(RESPONSE_PATH, file)) and "market_size_report" in file.lower()
         ]
 
+        info_list = []
+
+        for id in filtered_files:
+            basic_info = load_response_from_json(f"basic_info_{id}")
+
+            if basic_info:
+                info_list.append({
+                    "id": id,
+                    "sector": basic_info["sector"],
+                    "idea": basic_info["idea"],
+                    "location": basic_info["location"],
+                    "date": basic_info["date"]
+                })
+            else:
+                market_size_report = load_response_from_json(f"market_size_report_{id}")
+
+                data = market_size_report["business_analysis_input"]
+
+                pattern = r"(\w+)=\'([^\']*)\'"
+                data_dict = {match.group(1): match.group(2) for match in re.finditer(pattern, data)}
+                
+                info_list.append({
+                    "id": id,
+                    "sector": data_dict["sector"],
+                    "idea": data_dict["idea"],
+                    "location": data_dict["location"],
+                    "date": "Unknown"
+                })
 
         return {
-            "analyses": filtered_files
+            "analyses": filtered_files,
+            "info": info_list   
         }
 
     except FileNotFoundError:
