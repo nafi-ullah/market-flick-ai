@@ -81,19 +81,7 @@ export default function Home() {
     },
   };
 
-  /**
-   * Extracts the component and data for a given key if available.
-   */
-  function extractStreamData(
-    obj: any
-  ): { component: React.FC<{ data: any }>; data: any } | null {
-    for (const [key, { component }] of Object.entries(streamDataKeys)) {
-      if (key === obj["key"]) {
-        return { component, data: obj };
-      }
-    }
-    return null;
-  }
+ 
 
   return (
     <div className="font-[family-name:var(--font-geist-sans)] pt-24">
@@ -110,7 +98,7 @@ export default function Home() {
               const data = streamData.find((item) => item["key"] === key);
               const { component: Component, loader: Loader } =
                 streamDataKeys[key as keyof Props];
-
+              console.log('~~~', key, data)
               return (
                 <div key={key} className="mb-3">
                   {data ? (
