@@ -8,6 +8,7 @@ import PricingComponent from "@/components/landings/Pricing";
 import ProductFrequentlyAskedQuestionsSection from "@/components/landings/FAQSection";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import FileUpload from "../components/chat/FileUpload";
 
 
 
@@ -19,6 +20,7 @@ export default function Home() {
       <main>
         <section id="hero">
           <HeroSection />
+         
         </section>
         <section id="product-video-section">
           <ProductVideoSection />

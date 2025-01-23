@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-
+import { BsWechat } from 'react-icons/bs';
 import AdvancedWebAnalyticsSuite from "@/components/advancedanalytics/AdvancedWebAnalyticsSuite";
 import AIDAAnalysis from "@/components/AidiaAnalaysisComponent";
 import BusinessAnalysisForm from "@/components/BusinessCardForm";
@@ -32,6 +32,8 @@ import CompetitiorAnalysisGraphSkeleton from "@/components/loaders/CompetitorAna
 import SWOTAnalysisSkeleton from "@/components/loaders/SwotAnalysisLoader";
 import PASTELIAnalysisSkeleton from "@/components/loaders/PasteliAnalysisLoader";
 import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
+import ChatbotModal from "@/components/chat/ChatModal";
+import CascadeModal from "@/components/chat/CascadeModal";
 
 type Props = {
   "knowledge_base": MarkdownViewerProps;
@@ -81,10 +83,16 @@ export default function Home() {
     },
   };
 
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+
+  const toggleChatbot = () => {
+    setIsChatbotOpen((prev) => !prev);
+  };
+
  
 
   return (
-    <div className="font-[family-name:var(--font-geist-sans)] pt-24">
+    <div className="relative font-[family-name:var(--font-geist-sans)] pt-24">
       <Navbar />
 
       {/* Form that updates streamData */}
@@ -120,6 +128,14 @@ export default function Home() {
         </div>
       )}
 
+<div
+        className="fixed bottom-6 right-6 bg-indigo-500 text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-indigo-600 transition"
+        onClick={toggleChatbot}
+      >
+        <BsWechat size={24} />
+      </div>
+      {/* {isChatbotOpen && <ChatbotModal onClose={toggleChatbot} />} */}
+      {isChatbotOpen && <CascadeModal onClose={toggleChatbot} />}
     </div>
   );
 }
