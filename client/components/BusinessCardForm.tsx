@@ -177,7 +177,7 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
 
   return (
 <Paper
-  elevation={3}
+ 
   sx={{
     maxWidth: '800px',
     width: '100%',
@@ -187,10 +187,11 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
     color: 'hsl(var(--foreground))',
   }}
 >
-  <Typography variant="h4" component="h1" gutterBottom>
-    Market Flick AI 🚀
+  <Typography className="text-center" variant="h4" component="h1" gutterBottom>
+    What your business idea is?
   </Typography>
   <Typography
+    className="text-center"
     variant="subtitle1"
     color="text.secondary"
     sx={{ mb: 4, color: 'hsl(var(--foreground))' }}
@@ -201,40 +202,66 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
   <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
     {/* Business Sector */}
     <Autocomplete
-      id="businessSector"
-      options={BUSINESS_SECTORS}
-      value={formData.businessSector}
-      onChange={(_, newValue) => handleChange('businessSector')(null, newValue || '')}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Business Sector"
-          placeholder="Search for a sector..."
-          sx={{
-            '& .MuiInputBase-root': {
-              color: 'hsl(var(--foreground))', // Text color
-              backgroundColor: 'hsl(var(--background))', // Background color
-            },
-            '& .MuiInputLabel-root': {
-              color: 'hsl(var(--secondary))', // Placeholder/Label color
-            },
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'hsl(var(--secondary))', // Border color
-              },
-              '&:hover fieldset': {
-                borderColor: 'hsl(var(--foreground))', // Hover border color
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: 'hsl(var(--foreground))', // Focus border color
-              },
-            },
-          }}
-        />
-      )}
-      freeSolo
-      fullWidth
+  id="businessSector"
+  options={BUSINESS_SECTORS}
+  value={formData.businessSector}
+  onChange={(_, newValue) => handleChange('businessSector')(null, newValue || '')}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Business Sector"
+      placeholder="Search for a sector..."
+      sx={{
+        '& .MuiInputBase-root': {
+          color: 'hsl(var(--foreground))', // Text color
+          backgroundColor: 'hsl(var(--background))', // Background color
+        },
+        '& .MuiInputLabel-root': {
+          color: 'hsl(var(--secondary))', // Placeholder/Label color
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'hsl(var(--secondary))', // Border color
+          },
+          '&:hover fieldset': {
+            borderColor: 'hsl(var(--foreground))', // Hover border color
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'hsl(var(--foreground))', // Focus border color
+          },
+        },
+      }}
     />
+  )}
+  slotProps={{
+    popper: {
+      sx: {
+        '& .MuiAutocomplete-paper': {
+          backgroundColor: 'hsl(var(--background))', // Dropdown background color
+          color: 'hsl(var(--foreground))', // Dropdown text color
+        },
+        '& .MuiAutocomplete-listbox': {
+          '& .MuiAutocomplete-option': {
+            backgroundColor: 'hsl(var(--background))', // Option background
+            color: 'hsl(var(--foreground))', // Option text
+            '&[aria-selected="true"]': {
+              backgroundColor: 'hsl(var(--secondary))', // Selected option background
+              color: 'hsl(var(--foreground))', // Selected option text
+            },
+            '&:hover': {
+              backgroundColor: 'hsl(var(--secondary))', // Hover background
+              color: 'hsl(var(--foreground))', // Hover text color
+            },
+          },
+        },
+      },
+    },
+  }}
+  freeSolo
+  fullWidth
+/>
+
+
 
     {/* Business Idea */}
     <TextField
@@ -266,6 +293,7 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
           },
         },
       }}
+      
     />
 
     {/* Location */}
@@ -301,6 +329,30 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
           }}
         />
       )}
+      slotProps={{
+        popper: {
+          sx: {
+            '& .MuiAutocomplete-paper': {
+              backgroundColor: 'hsl(var(--background))', // Dropdown background color
+              color: 'hsl(var(--foreground))', // Dropdown text color
+            },
+            '& .MuiAutocomplete-listbox': {
+              '& .MuiAutocomplete-option': {
+                backgroundColor: 'hsl(var(--background))', // Option background
+                color: 'hsl(var(--foreground))', // Option text
+                '&[aria-selected="true"]': {
+                  backgroundColor: 'hsl(var(--secondary))', // Selected option background
+                  color: 'hsl(var(--foreground))', // Selected option text
+                },
+                '&:hover': {
+                  backgroundColor: 'hsl(var(--secondary))', // Hover background
+                  color: 'hsl(var(--foreground))', // Hover text color
+                },
+              },
+            },
+          },
+        },
+      }}
       freeSolo
       fullWidth
     />
