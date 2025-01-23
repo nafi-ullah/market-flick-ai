@@ -5,14 +5,15 @@ type ArticleCardProps = {
     articleTitle: string;
     description: string;
     image: string;
+    url: string;
 };
 
-const SourceCard: React.FC<ArticleCardProps> = ({ websiteName, articleTitle, description, image }) => {
+const SourceCard: React.FC<ArticleCardProps> = ({ websiteName, articleTitle, description, image, url }) => {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
         <div
-            className="relative  cursor-pointer "
+            className="relative  cursor-pointer max-w-[250px] w-full"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >

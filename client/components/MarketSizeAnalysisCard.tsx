@@ -4,6 +4,7 @@ import { motion } from "framer-motion"; // Import Framer Motion
 import LineChartComponent from "./charts/LineChart";
 import { parseMarketSizeData } from "@/data/DataMapping";
 import SourcesModal from "./common/SourcesModal";
+import UrlMetadataGrid from "./common/Sources/ShowAllSources";
 
 export type MarketSizeAnalysisCardProps = {
   data: {
@@ -69,7 +70,7 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data })
           Sources
         </button>
       </div>
-      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
+      {isModalOpen && <UrlMetadataGrid sources={sources} />}
     </motion.div>
   );
 };
