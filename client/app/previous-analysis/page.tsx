@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, Paper } from '@mui/material';
 import FireLoader from '@/components/loaders/FireLoader';
+import FetchMetadata from '@/components/common/Sources/FetchMetaData';
+import SampleDashboard from '@/components/common/Sources/SampleDashboard';
 
 export default function PreviousAnalysisPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +44,8 @@ export default function PreviousAnalysisPage() {
           <Typography variant="h4" gutterBottom>
             Previous Analysis
           </Typography>
+          <SampleDashboard/>
+          <FetchMetadata/>
           <Typography variant="body1" color="text.secondary">
             Select an analysis from the sidebar to view details
           </Typography>
