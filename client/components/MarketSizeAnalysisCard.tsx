@@ -1,5 +1,6 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
+import { motion } from "framer-motion"; // Import Framer Motion
 import LineChartComponent from "./charts/LineChart";
 import { parseMarketSizeData } from "@/data/DataMapping";
 import SourcesModal from "./common/SourcesModal";
@@ -21,21 +22,17 @@ export type MarketSizeAnalysisCardProps = {
 };
 
 const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data }) => {
-  const {
-    chartData,
-    sources
-  } = parseMarketSizeData(data.data) ?? {
+  const { chartData, sources } = parseMarketSizeData(data.data) ?? {
     chartData: {
       labels: [],
-      datasets: []
+      datasets: [],
     },
-    sources: []
-  }
+    sources: [],
+  };
 
-  console.log({chartData, sources});
+  console.log({ chartData, sources });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -44,11 +41,14 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data })
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
- 
-  
+
   return (
-    <div className="p-6 bg-white rounded-md shadow-md max-w-7xl mx-auto">
-      Header
+    <motion.div
+      className="p-6 bg-white rounded-md shadow-md max-w-7xl mx-auto"
+      initial={{ x: "50%", opacity: 0 }} // Start off-screen to the left
+      animate={{ x: 0, opacity: 1 }} // Move into view
+      transition={{ duration: 0.5, ease: "easeOut" }} // Animation duration and easing
+    >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Market Size Analysis</h2>
         <p className="text-sm text-gray-500">TAM, SAM, SOM</p>
@@ -61,15 +61,16 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data })
 
       {/* Sources */}
       <div className="flex justify-end">
-        <button 
-         onClick={handleOpenModal}
-        className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
+        <button
+          onClick={handleOpenModal}
+          className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
+        >
           <FaInfoCircle className="mr-2" />
           Sources
         </button>
       </div>
       {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
-    </div>
+    </motion.div>
   );
 };
 

@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white z-50">
+    <nav className="fixed top-0 left-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left: Logo */}
@@ -70,9 +70,9 @@ const Navbar: React.FC = () => {
           {/* Right: Share button and avatar */}
           <div className="flex items-center space-x-4">
             {/* Share Button */}
-            <button className="flex items-center px-4 py-2 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
-              <FiShare className="mr-2" />
-              <span className="text-sm font-medium">Share</span>
+            <button className="flex items-center px-4 py-2 bg-[hsl(var(--foreground))] border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
+              <FiShare className="mr-2 text-[hsl(var(--background))] " />
+              <span className="text-sm font-medium text-[hsl(var(--background))]">Share</span>
             </button>
 
             {/* Avatar with Dropdown */}

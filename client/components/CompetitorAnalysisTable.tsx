@@ -41,7 +41,7 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ data 
 
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-md">
+    <div className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-md mt-5">
       <h2 className="text-xl font-bold mb-4">Competitor Analysis & Market Players</h2>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
