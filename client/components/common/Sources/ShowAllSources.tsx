@@ -70,13 +70,13 @@ const UrlMetadataGrid: React.FC<Props> = ({ sources }) => {
   }, [sources]);
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "16px" }}>
+    <div className="grid grid-cols-4 gap-5">
       {loading
         ? Array.from({ length: 4 }).map((_, index) => (
             <SourceCardSkeleton/>
           ))
         : gridItems.map((item) => (
-            <>
+            
             <SourceCard 
                 websiteName={item.websiteTitle}
                 articleTitle={item.title}
@@ -85,7 +85,7 @@ const UrlMetadataGrid: React.FC<Props> = ({ sources }) => {
                 url={item.url}
 
             />
-            </>
+           
           ))}
     </div>
   );
