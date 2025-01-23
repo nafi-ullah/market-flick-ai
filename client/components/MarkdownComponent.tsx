@@ -22,7 +22,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
     );
   }
   return (
-    <div className="markdown-content p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
+    <div className="markdown-content p-4 bg-[hsl(var(--background))] rounded-md shadow-md max-w-7xl mx-auto my-6">
       {/* Inline styles for scoped CSS */}
       <style>
         {`
@@ -73,8 +73,8 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
           }
         `}
       </style>
-      <div className="text-2xl font-bold text-gray-800 mb-4 text-center">Market Analysis Report</div>
-      <div className="markdown-content p-4 bg-white rounded-md border border-gray-100 max-w-7xl max-h-[500px] overflow-y-auto mx-auto my-6">
+      <div className="text-2xl font-bold text-[hsl(var(--foreground))] mb-4 text-center">Market Analysis Report</div>
+      <div className="markdown-content p-4 bg-[hsl(var(--background))] rounded-md border border-[hsl(var(--source))] max-w-7xl max-h-[500px] overflow-y-auto mx-auto my-6">
         <ReactMarkdown 
           components={{
             a: LinkRenderer
