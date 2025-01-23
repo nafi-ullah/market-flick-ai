@@ -4,6 +4,7 @@ import { Box, Typography, Paper } from '@mui/material';
 import FireLoader from '@/components/loaders/FireLoader';
 import FetchMetadata from '@/components/common/Sources/FetchMetaData';
 import SampleDashboard from '@/components/common/Sources/SampleDashboard';
+import SourceCard from '@/components/common/Sources/SourceCard';
 
 export default function PreviousAnalysisPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,8 +45,14 @@ export default function PreviousAnalysisPage() {
           <Typography variant="h4" gutterBottom>
             Previous Analysis
           </Typography>
-          <SampleDashboard/>
-          <FetchMetadata/>
+          {/* <SampleDashboard/>
+          <FetchMetadata/> */}
+          <SourceCard
+              websiteName="NerdWallet"
+              articleTitle="How to Reduce Your Tax Bill: 12 Tips and Tricks"
+              description="Learn how to lower your tax bill with these actionable tips. "
+              image="./avatar.png"
+          />
           <Typography variant="body1" color="text.secondary">
             Select an analysis from the sidebar to view details
           </Typography>
