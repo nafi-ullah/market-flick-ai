@@ -176,85 +176,156 @@ const BusinessAnalysisForm = ({ setStreamData }: { setStreamData: React.Dispatch
   };
 
   return (
-    <Paper elevation={3} sx={{ 
-      maxWidth: '800px',
-      width: '100%',
-      mx: 'auto',
-      p: 6 
-    }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Market Flick AI 🚀
-      </Typography>
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 4 }}>
-        Make informed business decisions with real market data analysis
-      </Typography>
+<Paper
+  elevation={3}
+  sx={{
+    maxWidth: '800px',
+    width: '100%',
+    mx: 'auto',
+    p: 6,
+    backgroundColor: 'hsl(var(--background))',
+    color: 'hsl(var(--foreground))',
+  }}
+>
+  <Typography variant="h4" component="h1" gutterBottom>
+    Market Flick AI 🚀
+  </Typography>
+  <Typography
+    variant="subtitle1"
+    color="text.secondary"
+    sx={{ mb: 4, color: 'hsl(var(--foreground))' }}
+  >
+    Make informed business decisions with real market data analysis
+  </Typography>
 
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        {/* Business Sector */}
-        <Autocomplete
-          id="businessSector"
-          options={BUSINESS_SECTORS}
-          value={formData.businessSector}
-          onChange={(_, newValue) => handleChange('businessSector')(null, newValue || '')}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Business Sector"
-              placeholder="Search for a sector..."
-            />
-          )}
-          freeSolo
-          fullWidth
-        />
-
-        {/* Business Idea */}
+  <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+    {/* Business Sector */}
+    <Autocomplete
+      id="businessSector"
+      options={BUSINESS_SECTORS}
+      value={formData.businessSector}
+      onChange={(_, newValue) => handleChange('businessSector')(null, newValue || '')}
+      renderInput={(params) => (
         <TextField
-          id="businessIdea"
-          label="Business Idea"
-          multiline
-          rows={5}
-          value={formData.businessIdea}
-          onChange={(e) => handleChange('businessIdea')(e, null)}
-          placeholder="Describe your business idea..."
-          fullWidth
-        />
-
-        {/* Location */}
-        <Autocomplete
-          id="location"
-          options={LOCATIONS}
-          value={formData.location}
-          onChange={(_, newValue) => handleChange('location')(null, newValue || '')}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Location"
-              placeholder="Search for a location..."
-            />
-          )}
-          freeSolo
-          fullWidth
-        />
-
-        {/* Submit Button */}
-        <Button
-          type="submit"
-          variant="contained"
-          size="large"
+          {...params}
+          label="Business Sector"
+          placeholder="Search for a sector..."
           sx={{
-            bgcolor: 'black',
-            color: 'white',
-            '&:hover': {
-              bgcolor: 'grey.800',
+            '& .MuiInputBase-root': {
+              color: 'hsl(var(--foreground))', // Text color
+              backgroundColor: 'hsl(var(--background))', // Background color
             },
-            mt: 2
+            '& .MuiInputLabel-root': {
+              color: 'hsl(var(--secondary))', // Placeholder/Label color
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'hsl(var(--secondary))', // Border color
+              },
+              '&:hover fieldset': {
+                borderColor: 'hsl(var(--foreground))', // Hover border color
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'hsl(var(--foreground))', // Focus border color
+              },
+            },
           }}
-          disabled={isStreaming}
-        >
-          {isStreaming ? <StackedAnimatedLoader/> : "Analyze Market"}
-        </Button>
-      </Box>
-    </Paper>
+        />
+      )}
+      freeSolo
+      fullWidth
+    />
+
+    {/* Business Idea */}
+    <TextField
+      id="businessIdea"
+      label="Business Idea"
+      multiline
+      rows={5}
+      value={formData.businessIdea}
+      onChange={(e) => handleChange('businessIdea')(e, null)}
+      placeholder="Describe your business idea..."
+      fullWidth
+      sx={{
+        '& .MuiInputBase-root': {
+          color: 'hsl(var(--foreground))', // Text color
+          backgroundColor: 'hsl(var(--background))', // Background color
+        },
+        '& .MuiInputLabel-root': {
+          color: 'hsl(var(--secondary))', // Placeholder/Label color
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'hsl(var(--secondary))', // Border color
+          },
+          '&:hover fieldset': {
+            borderColor: 'hsl(var(--foreground))', // Hover border color
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: 'hsl(var(--foreground))', // Focus border color
+          },
+        },
+      }}
+    />
+
+    {/* Location */}
+    <Autocomplete
+      id="location"
+      options={LOCATIONS}
+      value={formData.location}
+      onChange={(_, newValue) => handleChange('location')(null, newValue || '')}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Location"
+          placeholder="Search for a location..."
+          sx={{
+            '& .MuiInputBase-root': {
+              color: 'hsl(var(--foreground))', // Text color
+              backgroundColor: 'hsl(var(--background))', // Background color
+            },
+            '& .MuiInputLabel-root': {
+              color: 'hsl(var(--secondary))', // Placeholder/Label color
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'hsl(var(--secondary))', // Border color
+              },
+              '&:hover fieldset': {
+                borderColor: 'hsl(var(--foreground))', // Hover border color
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'hsl(var(--foreground))', // Focus border color
+              },
+            },
+          }}
+        />
+      )}
+      freeSolo
+      fullWidth
+    />
+
+    {/* Submit Button */}
+    <Button
+      type="submit"
+      variant="contained"
+      size="large"
+      sx={{
+        bgcolor: 'hsl(var(--foreground))', // Button background color
+        color: 'hsl(var(--background))', // Button text color
+        '&:hover': {
+          bgcolor: 'hsl(var(--secondary))', // Hover button background
+          color: 'hsl(var(--foreground))', // Hover button text color
+        },
+        mt: 2,
+      }}
+      disabled={isStreaming}
+    >
+      {isStreaming ? <StackedAnimatedLoader /> : 'Analyze Market'}
+    </Button>
+  </Box>
+</Paper>
+
   );
 };
 
