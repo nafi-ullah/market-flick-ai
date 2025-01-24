@@ -19,7 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BACKENDURL } from "@/utils/constants";
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import { Button } from "../ui/button";
-import { PlusSquare } from "lucide-react";
+import { Loader, PlusSquare } from "lucide-react";
 
 export default function Leftbar() {
   const router = useRouter();
@@ -135,7 +135,11 @@ export default function Leftbar() {
           })}
         </List>
       </Box>
-      {isLoading && <IndividualLoader />}
+      {isLoading && (
+        <div className="flex justify-center items-center">
+          <Loader className="animate-spin" color="hsl(var(--foreground))" />
+        </div>
+      )}
     </>
   );
 }
