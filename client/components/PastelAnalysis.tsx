@@ -7,6 +7,8 @@ import { PastelData, } from "@/data/DummyData";
 import { FaInfoCircle } from "react-icons/fa";
 import SourcesModal from "./common/SourcesModal";
 import { parsePestaliData } from "@/data/PasteliDataMapping";
+import { SiCrowdsource } from "react-icons/si";
+import UrlMetadataGrid from "./common/Sources/ShowAllSources";
 
 
 export interface PASTELIAnalysisProps {
@@ -34,15 +36,18 @@ const PASTELIAnalysis: React.FC<PASTELIAnalysisProps> = ({ data }) => {
       
       {/* You can pass that data on to other components */}
       <ImpactGrid pestali_data={pestali_data} />
-      <div className="flex justify-end">
-        <button 
-         onClick={handleOpenModal}
-        className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
-          <FaInfoCircle className="mr-2" />
+      
+
+        {/* Sources */}
+        <div className="flex flex-col justify-start">
+        <div
+          className="flex items-center text-lg  py-2  rounded-md "
+        >
+          <SiCrowdsource className="mr-2" />
           Sources
-        </button>
+        </div>
+        <UrlMetadataGrid sources={pestali_data.sources} />
       </div>
-      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={pestali_data.sources} />}
     </div>
   );
 }

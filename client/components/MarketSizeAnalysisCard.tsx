@@ -5,6 +5,7 @@ import LineChartComponent from "./charts/LineChart";
 import { parseMarketSizeData } from "@/data/DataMapping";
 import SourcesModal from "./common/SourcesModal";
 import UrlMetadataGrid from "./common/Sources/ShowAllSources";
+import { SiCrowdsource } from "react-icons/si";
 
 export type MarketSizeAnalysisCardProps = {
   data: {
@@ -61,16 +62,16 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data })
       </div>
 
       {/* Sources */}
-      <div className="flex justify-end">
-        <button
-          onClick={handleOpenModal}
-          className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200"
+      <div className="flex flex-col justify-start">
+        <div
+          className="flex items-center text-lg  py-2  rounded-md "
         >
-          <FaInfoCircle className="mr-2" />
+          <SiCrowdsource className="mr-2" />
           Sources
-        </button>
+        </div>
+        <UrlMetadataGrid sources={sources} />
       </div>
-      {isModalOpen && <UrlMetadataGrid sources={sources} />}
+      
     </motion.div>
   );
 };

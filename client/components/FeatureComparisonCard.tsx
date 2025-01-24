@@ -3,6 +3,8 @@ import { FaInfoCircle } from "react-icons/fa";
 import { MdDetails } from "react-icons/md";
 import RadarChartComponent from "./charts/RadarChart";
 import SourcesModal from "./common/SourcesModal";
+import { SiCrowdsource } from "react-icons/si";
+import UrlMetadataGrid from "./common/Sources/ShowAllSources";
 
 
 type FeatureComparisonCardProps = {
@@ -56,15 +58,16 @@ const FeatureComparisonCard: React.FC<FeatureComparisonCardProps> = ({
       </div>
 
       {/* Buttons */}
-      <div className="flex justify-between">
-        <button 
-        onClick={handleOpenModal}
-        className="flex items-center text-sm px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200">
-          <FaInfoCircle className="mr-2" />
+       {/* Sources */}
+       <div className="flex flex-col justify-start">
+        <div
+          className="flex items-center text-lg  py-2  rounded-md "
+        >
+          <SiCrowdsource className="mr-2" />
           Sources
-        </button>
+        </div>
+        <UrlMetadataGrid sources={sources} />
       </div>
-      {isModalOpen && <SourcesModal handleClose={handleCloseModal} sources={sources} />}
     </div>
   );
 };
