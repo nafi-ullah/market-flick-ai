@@ -3,6 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from "next/image";
 import FileUpload from './FileUpload';
+import axios from 'axios';
+import { BACKENDURL } from '@/utils/constants';
+import { MdSend } from 'react-icons/md';
+import { FiPlus } from 'react-icons/fi';
+import { RxCross2 } from "react-icons/rx";
+import { FaHistory } from "react-icons/fa";
 
 interface CascadeModalProps {
   onClose: () => void;
@@ -14,6 +20,13 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
   const [dialogVisible, setDialogVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [mode, setMode] = useState<'write' | 'chat'>('chat');
+ 
+  const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
+  const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
+  const [outputValues, setOutputValues] = useState<string[]>([]); // Store output strings from API
+  const [isLoading, setIsLoading] = useState(false);
+  const [showFullChat, setShowFullChat] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +46,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
     { key: "roadmap", value: "Roadmap" },
   ];
 
-  const [mode, setMode] = useState<'write' | 'chat'>('write');
+ 
 
   const toggleMode = () => {
     setMode((prevMode) => (prevMode === 'write' ? 'chat' : 'write'));
@@ -72,6 +85,42 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
     setDialogVisible(false);
   };
 
+
+  const handleSendMessage = async () => {
+    if(!showFullChat){
+      setShowFullChat(true)
+    }
+    if (!inputValue.trim()) return;
+
+    // Push input value to inputValues array
+    setInputValues((prev) => [...prev, inputValue]);
+
+    setInputValue("");
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`${BACKENDURL}/chat`, {
+        id: knowledge_id,
+        type: mode,
+        message: inputValue,
+        chat_history: chatHistory, // Send existing chatHistory to backend
+        component_keys: selectedKeys,
+      });
+
+      const { output, chat_history: newChatHistory } = response.data;
+
+      // Update chatHistory with API response (store only, no display)
+      setChatHistory(newChatHistory);
+
+      // Push output value to outputValues array
+      setOutputValues((prev) => [...prev, output]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <motion.div
       className="fixed bottom-6 right-6 bg-indigo-500 text-white w-[420px] h-[85vh] rounded-lg shadow-lg flex flex-col"
@@ -81,7 +130,103 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
       transition={{ duration: 0.3 }}
     >
       {/* Header Section */}
-      <div className="p-4 flex flex-col gap-2">
+      {showFullChat ? (<><div className="flex flex-col h-full w-full px-4 pb-4 bg-indigo-800 rounded-lg">
+        <div className='flex justify-between'>
+          <div className='text-xs mt-3'>FlickAI | {mode} mode</div>
+          <div className="flex space-x-3 items-center justify-end py-2">
+        <button
+            onClick={()=>{setShowFullChat(false)}}
+            className="text-gray-400 hover:text-indigo-500 transition-colors"
+          >
+            <FiPlus/>
+          </button>
+
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-indigo-500 transition-colors text-xs"
+          >
+            <FaHistory/>
+          </button>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-indigo-500 transition-colors"
+          >
+           <RxCross2 />
+          </button>
+        
+
+         
+        </div>
+        </div>
+     
+      <div className="flex-grow overflow-y-auto pr-4  bg-indigo-800 rounded-md shadow-inner">
+        {/* Render inputValues on the right side */}
+        {inputValues.map((input, index) => (
+          <>
+          <div key={index} className="flex justify-end mb-2">
+            <div className="max-w-xs px-4 py-2 rounded-lg text-white text-sm bg-indigo-400">
+              {input} 
+            </div>
+          </div>
+          <div  className="flex justify-start my-3">
+            <div className="max-w-xs px-4 py-2 rounded-lg text-white text-sm bg-gray-700">
+              {outputValues[index]}
+            </div>
+          </div>
+        
+          </>
+        ))
+        
+        }
+
+        {/* Render outputValues on the left side */}
+       
+
+        {isLoading && (
+          <div className="flex justify-start mb-2">
+            <div className="max-w-xs px-4 py-2 rounded-lg bg-gray-300 animate-pulse">
+              Typing...
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="mt-4 flex items-cente relative">
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSendMessage();
+          }}
+          className="flex-grow pr-12 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-indigo-500 placeholder:text-sm placeholder:text-gray-300"
+          placeholder="Type your message here..."
+        />
+        {dialogVisible && (
+            <div
+              // style={{ top: cursorPosition.y + 5, left: cursorPosition.x }}
+              className="absolute bottom-full bg-indigo-400 text-gray-200 rounded-md shadow-lg p-2 z-50"
+            >
+              
+              {important_keys.map((item) => (
+                <div
+                  key={item.key}
+                  onClick={() => handleKeyClick(item)}
+                  className="px-3 py-1 cursor-pointer hover:bg-indigo-600 rounded text-xs"
+                >
+                  {item.value}
+                </div>
+              ))}
+            </div>
+          )}
+        <button
+          onClick={handleSendMessage}
+          className="px-4 py-2  text-white rounded-full hover:bg-indigo-700 absolute top-1 right-1 z-10"
+        >
+          <MdSend />
+        </button>
+      </div>
+    </div></>) : (<><div className="p-4 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 bg-white rounded-full">
             <Image
@@ -135,6 +280,9 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSendMessage();
+            }}
             placeholder="Ask anything (Ctrl+L), @ to mention code blocks"
             className="flex-1 bg-transparent outline-none text-xs placeholder:text-gray-400"
           />
@@ -205,7 +353,8 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
       {/* Footer / Additional Notes */}
       <div className="mt-auto p-4 text-center text-xs text-gray-300 border-t border-indigo-800">
         AI may make mistakes. Double-check all generated components.
-      </div>
+      </div></>)}
+      
     </motion.div>
   );
 };
