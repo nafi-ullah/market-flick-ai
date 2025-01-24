@@ -2,12 +2,15 @@
 
 from core.market_size_analysis.agent import market_size_report, market_size_graph_generator, competitors_table_generator
 from core.market_size_analysis.utils import extract_knowledge_base
+from core.util_agents.chat_write_agent import chat_write_agent
 from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from datetime import date
 from core.market_size_analysis.test_langgraph import BusinessAnalysisState
 from core.util_agents.title_generator import generate_title
 from dotenv import load_dotenv
+
+from main import load_response_from_json
 
 load_dotenv()
 
@@ -26,15 +29,18 @@ load_dotenv()
 
 # competitors_table_generator(knowledge_base_id)
 
-business_input = BusinessAnalysisInput(
-    sector="Real Estate",
-    idea="An online marketplace for co-living spaces, leveraging AI to match tenants based on lifestyle preferences, promoting community engagement and sustainable living.",
-    location="USA"
-)
+# business_input = BusinessAnalysisInput(
+#     sector="Real Estate",
+#     idea="An online marketplace for co-living spaces, leveraging AI to match tenants based on lifestyle preferences, promoting community engagement and sustainable living.",
+#     location="USA"
+# )
 
-response = generate_title(business_input)
+# response = generate_title(business_input)
 
-print(response)
+# print(response)
+
+# chat_write_agent(id = "1c61450e-0c92-4d54-b230-be36cff05349", input="I want to update the given roadmap, for step one make it \"Use our market research report\"")
+
 
 # run_business_analysis(business_input)
 
