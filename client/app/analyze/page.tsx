@@ -147,7 +147,7 @@ export default function Home() {
         <BsWechat size={24} />
       </div>
       {/* {isChatbotOpen && <ChatbotModal onClose={toggleChatbot} />} */}
-      {isChatbotOpen && <CascadeModal onClose={toggleChatbot} knowledge_id="0" />}
+      {/* {isChatbotOpen && <CascadeModal onClose={toggleChatbot} knowledge_id="0" />} */}
     </div>
   );
 }

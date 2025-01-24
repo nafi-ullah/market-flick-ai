@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,  Dispatch, SetStateAction } from 'react';
 import { motion } from 'framer-motion';
 import Image from "next/image";
 import FileUpload from './FileUpload';
@@ -10,12 +10,17 @@ import { FiPlus } from 'react-icons/fi';
 import { RxCross2 } from "react-icons/rx";
 import { FaHistory } from "react-icons/fa";
 
+type ComponentReloaderState = {
+  needReload: boolean;
+  components: string[];
+};
 interface CascadeModalProps {
   onClose: () => void;
   knowledge_id: string;
+  setComponentReloader: Dispatch<SetStateAction<ComponentReloaderState>>;
 }
 
-const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) => {
+const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setComponentReloader }) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -83,6 +88,12 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
     setInputValue((prev) => `${prev}${item.value}`);
     setSelectedKeys((prev) => [...prev, item.key]);
     setDialogVisible(false);
+  };
+  const handleClickReloader = () => {
+    setComponentReloader({
+      needReload: true,
+      components: ["swot_analysis", "market_player_table_data"],
+    });
   };
 
 
@@ -227,6 +238,12 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) =>
         </button>
       </div>
     </div></>) : (<><div className="p-4 flex flex-col gap-2">
+      <button
+        onClick={handleClickReloader}
+        className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+      >
+        Reload Components
+      </button>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 bg-white rounded-full">
             <Image
