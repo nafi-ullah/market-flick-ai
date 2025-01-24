@@ -19,6 +19,7 @@ class ChatRequest(BaseModel):
     message: str = Field(..., description="The message to be sent")
     chat_history: List[Tuple[str, str]] = Field(None, description="The chat history")
     component_keys: List[str] = Field(None, description="The keys of the components to be sent")
+    chat_model: str = Field("gpt-4o", description="The chat model to be used")
 
 
 class ChatResponse(BaseModel):
