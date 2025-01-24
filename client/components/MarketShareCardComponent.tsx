@@ -36,7 +36,7 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   };
 
   return (
-    <div className="p-4 bg-white rounded-md shadow-md w-full mx-auto">
+    <div className="p-4 bg-[hsl(var(--background))] rounded-md shadow-md w-full mx-auto">
       {/* Title */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">{title}</h2>

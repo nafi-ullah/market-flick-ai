@@ -45,14 +45,14 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data })
 
   return (
     <motion.div
-      className="p-6 bg-white rounded-md shadow-md max-w-7xl mx-auto"
+      className="p-6 bg-[hsl(var(--accent))] rounded-md shadow-md max-w-7xl mx-auto"
       initial={{ x: "50%", opacity: 0 }} // Start off-screen to the left
       animate={{ x: 0, opacity: 1 }} // Move into view
       transition={{ duration: 0.5, ease: "easeOut" }} // Animation duration and easing
     >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">Market Size Analysis</h2>
-        <p className="text-sm text-gray-500">TAM, SAM, SOM</p>
+        <p className="text-sm text-[hsl(var(--foreground))]">TAM, SAM, SOM</p>
       </div>
 
       {/* Chart */}

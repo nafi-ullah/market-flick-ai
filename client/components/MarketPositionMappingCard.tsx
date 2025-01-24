@@ -38,7 +38,7 @@ const MarketPositionMappingCard: React.FC<MarketPositionMappingCardProps> = ({
       setIsModalOpen(false);
     };
   return (
-    <div className="p-4 bg-white rounded-md shadow-md w-full mx-auto flex flex-col justify-between">
+    <div className="p-4 bg-[hsl(var(--background))] rounded-md shadow-md w-full mx-auto flex flex-col justify-between">
       {/* Title */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-bold">{title}</h2>

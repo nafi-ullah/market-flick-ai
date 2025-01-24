@@ -41,12 +41,12 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ data 
 
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-md mt-5">
-      <h2 className="text-xl font-bold mb-4">Competitor Analysis & Market Players</h2>
+    <div className="max-w-7xl mx-auto p-6 bg-[hsl(var(--accent))] shadow-md rounded-md mt-5">
+      <h2 className="text-lg font-bold mb-4">Competitor Analysis & Market Players</h2>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="text-left text-gray-700 font-medium">
+            <tr className="text-left  text-md">
               <th className="py-2 px-4">Company</th>
               <th className="py-2 px-4">Valuation</th>
               <th className="py-2 px-4">Money Raised</th>
@@ -55,7 +55,7 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ data 
           </thead>
           <tbody>
             {competitors.map((item, index) => (
-              <tr key={index} className="border-t">
+              <tr key={index} className="border-t text-sm">
                 <td className="py-2 px-4">{item.company}</td>
                 <td className="py-2 px-4">{item.valuation}</td>
                 <td className="py-2 px-4">{item.money_raised}</td>
