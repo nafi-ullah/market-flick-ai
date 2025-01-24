@@ -34,7 +34,9 @@ const UrlMetadataGrid: React.FC<Props> = ({ sources }) => {
             : url.split("https://")[1].split("/")[0];
 
           try {
-            const response = await fetch(`/api/fetch-metadata?url=${encodeURIComponent(url)}`);
+            const response = await fetch(
+              `/api/fetch-metadata?url=${encodeURIComponent(url)}`
+            );
             if (!response.ok) throw new Error("Failed to fetch metadata.");
 
             const metadata: Metadata = await response.json();
@@ -70,22 +72,20 @@ const UrlMetadataGrid: React.FC<Props> = ({ sources }) => {
   }, [sources]);
 
   return (
-    <div className="grid grid-cols-4 gap-5">
+    <div className="flex gap-5 flex-wrap">
       {loading
         ? Array.from({ length: 4 }).map((_, index) => (
-            <SourceCardSkeleton/>
+            <SourceCardSkeleton key={index} />
           ))
         : gridItems.map((item) => (
-            
-            <SourceCard 
-                websiteName={item.websiteTitle}
-                articleTitle={item.title}
-                description={item.description}
-                image={item.image}
-                url={item.url}
-
+            <SourceCard
+              websiteName={item.websiteTitle}
+              articleTitle={item.title}
+              description={item.description}
+              image={item.image}
+              url={item.url}
+              key={item.url}
             />
-           
           ))}
     </div>
   );
