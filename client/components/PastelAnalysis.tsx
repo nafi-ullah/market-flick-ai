@@ -29,7 +29,7 @@ const PASTELIAnalysis: React.FC<PASTELIAnalysisProps> = ({ data }) => {
     };
     
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
+    <div className="p-4 bg-[hsl(var(--accent))] rounded-md shadow-md max-w-7xl mx-auto my-6">
       <h2 className="text-lg font-bold mb-4">PASTELI Analysis</h2>
       
       {/* You can pass that data on to other components */}

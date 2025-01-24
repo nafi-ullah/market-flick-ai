@@ -17,7 +17,7 @@ export type RoadmapCardProps = {
 export const RoadmapCard: React.FC<RoadmapCardProps> = ({ data }) => {
     const roadmapData = parseRoadmap(data.data)
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
+    <div className="p-4 bg-[hsl(var(--accent))] rounded-md shadow-md max-w-7xl mx-auto my-6">
         <RoadmapComponent title={roadmapData.title} elements={roadmapData.elements} />
     </div>
   );

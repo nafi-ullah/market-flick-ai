@@ -108,7 +108,7 @@ export default function Home() {
   }, [id]);
 
   return (
-    <div className="font-[family-name:var(--font-geist-sans)]">
+    <div className="font-[family-name:var(--font-geist-sans)] bg-[hsl(var(--background))]">
       <Navbar />
       {streamData.length > 0 ? (
         <div className="mt-6 p-4 rounded-md">
@@ -129,7 +129,7 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <div className="mt-6 p-4 rounded-md px-10 flex flex-col gap-4 max-w-7xl">
+        <div className="mt-6 mx-auto p-4 rounded-md px-10 flex flex-col gap-4 max-w-7xl">
            <ArticleSkeleton/>
            <CompetitorAnalysisTableSkeleton/>
            <MarketShareCardSkeleton/>

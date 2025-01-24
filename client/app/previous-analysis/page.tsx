@@ -19,7 +19,7 @@ export default function PreviousAnalysisPage() {
   }, []);
 
   return (
-    <Box sx={{ mt: 8, px: 4 }}>
+    <Box sx={{ mt: 8, px: 4,  backgroundColor:'hsl(var(--background))' }}>
       {isLoading ? (
         <Box sx={{ width: '100%', mt: 4 }}>
           <FireLoader />
@@ -39,7 +39,7 @@ export default function PreviousAnalysisPage() {
           elevation={0} 
           sx={{ 
             p: 4,
-            backgroundColor: 'transparent'
+            backgroundColor:'hsl(var(--background))'
           }}
         >
           <Typography variant="h4" gutterBottom>
@@ -47,12 +47,7 @@ export default function PreviousAnalysisPage() {
           </Typography>
           {/* <SampleDashboard/>
           <FetchMetadata/> */}
-          <SourceCard
-              websiteName="NerdWallet"
-              articleTitle="How to Reduce Your Tax Bill: 12 Tips and Tricks"
-              description="Learn how to lower your tax bill with these actionable tips. "
-              image="./avatar.png"
-          />
+          
           <Typography variant="body1" color="text.secondary">
             Select an analysis from the sidebar to view details
           </Typography>

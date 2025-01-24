@@ -23,7 +23,7 @@ const SWOTAnalysis: React.FC<SWOTAnalysisProps> = ({ data }) => {
   const swot_data = parseSwotData(data.data)
 
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6">
+    <div className="p-4 bg-[hsl(var(--accent))] rounded-md shadow-md max-w-7xl mx-auto my-6">
       <h2 className="text-lg font-bold mb-4">SWOT Analysis</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {swot_data.map((item, index) => (

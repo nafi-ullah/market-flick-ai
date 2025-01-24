@@ -37,8 +37,8 @@ const ImpactGrid: React.FC<ImpactGridProps> = ({ pestali_data }) => {
             className="p-4 rounded-lg shadow-md"
             style={{ backgroundColor: `${item.color}1A` }} // Transparent background
           >
-            <h3 className="text-lg font-semibold text-gray-800">{item.title}</h3>
-            <p className="text-sm text-gray-600 mt-2">{item.description}</p>
+            <h3 className="text-lg font-semibold text-[hsl(var(--foreground))]">{item.title}</h3>
+            <p className="text-sm text-[hsl(var(--foreground))] mt-2">{item.description}</p>
 
             <div className="flex items-center justify-between mt-4">
               <span className="text-md font-medium" style={{ color: item.color }}>Impact Level</span>
