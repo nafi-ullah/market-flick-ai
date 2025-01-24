@@ -61,7 +61,7 @@ def market_size_report_node(state: BusinessAnalysisState):
         state_schema=BusinessAnalysisState,
     )
 
-    unique_id = str(uuid.uuid4())
+    unique_id = state["knowledge_base_id"]
 
     inputs = {
         "messages": [

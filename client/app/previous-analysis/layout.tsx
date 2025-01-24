@@ -74,8 +74,8 @@ export default function PreviousAnalysisLayout({
             Previous Analysis
           </Typography>
           <List className='mt-4'>
-            {analyses.map((uid, idx) => {
-            const path = `/previous-analysis/${uid}`;
+            {analyses.map((analysis, idx) => {
+            const path = `/previous-analysis/${analysis["basic_info_id"]}`;
             
             return (
               <ListItem key={`Item ${idx + 1}`} disablePadding>
@@ -95,7 +95,7 @@ export default function PreviousAnalysisLayout({
                     <BarChartIcon className='text-[hsl(var(--foreground))]'/>
                   </ListItemIcon>
                   <ListItemText 
-                    primary={`Item ${idx + 1}`}
+                    primary={`${analysis["basic_info"]['title']}`}
                     sx={{
                       '& .MuiTypography-root': {
                         color: pathname === path ? 'primary.main' : 'hsl(var(--foreground))',
