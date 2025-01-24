@@ -36,7 +36,7 @@ const SourceCard: React.FC<ArticleCardProps> = ({ websiteName, articleTitle, des
 
             {isHovered && (
                 <div
-                    className="absolute top-full left-0  p-4 rounded-md bg-[hsl(var(--background))] border border-[hsl(var(--source))] shadow-md z-10 max-w-[250px]"
+                    className="absolute top-full left-0  p-4 rounded-md bg-[hsl(var(--background))] border border-[hsl(var(--source))] shadow-md z-10 min-w-[250px]"
                 >
                       <div className='flex my-2 justify-start items-start'>
                 <img
