@@ -1,21 +1,27 @@
-import { parseMarketPlayerData } from '@/data/DataMapping';
 import React, { useState } from 'react';
 import { FaInfoCircle } from 'react-icons/fa';
 import SourcesModal from './common/SourcesModal';
 import { SiCrowdsource } from 'react-icons/si';
 import UrlMetadataGrid from './common/Sources/ShowAllSources';
-
-
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 export interface CompetitorAnalysisTableProps {
   data: {
     key: string;
     data: {
       competitors: {
-          company_name: string;
-          valuation: string;
-          money_raised: string;
-          key_focus: string;
+        company_name: string;
+        valuation: string;
+        money_raised: string;
+        key_focus: string;
       }[];
       sources: string[];
     };
@@ -27,11 +33,12 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ data 
   const {
     competitors,
     sources
-  } = parseMarketPlayerData(data.data) ?? {
+  } = data.data ?? {
     competitors: [],
     sources: []
-  }
-   const [isModalOpen, setIsModalOpen] = useState(false);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -41,42 +48,42 @@ const CompetitorAnalysisTable: React.FC<CompetitorAnalysisTableProps> = ({ data 
     setIsModalOpen(false);
   };
 
-
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-[hsl(var(--accent))] shadow-md rounded-md mt-5">
-      <h2 className="text-lg font-bold mb-4">Competitor Analysis & Market Players</h2>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="text-left  text-">
-              <th className="py-2 px-4">Company</th>
-              <th className="py-2 px-4">Valuation</th>
-              <th className="py-2 px-4">Money Raised</th>
-              <th className="py-2 px-4">Key Focus</th>
-            </tr>
-          </thead>
-          <tbody>
+    <Box width={'100%'} mx="auto" p={3} mt={5} sx={{ backgroundColor: 'hsl(var(--accent))', borderRadius: '8px', color: 'hsl(var(--foreground))' }}>
+      <Typography variant="h5" fontWeight="bold" gutterBottom>
+        Competitor Analysis & Market Players
+      </Typography>
+      <TableContainer component={Paper} elevation={3} sx={{ backgroundColor: 'hsl(var(--background))' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ color: 'hsl(var(--foreground))' }}><strong>Company</strong></TableCell>
+              <TableCell sx={{ color: 'hsl(var(--foreground))' }}><strong>Valuation</strong></TableCell>
+              <TableCell sx={{ color: 'hsl(var(--foreground))' }}><strong>Money Raised</strong></TableCell>
+              <TableCell sx={{ color: 'hsl(var(--foreground))' }}><strong>Key Focus</strong></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {competitors.map((item, index) => (
-              <tr key={index} className="border-t text-sm">
-                <td className="py-2 px-4">{item.company}</td>
-                <td className="py-2 px-4">{item.valuation}</td>
-                <td className="py-2 px-4">{item.money_raised}</td>
-                <td className="py-2 px-4">{item.key_focus}</td>
-              </tr>
+              <TableRow key={index} sx={{ backgroundColor: 'hsl(var(--source))' }}>
+                <TableCell sx={{ color: 'hsl(var(--foreground))' }}>{item.company_name}</TableCell>
+                <TableCell sx={{ color: 'hsl(var(--foreground))' }}>{item.valuation}</TableCell>
+                <TableCell sx={{ color: 'hsl(var(--foreground))' }}>{item.money_raised}</TableCell>
+                <TableCell sx={{ color: 'hsl(var(--foreground))' }}>{item.key_focus}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-        <div className="flex flex-col justify-start">
-        <div
-          className="flex items-center text-lg  py-2  rounded-md "
-        >
-          <SiCrowdsource className="mr-2" />
-          Sources
-        </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Box mt={3}>
+        <Box display="flex" alignItems="center" mb={1}>
+          <SiCrowdsource style={{ marginRight: 8 }} />
+          <Typography variant="h6">Sources</Typography>
+        </Box>
         <UrlMetadataGrid sources={sources} />
-      </div>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

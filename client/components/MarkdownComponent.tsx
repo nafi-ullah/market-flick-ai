@@ -22,7 +22,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
     );
   }
   return (
-    <div className="markdown-content p-4 bg-[hsl(var(--accent))] rounded-md shadow-md max-w-7xl mx-auto my-6">
+    <div className="markdown-content p-4 bg-[hsl(var(--accent))] rounded-md shadow-md w-full my-6">
       {/* Inline styles for scoped CSS */}
       <style>
         {`

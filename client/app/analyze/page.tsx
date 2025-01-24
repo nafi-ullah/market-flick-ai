@@ -120,7 +120,7 @@ export default function Home() {
                 streamDataKeys[key as keyof Props];
               console.log("~~~", key, data);
               return (
-                <div key={key} className="mb-3">
+                <div key={key} className="mb-3 max-w-7xl mx-auto">
                   {data ? (
                     // Render the component when data is available
                     <Component
