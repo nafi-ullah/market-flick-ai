@@ -32,7 +32,10 @@ export default function Leftbar() {
     fetch(`${BACKENDURL}/analyses`)
       .then((res) => res.json())
       .then((data) => {
-        setAnalyses(data.analyses);
+        console.log("~~~ data", data);
+        setAnalyses(
+          data.analyses.filter((analysis) => analysis && analysis["basic_info"])
+        );
         setIsLoading(false);
       })
       .catch((error) => console.error("Error fetching analyses:", error));
@@ -90,8 +93,8 @@ export default function Leftbar() {
             overflow: "auto",
           }}
         >
-          {analyses.map((uid, idx) => {
-            const path = `/previous-analysis/${uid}`;
+          {analyses.map((analysis, idx) => {
+            const path = `/previous-analysis/${analysis["basic_info_id"]}`;
             return (
               <ListItem key={`Item ${idx + 1}`} disablePadding>
                 <ListItemButton
@@ -114,7 +117,7 @@ export default function Leftbar() {
                     <BarChartIcon className="text-[hsl(var(--foreground))]" />
                   </ListItemIcon>
                   <ListItemText
-                    primary={`Item ${idx + 1}`}
+                    primary={`${analysis["basic_info"]["title"]}`}
                     sx={{
                       "& .MuiTypography-root": {
                         color:
@@ -122,6 +125,7 @@ export default function Leftbar() {
                             ? "primary.main"
                             : "hsl(var(--foreground))",
                         fontWeight: pathname === path ? 500 : 400,
+                        fontSize: 14,
                       },
                     }}
                   />
