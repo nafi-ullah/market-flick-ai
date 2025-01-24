@@ -129,7 +129,7 @@ export default function Home() {
                 const { component: Component, data } = extracted;
 
                 return (
-                  <div key={data["key"]} className="mb-1">
+                  <div key={data["key"]} className="mb-1 max-w-7xl mx-auto">
                     <Component data={data} />
                   </div>
                 );

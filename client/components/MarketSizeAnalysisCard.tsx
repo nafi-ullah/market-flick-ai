@@ -46,7 +46,7 @@ const MarketSizeAnalysisCard: React.FC<MarketSizeAnalysisCardProps> = ({ data })
 
   return (
     <motion.div
-      className="p-6 bg-[hsl(var(--accent))] rounded-md shadow-md max-w-7xl mx-auto"
+      className="p-6 bg-[hsl(var(--accent))] rounded-md shadow-md "
       initial={{ x: "50%", opacity: 0 }} // Start off-screen to the left
       animate={{ x: 0, opacity: 1 }} // Move into view
       transition={{ duration: 0.5, ease: "easeOut" }} // Animation duration and easing
