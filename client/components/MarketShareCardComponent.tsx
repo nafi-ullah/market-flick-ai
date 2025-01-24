@@ -6,7 +6,6 @@ import SourcesModal from "./common/SourcesModal";
 import { SiCrowdsource } from "react-icons/si";
 import UrlMetadataGrid from "./common/Sources/ShowAllSources";
 
-
 type MarketShareCardProps = {
   title: string;
   subtitle: string;
@@ -27,7 +26,7 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
   details,
 }) => {
   console.log(sources, details);
-   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -46,7 +45,7 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
       </div>
 
       {/* Chart */}
-      <div className="mb-4 min-h-[20vh]">
+      <div className="mb-4 min-h-[20vh] p-16">
         <PieChartComponent
           labels={chartData.labels}
           dataValues={chartData.dataValues}
@@ -55,11 +54,9 @@ const MarketShareCard: React.FC<MarketShareCardProps> = ({
       </div>
 
       {/* Buttons */}
-       {/* Sources */}
-       <div className="flex flex-col justify-start">
-        <div
-          className="flex items-center text-lg  py-2  rounded-md "
-        >
+      {/* Sources */}
+      <div className="flex flex-col justify-start">
+        <div className="flex items-center text-lg  py-2  rounded-md ">
           <SiCrowdsource className="mr-2" />
           Sources
         </div>
