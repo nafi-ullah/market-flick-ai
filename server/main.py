@@ -17,7 +17,21 @@ from core.market_size_analysis.test_langgraph import build_business_analysis_gra
 import os
 
 from core.market_size_analysis.utils import get_serializable_response, save_response_to_json
+# from dotenv import load_dotenv
 
+# # Load .env file
+# load_dotenv()
+
+# # Access environment variables
+# mongodb_uri = os.getenv("MONGODB_URI")
+# openai_api_key = os.getenv("OPENAI_API_KEY")
+# pplx_api_key = os.getenv("PPLX_API_KEY")
+# tavily_api_key = os.getenv("TAVILY_API_KEY")
+# nvidia_api_key = os.getenv("NVIDIA_API_KEY")
+
+# # Print (for debugging purposes)
+# print("tavily_api_key:", tavily_api_key)
+# print("OPENAI_API_KEY:", openai_api_key)
 
 set_llm_cache(InMemoryCache())
 

@@ -141,7 +141,11 @@ export default function Home() {
         <div className="mt-6 mx-auto p-4 rounded-md px-10 flex flex-col gap-4 max-w-7xl">
           <ArticleSkeleton />
           <CompetitorAnalysisTableSkeleton />
+          <div className="grid grid-cols-2 w-full">
           <MarketShareCardSkeleton />
+          <MarketShareCardSkeleton />
+          </div>
+         
         </div>
       )}
     </div>
