@@ -47,7 +47,7 @@ export default function PreviousAnalysisLayout({
  
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', backgroundColor: 'hsl(var(--background))' }}>
       <Drawer
         variant="permanent"
         sx={{
@@ -57,18 +57,18 @@ export default function PreviousAnalysisLayout({
             width: DRAWER_WIDTH,
             boxSizing: 'border-box',
             borderRight: `1px solid ${theme.palette.divider}`,
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: 'hsl(var(--accent))',
           },
         }}
         
       >
-        <Box sx={{ overflow: 'auto', mt: 8, mx: 'auto' }}>  {/* Added margin top to account for navbar */}
+        <Box sx={{ overflow: 'auto', mt: 8, mx: 'auto', backgroundColor: 'hsl(var(--accent))' }}>  {/* Added margin top to account for navbar */}
           <Typography
             variant="h6"
             sx={{
               px: 3,
               py: 2,
-              color: theme.palette.text.secondary
+              color: 'hsl(var(--foreground))'
             }}
           >
             Previous Analysis
@@ -92,13 +92,13 @@ export default function PreviousAnalysisLayout({
                   }}
                 >
                   <ListItemIcon sx={{ color: pathname === path ? 'primary.main' : 'inherit' }}>
-                    <BarChartIcon />
+                    <BarChartIcon className='text-[hsl(var(--foreground))]'/>
                   </ListItemIcon>
                   <ListItemText 
                     primary={`Item ${idx + 1}`}
                     sx={{
                       '& .MuiTypography-root': {
-                        color: pathname === path ? 'primary.main' : 'inherit',
+                        color: pathname === path ? 'primary.main' : 'hsl(var(--foreground))',
                         fontWeight: pathname === path ? 500 : 400,
                       },
                     }}
@@ -118,7 +118,7 @@ export default function PreviousAnalysisLayout({
           p: 3,
           width: `calc(100% - ${DRAWER_WIDTH}px)`,
           minHeight: '100vh',
-          backgroundColor: theme.palette.background.default,
+          backgroundColor: 'hsl(var(--background))',
         }}
       >
         {children}

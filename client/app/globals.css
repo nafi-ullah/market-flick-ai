@@ -91,7 +91,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #ffffff; /* Background of the scrollbar track */
+  background: #191A1A; /* Background of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
@@ -100,5 +100,5 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ffffff; 
+  background: #191A1A; 
 }
