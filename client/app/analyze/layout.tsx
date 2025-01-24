@@ -22,7 +22,7 @@ import Leftbar from "@/components/leftbar/Leftbar";
 
 const DRAWER_WIDTH = 250;
 
-export default function PreviousAnalysisLayout({
+export default function AnalyzeLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -45,7 +45,13 @@ export default function PreviousAnalysisLayout({
   }, []);
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "hsl(var(--background))" }}>
+    <Box
+      sx={{
+        display: "flex",
+        backgroundColor: "hsl(var(--background))",
+        overflow: "none",
+      }}
+    >
       <Drawer
         variant="permanent"
         sx={{

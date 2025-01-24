@@ -33,20 +33,20 @@ export default function StackedAnimatedLoader() {
   }, [currentTextIndex])
  
   return (
-    <div className="flex items-center justify-center  bg-gray-100 text-md">
-      <div className="max-w-md w-full p-3 bg-white rounded-lg shadow-lg">
+    <div className="flex items-center justify-center   text-md">
+      <div className=" w-full  rounded-lg shadow-lg">
         {loadingTexts.map((text, index) => (
           <div key={index} className="flex items-start mb-4">
             <div className="w-6 h-6 mt-1 mr-4 flex-shrink-0">
               {completedSteps[index] ? (
-                <Check className="w-6 h-6 text-green-500" />
+                <Check className="w-6 h-6 text-indigo-300" />
               ) : index === currentTextIndex ? (
                 <div className="w-6 h-6 border-t-2 border-blue-500 rounded-full animate-spin"></div>
               ) : (
                 <div className="w-6 h-6 border-2 border-gray-300 rounded-full"></div>
               )}
             </div>
-            <p className={`text-md ${index <= currentTextIndex ? 'text-gray-800' : 'text-gray-400'}`}>
+            <p className={`text-md ${index <= currentTextIndex ? 'text-indigo-400' : 'text-[hsl(var(--foreground))]'}`}>
               {text}
             </p>
           </div>
