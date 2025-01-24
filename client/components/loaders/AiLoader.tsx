@@ -33,8 +33,8 @@ export default function StackedAnimatedLoader() {
   }, [currentTextIndex])
  
   return (
-    <div className="flex items-center justify-center  bg-gray-100 text-md">
-      <div className="max-w-md w-full p-3 bg-white rounded-lg shadow-lg">
+    <div className="flex items-center justify-center  text0[hsl(var(--foreground))] text-md">
+      <div className=" w-full  rounded-lg shadow-lg">
         {loadingTexts.map((text, index) => (
           <div key={index} className="flex items-start mb-4">
             <div className="w-6 h-6 mt-1 mr-4 flex-shrink-0">
