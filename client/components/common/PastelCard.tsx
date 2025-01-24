@@ -18,6 +18,8 @@ interface ImpactGridProps {
 
 const ImpactGrid: React.FC<ImpactGridProps> = ({ pestali_data }) => {
   const pestaliData = pestali_data.pestaliData
+
+  const lightColors = ["#E0FFFF", "#FFD700",  "#ADD8E6", "#FFC0CB", "#F0E68C", "#FFB6C1", "#D8BFD8", "#FAFAD2",  "#E6E6FA", "#F5DEB3"]; 
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
@@ -35,16 +37,16 @@ const ImpactGrid: React.FC<ImpactGridProps> = ({ pestali_data }) => {
           <div
             key={index}
             className="p-4 rounded-lg shadow-md"
-            style={{ backgroundColor: `${item.color}1A` }} // Transparent background
+            style={{ backgroundColor: `${lightColors[index % lightColors.length]}1A` }} // Transparent background
           >
             <h3 className="text-lg font-semibold text-[hsl(var(--foreground))]">{item.title}</h3>
             <p className="text-sm text-[hsl(var(--foreground))] mt-2">{item.description}</p>
 
             <div className="flex items-center justify-between mt-4">
-              <span className="text-md font-medium" style={{ color: item.color }}>Impact Level</span>
+              <span className="text-md font-medium" style={{ color: lightColors[index % lightColors.length] }}>Impact Level</span>
               <span
                 className="text-md font-bold"
-                style={{ color: item.color }} // Apply dynamic color to the text
+                style={{ color: lightColors[index % lightColors.length] }} // Apply dynamic color to the text
               >
                 {impactText}
               </span>
@@ -55,12 +57,12 @@ const ImpactGrid: React.FC<ImpactGridProps> = ({ pestali_data }) => {
                 className="h-2 rounded-full"
                 style={{
                   width: `${item.impact_level}%`,
-                  backgroundColor: item.color, // Dynamic progress bar color
+                  backgroundColor: lightColors[index % lightColors.length], // Dynamic progress bar color
                 }}
               ></div>
             </div>
 
-            <div className="flex items-center mt-4 text-sm " style={{ color: item.color }}>
+            <div className="flex items-center mt-4 text-sm " style={{ color: lightColors[index % lightColors.length] }}>
               <span className="mr-2">&#x21bb;</span>
               <span>Real-time updates</span>
             </div>
