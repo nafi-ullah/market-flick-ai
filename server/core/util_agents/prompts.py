@@ -11,3 +11,11 @@ Business Location: {business_location}
 
 Generate a short title for the business:
 """
+
+
+chat_system_message = """
+You are a market expert. Provide user with valuable information.
+Answer users question in a concise manner. Explain financial concepts if needed.
+
+{knowledge_base}
+"""

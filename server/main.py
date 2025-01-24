@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import uuid
 from constants import RESPONSE_PATH, important_keys
+from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.title_generator import generate_title
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
@@ -10,13 +11,14 @@ import asyncio
 from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
+from custom_types.basetypes import ChatRequest, ChatType
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
 
-from core.market_size_analysis.utils import get_serializable_response, save_response_to_json
+from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
 
 
 set_llm_cache(InMemoryCache())
@@ -292,3 +294,15 @@ async def get_analyses():
         return {"error": str(e)}
 
     
+@app.post("/chat")
+async def chat(chat_request: ChatRequest):
+    knowledge_base_id = chat_request.id
+    knowledge_base = extract_knowledge_base(knowledge_base_id)
+
+    if chat_request.type == ChatType.CHAT:
+        response = chat_with_agent(input_text=chat_request.message, chat_history=chat_request.chat_history, knowledge_base=knowledge_base)
+    elif chat_request.type == ChatType.WRITE:
+        response = {
+            "message": "work in progress"
+        }
+    return response
