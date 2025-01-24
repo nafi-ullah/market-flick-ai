@@ -1,19 +1,27 @@
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaSearch, FaPen, FaEllipsisH, FaCircle } from 'react-icons/fa';
+import { FaSearch, FaPen, FaComment, FaCircle } from 'react-icons/fa';
 import Image from "next/image";
 import FileUpload from './FileUpload';
 interface CascadeModalProps {
   onClose: () => void;
+  knowledge_id: string;
 }
 
-const CascadeModal: React.FC<CascadeModalProps> = ({ onClose }) => {
+const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id }) => {
   // Example data for past workflows
   const pastWorkflows = [
     { title: 'Enhancing TAM SAM SOM ', time: '3d' },
     { title: 'Redesigning Roadmap', time: '4d' },
     { title: 'Redesigning Competittor Analysis', time: '4d' },
   ];
+
+  const [mode, setMode] = useState<'write' | 'chat'>('write');
+
+  const toggleMode = () => {
+    setMode((prevMode) => (prevMode === 'write' ? 'chat' : 'write'));
+  };
 
   return (
     <motion.div
@@ -49,32 +57,68 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose }) => {
         </div>
 
         {/* Header text */}
-        <div>
-          <h1 className="text-xl font-bold">Write with FlickChat</h1>
-          <p className="text-sm text-gray-200">
-            Kick off a new project or make changes across your entire market analysis
-          </p>
-        </div>
+        <motion.div
+          key={mode}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.3 }}
+        >
+          {mode === 'write' ? (
+            <>
+              <h1 className="text-xl font-bold">Write with FlickChat </h1>
+              <p className="text-sm text-gray-200">
+                Kick off a new project or make changes across your entire market analysis
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-xl font-bold">Chat with FlickChat</h1>
+              <p className="text-sm text-gray-200">
+                Chat with FlickChat to broaden your insights your entire market analysis.
+              </p>
+            </>
+          )}
+        </motion.div>
       </div>
 
       {/* Main Interaction Section - Search Bar */}
       <div className="px-4">
-        <div className="bg-indigo-800 rounded-full flex items-center px-4 py-2 shadow-sm">
-          <FaSearch className="text-gray-300 mr-2" />
+        <div className="bg-indigo-800 rounded-lg flex flex-col px-3 py-3 shadow-sm">
           <input
             type="text"
             placeholder="Ask anything (Ctrl+L), @ to mention code blocks"
-            className="flex-1 bg-transparent outline-none text-sm placeholder:text-gray-400"
+            className="flex-1 bg-transparent outline-none text-xs placeholder:text-gray-400"
           />
-          {/* Right-side actions */}
-          <div className="flex items-center gap-2 ml-2">
-            <button className="flex items-center gap-1 text-white bg-indigo-300 px-3 py-1 rounded-full text-sm hover:bg-indigo-400 transition-colors">
-              <FaPen size={12} />
-              Write
-            </button>
-            <button className="text-white hover:bg-indigo-700 p-2 rounded-full transition-colors">
-              <FaEllipsisH size={14} />
-            </button>
+
+          {/* Toggle switch */}
+          <div className="relative mt-3 w-full flex items-center justify-end">
+            <div
+              className="relative bg-indigo-400 w-[75px] h-[20px] rounded-full flex items-center p-1 cursor-pointer"
+              onClick={toggleMode}
+            >
+              {/* Animated toggle button */}
+              <motion.div
+                className="absolute bg-white w-[33px] h-[18px] rounded-full shadow-md"
+                initial={{ x: mode === 'write' ? 0 : 37 }}
+                animate={{ x: mode === 'write' ? 0 : 37 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+               {mode === 'write' ? (
+                  <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Write</div>
+                ) : (
+                  <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Code</div>
+                )}
+              </motion.div>
+              
+              {/* Labels */}
+              <span className="flex-1 text-center text-[10px] font-semibold text-indigo-800">
+                Write
+              </span>
+              <span className="flex-1 text-center text-[10px] font-semibold text-indigo-800">
+                Chat
+              </span>
+            </div>
           </div>
         </div>
       </div>

@@ -25,6 +25,8 @@ import SWOTAnalysis, { SWOTAnalysisProps } from "@/components/SWOTAnalysisCard";
 import PASTELIAnalysis, {
   PASTELIAnalysisProps,
 } from "@/components/PastelAnalysis";
+import { BsWechat } from "react-icons/bs";
+import CascadeModal from "@/components/chat/CascadeModal";
 
 type Props = {
   knowledge_base: MarkdownViewerProps;
@@ -38,8 +40,9 @@ type Props = {
 
 export default function Home() {
   const { id } = useParams();
+  const [showChat, setShowChat] = useState(false);
   const [streamData, setStreamData] = useState<string[]>([]);
-
+const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const streamDataKeys: {
     [K in keyof Props]: React.FC<Props[K]>;
   } = {
@@ -115,10 +118,22 @@ export default function Home() {
         setStreamData(chunks_json);
       })
       .catch((error) => console.error("Error streaming data:", error));
+
+      if(id && id.length > 0){
+        setShowChat(true);
+      }
+      else{
+        setShowChat(false);
+      }
   }, [id]);
 
+  const toggleChatbot = () => {
+    setIsChatbotOpen((prev) => !prev);
+  };
+
+
   return (
-    <div className="font-[family-name:var(--font-geist-sans)] bg-[hsl(var(--background))]">
+    <div className="relative font-[family-name:var(--font-geist-sans)] bg-[hsl(var(--background))]">
       <Navbar />
       {streamData.length > 0 ? (
         <div className="mt-6 p-4 rounded-md">
@@ -148,6 +163,15 @@ export default function Home() {
          
         </div>
       )}
+{showChat && 
+<div
+        className="fixed bottom-6 right-6 bg-indigo-500 text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-indigo-600 transition"
+        onClick={toggleChatbot}
+      >
+        <BsWechat size={24} />
+      </div>}
+      {/* {isChatbotOpen && <ChatbotModal onClose={toggleChatbot} />} */}
+      {isChatbotOpen && <CascadeModal onClose={toggleChatbot} knowledge_id={id}/>}
     </div>
   );
 }
