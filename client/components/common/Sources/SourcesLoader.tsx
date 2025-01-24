@@ -2,7 +2,7 @@ import React from 'react';
 
 const SourceCardSkeleton: React.FC = () => {
     return (
-        <div className="relative w-full cursor-pointer animate-pulse">
+        <div className="relative w-full max-w-[250px] cursor-pointer animate-pulse">
             <div className="flex flex-col w-full bg-[hsl(var(--source))] text-[hsl(var(--foreground))] p-3 rounded-md">
                 <div className="h-4 bg-[hsl(var(--secondary))] rounded w-3/4 mb-2"></div>
                 <div className="flex my-2 justify-start items-start">

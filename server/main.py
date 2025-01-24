@@ -18,8 +18,23 @@ from langchain_core.globals import set_llm_cache
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
 
+
 from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
 
+
+# # Load .env file
+# load_dotenv()
+
+# # Access environment variables
+# mongodb_uri = os.getenv("MONGODB_URI")
+# openai_api_key = os.getenv("OPENAI_API_KEY")
+# pplx_api_key = os.getenv("PPLX_API_KEY")
+# tavily_api_key = os.getenv("TAVILY_API_KEY")
+# nvidia_api_key = os.getenv("NVIDIA_API_KEY")
+
+# # Print (for debugging purposes)
+# print("tavily_api_key:", tavily_api_key)
+# print("OPENAI_API_KEY:", openai_api_key)
 
 set_llm_cache(InMemoryCache())
 
