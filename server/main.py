@@ -1,5 +1,8 @@
+from datetime import datetime
 import json
+import uuid
 from constants import RESPONSE_PATH, important_keys
+from core.util_agents.title_generator import generate_title
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -7,11 +10,16 @@ import asyncio
 from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
+from langchain_core.caches import InMemoryCache
+from langchain_core.globals import set_llm_cache
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
 
-from core.market_size_analysis.utils import get_serializable_response
+from core.market_size_analysis.utils import get_serializable_response, save_response_to_json
+
+
+set_llm_cache(InMemoryCache())
 
 
 app = FastAPI()
@@ -50,13 +58,41 @@ async def business_analysis_stream(
                 "data": "Waaassuupp?",
                 "status": "success"
             })
+
+
+            # basic info from the idea
+            title = generate_title(business_input)
+            knowledge_base_id = str(uuid.uuid4())
+            current_date_time = datetime.now().isoformat()
+            basic_info = {
+                "basic_info_id": knowledge_base_id,
+                "basic_info": {
+                    "title": title, 
+                    "date": current_date_time,
+                    "business_idea": business_input.idea,
+                    "business_sector": business_input.sector,
+                    "business_location": business_input.location
+                }
+            }
+
+            yield json.dumps({
+                "key": "basic_info",
+                "data": basic_info,
+                "status": "success"
+            })
+
+            save_response_to_json(basic_info, f"basic_info_{knowledge_base_id}")
+
+
             # Create the graph
             graph = build_business_analysis_graph()
+
+            
 
             # Initial state
             initial_state = {
                 "business_analysis_input": business_input,
-                "knowledge_base_id": "",
+                "knowledge_base_id": knowledge_base_id,
                 "knowledge_base": "",
                 "market_size_data_points": "",
                 "market_size_plot_id": "",
@@ -135,6 +171,9 @@ def load_response_from_json(file_name: str):
 
 def get_all_saved_responses(knowledge_base_id: str):
     return {
+        "basic_info": load_response_from_json(
+            f"basic_info_{knowledge_base_id}"
+        ),
         "market_size_report": load_response_from_json(
             f"market_size_report_{knowledge_base_id}"
         ),
@@ -172,6 +211,10 @@ async def previous_analysis_stream(
             })
             # Create the graph
             saved_responses = get_all_saved_responses(knowledge_base_id)
+
+            print("keys of saved responses", saved_responses.keys())
+            print("keys of important keys", important_keys)
+
             # Stream the graph execution
             for key, response in saved_responses.items():
                 try:
@@ -232,9 +275,15 @@ async def get_analyses():
             if os.path.isfile(os.path.join(RESPONSE_PATH, file)) and "market_size_report" in file.lower()
         ]
 
+        analyses = []
+
+        for id in filtered_files:
+            basic_info = load_response_from_json(f"basic_info_{id}")
+            analyses.append(basic_info)
+
 
         return {
-            "analyses": filtered_files
+            "analyses": analyses
         }
 
     except FileNotFoundError:

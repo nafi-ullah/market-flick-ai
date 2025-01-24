@@ -5,7 +5,8 @@ from core.market_size_analysis.utils import extract_knowledge_base
 from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint
 from core.market_size_analysis.market_size_graph import plot_market_projection
 from datetime import date
-from core.market_size_analysis.test_langgraph import run_business_analysis, BusinessAnalysisState
+from core.market_size_analysis.test_langgraph import BusinessAnalysisState
+from core.util_agents.title_generator import generate_title
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -26,12 +27,16 @@ load_dotenv()
 # competitors_table_generator(knowledge_base_id)
 
 business_input = BusinessAnalysisInput(
-    sector="Technology",
-    idea="AI-powered productivity tool",
-    location="San Francisco"
+    sector="Real Estate",
+    idea="An online marketplace for co-living spaces, leveraging AI to match tenants based on lifestyle preferences, promoting community engagement and sustainable living.",
+    location="USA"
 )
 
-run_business_analysis(business_input)
+response = generate_title(business_input)
+
+print(response)
+
+# run_business_analysis(business_input)
 
 
 
