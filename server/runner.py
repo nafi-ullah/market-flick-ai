@@ -8,9 +8,8 @@ from core.market_size_analysis.market_size_graph import plot_market_projection
 from datetime import date
 from core.market_size_analysis.test_langgraph import BusinessAnalysisState
 from core.util_agents.title_generator import generate_title
+from utils.general_utils import get_all_saved_responses, load_response_from_json
 from dotenv import load_dotenv
-
-from main import load_response_from_json
 
 load_dotenv()
 
@@ -45,6 +44,10 @@ load_dotenv()
 # run_business_analysis(business_input)
 
 
+
+# saved_responses = get_all_saved_responses("67ef1654-9d74-47d9-ab21-a484c1e3da13")
+
+# print(saved_responses)
 
 # Example usage
 # if __name__ == "__main__":
