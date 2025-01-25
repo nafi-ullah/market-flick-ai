@@ -150,7 +150,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
 
       const { output, chat_history: newChatHistory } = response.data;
 
-      if(response.data){
+      if(response.data && mode == 'write'){
         handleClickReloader(selectedKeys);
       }
 
