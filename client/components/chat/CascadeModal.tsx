@@ -365,7 +365,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
                 {mode === 'write' ? (
                   <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Write</div>
                 ) : (
-                  <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Code</div>
+                  <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Chat</div>
                 )}
               </motion.div>
               <span className="flex-1 text-center text-[10px] font-semibold text-indigo-800">

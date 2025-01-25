@@ -18,10 +18,12 @@ import {
   Logout as LogoutIcon
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
+import SocialShare from "../features/ShareCards";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isShareModalOpened, setIsShareModalOpened] = useState(false);
   const open = Boolean(anchorEl);
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -154,6 +156,21 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
+      {isShareModalOpened &&  <div
+          className="fixed inset-0 bg-opacity-80 bg-black flex justify-center items-center w-screen h-screen p-5 md:p-10 z-50"
+          onClick={() => {
+           
+          }}
+        >
+          <div
+            className="bg-gray-900 text-black rounded-xl w-full h-auto max-w-[600px] flex flex-col items-center gap-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+           
+            {/* <SocialShare url={shareVars.url} title={state.language === 'en' ? jobTitle : jobTitle_de} body={state.language === 'en' ? description : description_de} onClick={()=>{setIsShareModalOpened(false)}}/> */}
+          </div>
+          </div>
+          }
     </nav>
   );
 };
