@@ -5,7 +5,8 @@ from langchain.schema import BaseMessage
 from langgraph.graph.message import add_messages
 
 from langgraph.managed import IsLastStep
-
+from fastapi import FastAPI, File, UploadFile, Form
+from qdrant_client.models import PointStruct
 
 
 
@@ -13,9 +14,28 @@ class BusinessAnalysisInput(BaseModel):
     """
     Input for business analysis.
     """
-    sector: str = Field(description="The business sector or industry")
-    idea: str = Field(description="The business idea or concept")
-    location: str = Field(description="The geographical location for the business")
+    sector: str = Field(description="The business sector or industry", default="")
+    idea: str = Field(description="The business idea or concept", default="")
+    location: str = Field(description="The geographical location for the business", default="")
+    files: list[UploadFile] | None = Field(description="The files to be used for the business analysis", default=None)
+    links: list[str] | None = Field(description="The links to be used for the business analysis", default=None)
+    # Add this class method to handle form data
+    @classmethod
+    def as_form(
+        cls,
+        sector: str = Form(...),
+        idea: str = Form(...),
+        location: str = Form(...),
+        files: list[UploadFile] | None = None,
+        links: list[str] | None = None,
+    ):
+        return cls(
+            sector=sector,
+            idea=idea,
+            location=location,
+            files=files,
+            links=links
+        )
 
 
 # Pydantic Model for Market Data
@@ -42,6 +62,7 @@ class MarketPlayerTableData(BaseModel):
 
 class BusinessAnalysisState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
+    internal_context_points: list[PointStruct] = []
     knowledge_base_id: str
     knowledge_base: str = ""
     market_size_data_points: str =""

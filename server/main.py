@@ -1,13 +1,15 @@
 from datetime import datetime
+import hashlib
 import json
 import uuid
 from constants import RESPONSE_PATH, important_keys
 from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
+from core.rag.rag import upload_and_fetch_context
 from utils.general_utils import load_response_from_json
 from database.db import get_database
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile
 from fastapi.responses import StreamingResponse
 import asyncio
 from typing import AsyncGenerator
@@ -67,8 +69,61 @@ async def root():
 
 @app.post("/business-analysis")
 async def business_analysis_stream(
-    business_input: BusinessAnalysisInput,
+    sector: str = Form(...),
+    idea: str = Form(...),
+    location: str = Form(...),
+    links: list[str] = Form(...),
+    files: list[UploadFile] | None = None,
 ) -> StreamingResponse:
+    # Convert form data to BusinessAnalysisInput
+    print('~'*100)
+    print(links, type(links))
+    print('~'*100)
+    business_input = BusinessAnalysisInput.as_form(
+        sector=sector,
+        idea=idea,
+        location=location,
+        files=files,
+        links=links
+    )
+    
+    knowledge_base_id = str(uuid.uuid4())
+    
+    points = []
+    if files:
+        # save those files in ./rag_base/files
+        sources_object = {
+            "knowledge_base_id": knowledge_base_id,
+            "files": [],
+            "links": []
+        }
+        for file in files:
+            content = None
+            content = await file.read()
+            file_uuid = hashlib.sha256(content).hexdigest()
+            with open(f"./rag_base/files/{file_uuid}.{file.filename.split('.')[-1]}", "wb") as f:
+                f.write(content)
+            file_object = {
+                "file_id": file_uuid,
+                "file_name": file.filename,
+                "file_path": f"./rag_base/files/{file_uuid}.{file.filename.split('.')[-1]}"
+            }
+        
+            sources_object["files"].append(file_object)
+    
+        if links:
+            sources_object["links"] = [
+                {
+                    "link_id": hashlib.sha256(link.encode()).hexdigest(),
+                    "link_url": link
+                }
+                for link in links
+            ]
+        print(sources_object)
+        json.dump(sources_object, open(f"./rag_base/sources/sources_{knowledge_base_id}.json", "w"), indent=4)
+    
+        points = upload_and_fetch_context(knowledge_base_id, f'Idea: {business_input.idea} - Sector: {business_input.sector} - Location: {business_input.location}', sources_object)
+     
     async def generate_stream() -> AsyncGenerator[str, None]:
         try:
             
@@ -81,7 +136,6 @@ async def business_analysis_stream(
 
             # basic info from the idea
             title = generate_title(business_input)
-            knowledge_base_id = str(uuid.uuid4())
             current_date_time = datetime.now().isoformat()
             basic_info = {
                 "basic_info_id": knowledge_base_id,
@@ -112,6 +166,7 @@ async def business_analysis_stream(
             initial_state = {
                 "business_analysis_input": business_input,
                 "knowledge_base_id": knowledge_base_id,
+                "internal_context_points": points,
                 "knowledge_base": "",
                 "market_size_data_points": "",
                 "market_size_plot_id": "",
