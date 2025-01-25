@@ -82,7 +82,7 @@ const streamDataMapping: StreamDataMapping = {
 const important_keys = [
   { key: "knowledge_base", value: "Market Analysis Report" },
   { key: "market_size_data_points", value: "Market Size Analysis" },
-  { key: "market_player_table_data", value: "Market Players" },
+  { key: "market_player_table_data", value: "Competitors Table" },
   { key: "competitors_chart_data", value: "Competitor Analysis Graph" },
   { key: "swot_analysis", value: "SWOT Analysis" },
   { key: "pestali_analysis", value: "Pestali Analysis" },
