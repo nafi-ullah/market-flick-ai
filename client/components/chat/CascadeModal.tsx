@@ -89,10 +89,10 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
     setSelectedKeys((prev) => [...prev, item.key]);
     setDialogVisible(false);
   };
-  const handleClickReloader = () => {
+  const handleClickReloader = (selected_comps: string[]) => {
     setComponentReloader({
       needReload: true,
-      components: ["swot_analysis", "market_player_table_data"],
+      components: selected_comps,
     });
   };
 
@@ -119,6 +119,10 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
       });
 
       const { output, chat_history: newChatHistory } = response.data;
+
+      if(response.data){
+        handleClickReloader(selectedKeys);
+      }
 
       // Update chatHistory with API response (store only, no display)
       setChatHistory(newChatHistory);
@@ -238,12 +242,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
         </button>
       </div>
     </div></>) : (<><div className="p-4 flex flex-col gap-2">
-      <button
-        onClick={handleClickReloader}
-        className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-      >
-        Reload Components
-      </button>
+    
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 bg-white rounded-full">
             <Image
