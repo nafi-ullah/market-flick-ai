@@ -20,14 +20,28 @@ import { BACKENDURL } from "@/utils/constants";
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import { Button } from "../ui/button";
 import { Loader, PlusSquare } from "lucide-react";
+import { useAnalysisDataContext } from "@/context/AnalysisContext";
 
+
+interface BasicInfo {
+  title: string;
+  date: string;
+  business_idea: string;
+  business_sector: string;
+  business_location: string;
+}
+
+interface AnalysisData {
+  basic_info_id: string;
+  basic_info: BasicInfo;
+}
 export default function Leftbar() {
   const router = useRouter();
   const pathname = usePathname();
 
   const [analyses, setAnalyses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const {setAnalysisData} = useAnalysisDataContext();
   useEffect(() => {
     fetch(`${BACKENDURL}/analyses`)
       .then((res) => res.json())
@@ -36,6 +50,15 @@ export default function Leftbar() {
         setAnalyses(
           data.analyses.filter((analysis) => analysis && analysis["basic_info"])
         );
+
+        const filteredData = data.analyses
+          .filter((analysis: any) => analysis && analysis["basic_info"])
+          .map((analysis: AnalysisData) => ({
+            basic_info_id: analysis.basic_info_id,
+            basic_info: analysis.basic_info,
+          }));
+        console.log("Filtered Data:", filteredData);
+        setAnalysisData(filteredData);
         setIsLoading(false);
       })
       .catch((error) => console.error("Error fetching analyses:", error));

@@ -1,4 +1,6 @@
-import React from "react";
+import { useAnalysisDataContext } from "@/context/AnalysisContext";
+import { FRONTENDURL } from "@/utils/constants";
+import React, { useEffect, useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
 import {
   FacebookShareButton,
@@ -14,15 +16,36 @@ import {
 } from "react-share";
 
 interface SocialShareProps {
-  url: string;
-  title: string;
-  body: string; // Add a body or summary to the props
+ // Add a body or summary to the props
   onClick: () => void;
 }
 
-const SocialShare: React.FC<SocialShareProps> = ({ url, title, body, onClick }) => {
+const SocialShare: React.FC<SocialShareProps> = ({ onClick }) => {
+    const [title, setTitle] = useState("");
+    const [url, setUrl] = useState("");
+    const [body, setBody] = useState("");
+    const {currentBasicInfoId, analysisData} = useAnalysisDataContext();
+
+    useEffect(() => {
+        if (currentBasicInfoId) {
+          // Find the matching data by basic_info_id
+          const matchedData = analysisData.find(
+            (data) => data.basic_info_id === currentBasicInfoId
+          );
+    
+          if (matchedData) {
+            setTitle(matchedData.basic_info.title);
+            setBody(matchedData.basic_info.business_idea);
+            setUrl(`${FRONTENDURL}/previous-analysis/${matchedData.basic_info_id}`); // URL can be customized based on your requirements
+          }
+        }
+      }, [currentBasicInfoId, analysisData]);
+
+    
+
+
   return (
-    <div className="bg-gray-900 text-white p-4 rounded-lg w-full">
+    <div className="bg-[hsl(var(--accent))] text-white p-4 rounded-lg w-full">
         <div className=" flex items-center justify-between"> 
         <div></div>
       <div className="text-xl font-semibold mb-4 text-center mt-4">Share this post</div>
