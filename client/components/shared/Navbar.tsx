@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { FiMenu, FiX } from 'react-icons/fi';
-import { useRouter } from 'next/navigation';
-
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { FiMenu, FiX } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,11 +10,11 @@ const Navbar = () => {
   const router = useRouter();
   // Navigation items
   const navItems = [
-    { name: 'Home', href: '#hero' },
-    { name: 'Features', href: '#features' },
-    { name: 'Demo', href: '#product-video-section' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'FAQ', href: '#faq' },
+    { name: "Home", href: "#hero" },
+    { name: "Features", href: "#features" },
+    { name: "Demo", href: "#product-video-section" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "FAQ", href: "#faq" },
   ];
 
   useEffect(() => {
@@ -23,8 +22,8 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 10);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -36,7 +35,7 @@ const Navbar = () => {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth'
+        behavior: "smooth",
       });
     }
     setIsMobileMenuOpen(false);
@@ -47,16 +46,13 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg' : 'bg-transparent'
+        isScrolled ? "bg-white shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="flex-shrink-0"
-          >
+          <motion.div whileHover={{ scale: 1.05 }} className="flex-shrink-0">
             <Link href="/">
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 MarketFlick AI
@@ -82,7 +78,7 @@ const Navbar = () => {
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-medium"
               onClick={() => {
-                router.push('/dashboard');
+                router.push("/analyze");
               }}
             >
               Get Started
@@ -110,7 +106,7 @@ const Navbar = () => {
         {isMobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-white"
           >

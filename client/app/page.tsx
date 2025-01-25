@@ -8,19 +8,14 @@ import PricingComponent from "@/components/landings/Pricing";
 import ProductFrequentlyAskedQuestionsSection from "@/components/landings/FAQSection";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
-import FileUpload from "../components/chat/FileUpload";
-
-
 
 export default function Home() {
-
   return (
     <div className="font-[family-name:var(--font-geist-sans)]">
       <Navbar />
       <main>
-        <section id="hero">
+        <section id="hero" className="bg-white">
           <HeroSection />
-         
         </section>
         <section id="product-video-section">
           <ProductVideoSection />

@@ -18,8 +18,6 @@ export default async function handler(
     return res.status(400).json({ error: "Invalid or missing URL parameter." });
   }
 
-  return res.status(400).json({ error: "Not implemented" });
-
   try {
     // Fetch the website content
     const response = await axios.get(url);

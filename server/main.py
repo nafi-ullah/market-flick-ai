@@ -337,7 +337,7 @@ async def chat(chat_request: ChatRequest):
     knowledge_base = extract_knowledge_base(knowledge_base_id)
 
     if chat_request.type == ChatType.CHAT:
-        response = chat_with_agent(input_text=chat_request.message, chat_history=chat_request.chat_history, knowledge_base=knowledge_base)
+        response = chat_with_agent(input_text=chat_request.message, chat_history=chat_request.chat_history, knowledge_base=knowledge_base, knowledge_base_id=knowledge_base_id)
     elif chat_request.type == ChatType.WRITE:
         response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response

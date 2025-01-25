@@ -19,9 +19,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { BACKENDURL } from "@/utils/constants";
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import { Button } from "../ui/button";
-import { Loader, PlusSquare } from "lucide-react";
+import { Circle, LineChart, Loader, PlusSquare, Square } from "lucide-react";
 import { useAnalysisDataContext } from "@/context/AnalysisContext";
-
 
 interface BasicInfo {
   title: string;
@@ -41,28 +40,24 @@ export default function Leftbar() {
 
   const [analyses, setAnalyses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const {setAnalysisData} = useAnalysisDataContext();
+  const { setAnalysisData } = useAnalysisDataContext();
   useEffect(() => {
     fetch(`${BACKENDURL}/analyses`)
       .then((res) => res.json())
       .then((data) => {
         console.log("~~~ data", data);
-        setAnalyses(
-          data.analyses.filter((analysis) => analysis && analysis["basic_info"])
-        );
-
         const filteredData = data.analyses
-          .filter((analysis: any) => analysis && analysis["basic_info"])
-          .map((analysis: AnalysisData) => ({
-            basic_info_id: analysis.basic_info_id,
-            basic_info: analysis.basic_info,
-          }));
-        console.log("Filtered Data:", filteredData);
-        setAnalysisData(filteredData);
+          .filter((analysis) => analysis && analysis["basic_info"])
+          .sort((a, b) => {
+            const dateA = new Date(a["basic_info"]["date"]);
+            const dateB = new Date(b["basic_info"]["date"]);
+            return dateB.getTime() - dateA.getTime();
+          });
+        setAnalyses(filteredData);
         setIsLoading(false);
       })
       .catch((error) => console.error("Error fetching analyses:", error));
-  }, []);
+  }, [setAnalysisData]);
 
   return (
     <>
@@ -86,7 +81,7 @@ export default function Leftbar() {
         </Typography>
         <PlusSquare
           color="#ffffff"
-          onClick={() => (window.location.href = "/analyze")}
+          onClick={() => router.push("/analyze")}
           className="cursor-pointer"
         />
       </Box>
@@ -125,33 +120,52 @@ export default function Leftbar() {
                   onClick={() => router.push(path)}
                   sx={{
                     "&.Mui-selected": {
-                      backgroundColor: "rgba(0, 0, 0, 0.04)",
+                      backgroundColor: "rgba(0, 0, 0, 0.8)",
                       "&:hover": {
                         backgroundColor: "rgba(0, 0, 0, 0.08)",
                       },
                     },
                   }}
+                  className="grid grid-cols-[30px_1fr] gap-1"
                 >
                   <ListItemIcon
                     sx={{
                       color: pathname === path ? "primary.main" : "inherit",
                     }}
                   >
-                    <BarChartIcon className="text-[hsl(var(--foreground))]" />
+                    <LineChart className="text-[hsl(var(--foreground))]" />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={`${analysis["basic_info"]["title"]}`}
-                    sx={{
-                      "& .MuiTypography-root": {
-                        color:
-                          pathname === path
-                            ? "primary.main"
-                            : "hsl(var(--foreground))",
-                        fontWeight: pathname === path ? 500 : 400,
-                        fontSize: 14,
-                      },
-                    }}
-                  />
+                  <div className="flex flex-col grow-1">
+                    <ListItemText
+                      primary={`${analysis["basic_info"]["title"]}`}
+                      sx={{
+                        color: "hsl(var(--foreground))",
+                        "& .MuiTypography-root": {
+                          fontSize: 14,
+                        },
+                      }}
+                    />
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        color: "hsl(var(--foreground))",
+                        fontSize: 12,
+                        "& .MuiTypography-root": {
+                          fontSize: 10,
+                        },
+                      }}
+                    >
+                      {new Date(
+                        analysis["basic_info"]["date"]
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
+                    </Typography>
+                  </div>
                 </ListItemButton>
               </ListItem>
             );
