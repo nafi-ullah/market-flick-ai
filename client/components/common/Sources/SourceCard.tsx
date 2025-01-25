@@ -24,12 +24,12 @@ const SourceCard: React.FC<ArticleCardProps> = ({
   useEffect(() => {
     // check if image is a valid url using request
     const imageRequest = new Request(image);
-    fetch(imageRequest).then((response) => {
-      if (url.includes("digitaljournal.com")) {
-        console.log({ response, url });
-      }
-      setImageUrl(response.url);
-    });
+    // fetch(imageRequest).then((response) => {
+    //   if (url.includes("digitaljournal.com")) {
+    //     console.log({ response, url });
+    //   }
+    //   setImageUrl(response.url);
+    // });
   }, [image, url]);
 
   const handleImageError = () => {
