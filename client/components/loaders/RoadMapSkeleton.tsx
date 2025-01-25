@@ -2,7 +2,7 @@ import React from "react";
 
 const RoadmapComponentSkeleton: React.FC = () => {
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6 animate-pulse">
+    <div className="p-4 bg-white rounded-md shadow-md  my-6 animate-pulse">
       <div className="container mx-auto px-4 py-8">
         {/* Title Placeholder */}
         <div className="h-8 bg-gray-300 w-1/2 mx-auto rounded-md mb-12"></div>

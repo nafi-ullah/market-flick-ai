@@ -54,11 +54,11 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-[hsl(var(--background))]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
         <div className="flex justify-between items-center h-16">
           {/* Left: Logo */}
           <div className="flex-shrink-0">
-            <span className="text-xl font-bold my-3">
+            {/* <span className="text-xl font-bold my-3">
               <Image
                 src="/marktelogo.png"
                 alt="Logo"
@@ -66,7 +66,7 @@ const Navbar: React.FC = () => {
                 height={60}
                 className="rounded-full"
               />
-            </span>
+            </span> */}
           </div>
 
           {/* Right: Share button and avatar */}
