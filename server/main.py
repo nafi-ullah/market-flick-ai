@@ -289,21 +289,31 @@ async def chat(chat_request: ChatRequest):
         response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response
 
-@app.get("/investor-analysis/{id}")
+
+
+@app.post("/investor-analysis/{id}")
 async def investor_analysis(id: str):
     async def generate_stream() -> AsyncGenerator[str, None]:
         try:
             async for s in get_investor_analysis(id):
                 message = s["messages"][-1]
                 if isinstance(message, tuple):
-                    yield message+"\n\n"
+                    # SSE requires "data: <content>\n\n"
+                    yield json.dumps({"data": message})
                 else:
-                    yield message.pretty_repr()+"\n\n"
+                    yield json.dumps({"data": str(message.pretty_repr())})
         
         except Exception as e:
-            yield f"event: error\ndata: {str(e)}\n\n"
+            yield json.dumps({"event": "error", "data": str(e)})
+
+    headers = {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Origin": "*",  # Allow frontend to access
+    }
     
-    return StreamingResponse(generate_stream(), media_type="text/event-stream")
+    return StreamingResponse(generate_stream(), media_type="application/json", headers=headers)
 
 
 @app.get("/investor-profiles/{id}")

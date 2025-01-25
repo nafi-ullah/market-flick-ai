@@ -74,6 +74,14 @@ const Navbar: React.FC = () => {
             {/* Share Button */}
             <button 
             onClick={()=>{
+              window.location.href = "/investor";
+            }}
+            className="flex items-center px-4 py-2 bg-[hsl(var(--foreground))] border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
+             
+              <span className="text-sm font-medium text-[hsl(var(--background))]">Investor</span>
+            </button>
+            <button 
+            onClick={()=>{
               setIsShareModalOpened(true);
             }}
             className="flex items-center px-4 py-2 bg-[hsl(var(--foreground))] border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
