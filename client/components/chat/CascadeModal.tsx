@@ -1,19 +1,140 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useRef, useState,  Dispatch, SetStateAction } from 'react';
 import { motion } from 'framer-motion';
-import { FaSearch, FaPen, FaEllipsisH, FaCircle } from 'react-icons/fa';
 import Image from "next/image";
 import FileUpload from './FileUpload';
+import axios from 'axios';
+import { BACKENDURL } from '@/utils/constants';
+import { MdSend } from 'react-icons/md';
+import { FiPlus } from 'react-icons/fi';
+import { RxCross2 } from "react-icons/rx";
+import { FaHistory } from "react-icons/fa";
+
+type ComponentReloaderState = {
+  needReload: boolean;
+  components: string[];
+};
 interface CascadeModalProps {
   onClose: () => void;
+  knowledge_id: string;
+  setComponentReloader: Dispatch<SetStateAction<ComponentReloaderState>>;
 }
 
-const CascadeModal: React.FC<CascadeModalProps> = ({ onClose }) => {
-  // Example data for past workflows
+const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setComponentReloader }) => {
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [mode, setMode] = useState<'write' | 'chat'>('chat');
+ 
+  const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
+  const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
+  const [outputValues, setOutputValues] = useState<string[]>([]); // Store output strings from API
+  const [isLoading, setIsLoading] = useState(false);
+  const [showFullChat, setShowFullChat] = useState(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const pastWorkflows = [
     { title: 'Enhancing TAM SAM SOM ', time: '3d' },
     { title: 'Redesigning Roadmap', time: '4d' },
-    { title: 'Redesigning Competittor Analysis', time: '4d' },
+    { title: 'Redesigning Competitor Analysis', time: '4d' },
   ];
+
+  const important_keys = [
+    { key: "knowledge_base", value: "Market Analysis Report" },
+    { key: "market_size_data_points", value: "Market Size Analysis" },
+    { key: "market_player_table_data", value: "Market Players" },
+    { key: "competitors_chart_data", value: "Competitor Analysis Graph" },
+    { key: "swot_analysis", value: "SWOT Analysis" },
+    { key: "pestali_analysis", value: "Pestali Analysis" },
+    { key: "roadmap", value: "Roadmap" },
+  ];
+
+ 
+
+  const toggleMode = () => {
+    setMode((prevMode) => (prevMode === 'write' ? 'chat' : 'write'));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    // Detect if "@" is typed
+    if (value.endsWith("@")) {
+      setDialogVisible(true);
+      if (inputRef.current) {
+        const rect = inputRef.current.getBoundingClientRect();
+        setCursorPosition({ x: rect.left, y: rect.bottom });
+      }
+    } else {
+      setDialogVisible(false);
+    }
+
+    // Remove key if its associated value is deleted
+    selectedKeys.forEach((key) => {
+      const item = important_keys.find((i) => i.key === key);
+      if (item && !value.includes(item.value)) {
+        setSelectedKeys((prev) => prev.filter((k) => k !== key));
+      }
+    });
+    console.log(inputValue)
+    console.log(selectedKeys)
+
+    setInputValue(value);
+  };
+
+  const handleKeyClick = (item: { key: string; value: string }) => {
+    setInputValue((prev) => `${prev}${item.value}`);
+    setSelectedKeys((prev) => [...prev, item.key]);
+    setDialogVisible(false);
+  };
+  const handleClickReloader = (selected_comps: string[]) => {
+    setComponentReloader({
+      needReload: true,
+      components: selected_comps,
+    });
+  };
+
+
+  const handleSendMessage = async () => {
+    if(!showFullChat){
+      setShowFullChat(true)
+    }
+    if (!inputValue.trim()) return;
+
+    // Push input value to inputValues array
+    setInputValues((prev) => [...prev, inputValue]);
+
+    setInputValue("");
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`${BACKENDURL}/chat`, {
+        id: knowledge_id,
+        type: mode,
+        message: inputValue,
+        chat_history: chatHistory, // Send existing chatHistory to backend
+        component_keys: selectedKeys,
+      });
+
+      const { output, chat_history: newChatHistory } = response.data;
+
+      if(response.data){
+        handleClickReloader(selectedKeys);
+      }
+
+      // Update chatHistory with API response (store only, no display)
+      setChatHistory(newChatHistory);
+
+      // Push output value to outputValues array
+      setOutputValues((prev) => [...prev, output]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <motion.div
@@ -24,22 +145,115 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose }) => {
       transition={{ duration: 0.3 }}
     >
       {/* Header Section */}
-      <div className="p-4 flex flex-col gap-2">
-        {/* Top row: minimal circular logo + close button (optional) */}
+      {showFullChat ? (<><div className="flex flex-col h-full w-full px-4 pb-4 bg-indigo-800 rounded-lg">
+        <div className='flex justify-between'>
+          <div className='text-xs mt-3'>FlickAI | {mode} mode</div>
+          <div className="flex space-x-3 items-center justify-end py-2">
+        <button
+            onClick={()=>{setShowFullChat(false)}}
+            className="text-gray-400 hover:text-indigo-500 transition-colors"
+          >
+            <FiPlus/>
+          </button>
+
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-indigo-500 transition-colors text-xs"
+          >
+            <FaHistory/>
+          </button>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-indigo-500 transition-colors"
+          >
+           <RxCross2 />
+          </button>
+        
+
+         
+        </div>
+        </div>
+     
+      <div className="flex-grow overflow-y-auto pr-4  bg-indigo-800 rounded-md shadow-inner">
+        {/* Render inputValues on the right side */}
+        {inputValues.map((input, index) => (
+          <>
+          <div key={index} className="flex justify-end mb-2">
+            <div className="max-w-xs px-4 py-2 rounded-lg text-white text-sm bg-indigo-400">
+              {input} 
+            </div>
+          </div>
+          <div  className="flex justify-start my-3">
+            <div className="max-w-xs px-4 py-2 rounded-lg text-white text-sm bg-gray-700">
+              {outputValues[index]}
+            </div>
+          </div>
+        
+          </>
+        ))
+        
+        }
+
+        {/* Render outputValues on the left side */}
+       
+
+        {isLoading && (
+          <div className="flex justify-start mb-2">
+            <div className="max-w-xs px-4 py-2 rounded-lg bg-gray-300 animate-pulse">
+              Typing...
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="mt-4 flex items-cente relative">
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSendMessage();
+          }}
+          className="flex-grow pr-12 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-indigo-500 placeholder:text-sm placeholder:text-gray-300"
+          placeholder="Type your message here..."
+        />
+        {dialogVisible && (
+            <div
+              // style={{ top: cursorPosition.y + 5, left: cursorPosition.x }}
+              className="absolute bottom-full bg-indigo-400 text-gray-200 rounded-md shadow-lg p-2 z-50"
+            >
+              
+              {important_keys.map((item) => (
+                <div
+                  key={item.key}
+                  onClick={() => handleKeyClick(item)}
+                  className="px-3 py-1 cursor-pointer hover:bg-indigo-600 rounded text-xs"
+                >
+                  {item.value}
+                </div>
+              ))}
+            </div>
+          )}
+        <button
+          onClick={handleSendMessage}
+          className="px-4 py-2  text-white rounded-full hover:bg-indigo-700 absolute top-1 right-1 z-10"
+        >
+          <MdSend />
+        </button>
+      </div>
+    </div></>) : (<><div className="p-4 flex flex-col gap-2">
+    
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 bg-white rounded-full">
-            {/* Minimalist circular logo */}
-           <Image
-                           src="/marktelogo.png"
-                           alt="Logo"
-                           width={32}
-                           height={32}
-                           className="rounded-full"
-                         />
-            {/* If you have a logo image, place it here instead */}
+            <Image
+              src="/marktelogo.png"
+              alt="Logo"
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
             <span className="sr-only">Logo</span>
           </div>
-          {/* Optional close button or any header control */}
           <button
             onClick={onClose}
             className="text-gray-300 hover:text-red-400 transition-colors"
@@ -48,39 +262,95 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Header text */}
-        <div>
-          <h1 className="text-xl font-bold">Write with FlickChat</h1>
-          <p className="text-sm text-gray-200">
-            Kick off a new project or make changes across your entire market analysis
-          </p>
-        </div>
+        <motion.div
+          key={mode}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.3 }}
+        >
+          {mode === 'write' ? (
+            <>
+              <h1 className="text-xl font-bold">Write with FlickChat </h1>
+              <p className="text-sm text-gray-200">
+                Kick off a new project or make changes across your entire market analysis
+              </p>
+             
+            </>
+          ) : (
+            <>
+              <h1 className="text-xl font-bold">Chat with FlickChat</h1>
+              <p className="text-sm text-gray-200">
+                Chat with FlickChat to broaden your insights your entire market analysis.
+              </p>
+            </>
+          )}
+        </motion.div>
       </div>
 
       {/* Main Interaction Section - Search Bar */}
       <div className="px-4">
-        <div className="bg-indigo-800 rounded-full flex items-center px-4 py-2 shadow-sm">
-          <FaSearch className="text-gray-300 mr-2" />
+        <div className="bg-indigo-800 rounded-lg flex flex-col px-3 py-3 shadow-sm relative">
           <input
+            ref={inputRef}
             type="text"
+            value={inputValue}
+            onChange={handleInputChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSendMessage();
+            }}
             placeholder="Ask anything (Ctrl+L), @ to mention code blocks"
-            className="flex-1 bg-transparent outline-none text-sm placeholder:text-gray-400"
+            className="flex-1 bg-transparent outline-none text-xs placeholder:text-gray-400"
           />
-          {/* Right-side actions */}
-          <div className="flex items-center gap-2 ml-2">
-            <button className="flex items-center gap-1 text-white bg-indigo-300 px-3 py-1 rounded-full text-sm hover:bg-indigo-400 transition-colors">
-              <FaPen size={12} />
-              Write
-            </button>
-            <button className="text-white hover:bg-indigo-700 p-2 rounded-full transition-colors">
-              <FaEllipsisH size={14} />
-            </button>
+
+          {dialogVisible && (
+            <div
+              // style={{ top: cursorPosition.y + 5, left: cursorPosition.x }}
+              className="absolute top-full bg-indigo-400 text-gray-200 rounded-md shadow-lg p-2 z-50"
+            >
+              
+              {important_keys.map((item) => (
+                <div
+                  key={item.key}
+                  onClick={() => handleKeyClick(item)}
+                  className="px-3 py-1 cursor-pointer hover:bg-indigo-600 rounded text-xs"
+                >
+                  {item.value}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="relative mt-3 w-full flex items-center justify-end">
+            <div
+              className="relative bg-indigo-400 w-[75px] h-[20px] rounded-full flex items-center p-1 cursor-pointer"
+              onClick={toggleMode}
+            >
+              <motion.div
+                className="absolute bg-white w-[33px] h-[18px] rounded-full shadow-md"
+                initial={{ x: mode === 'write' ? 0 : 37 }}
+                animate={{ x: mode === 'write' ? 0 : 37 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+                {mode === 'write' ? (
+                  <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Write</div>
+                ) : (
+                  <div className="relative top-[2px] left-1 text-[10px] font-semibold text-indigo-800">Code</div>
+                )}
+              </motion.div>
+              <span className="flex-1 text-center text-[10px] font-semibold text-indigo-800">
+                Write
+              </span>
+              <span className="flex-1 text-center text-[10px] font-semibold text-indigo-800">
+                Chat
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Past Workflows Section */}
-      <FileUpload/>
+      <FileUpload />
       <div className="flex-1 overflow-y-auto mt-4 px-4">
         <h2 className="text-md font-semibold mb-2">Past Workflows</h2>
         <div className="flex flex-col gap-2">
@@ -99,7 +369,8 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose }) => {
       {/* Footer / Additional Notes */}
       <div className="mt-auto p-4 text-center text-xs text-gray-300 border-t border-indigo-800">
         AI may make mistakes. Double-check all generated components.
-      </div>
+      </div></>)}
+      
     </motion.div>
   );
 };

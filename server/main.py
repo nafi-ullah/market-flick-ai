@@ -3,7 +3,9 @@ import json
 import uuid
 from constants import RESPONSE_PATH, important_keys
 from core.util_agents.chat_agent import chat_with_agent
+from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
+from utils.general_utils import load_response_from_json
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -178,12 +180,7 @@ async def business_analysis_stream(
     return StreamingResponse(generate_stream(), media_type="application/json")
 
 
-def load_response_from_json(file_name: str):
-    try:
-        with open(f"responses/{file_name}.json", "r") as f:
-            return json.load(f)
-    except Exception as e:
-        return None
+
 
 
 def get_all_saved_responses(knowledge_base_id: str):
@@ -228,9 +225,6 @@ async def previous_analysis_stream(
             })
             # Create the graph
             saved_responses = get_all_saved_responses(knowledge_base_id)
-
-            print("keys of saved responses", saved_responses.keys())
-            print("keys of important keys", important_keys)
 
             # Stream the graph execution
             for key, response in saved_responses.items():
@@ -317,7 +311,5 @@ async def chat(chat_request: ChatRequest):
     if chat_request.type == ChatType.CHAT:
         response = chat_with_agent(input_text=chat_request.message, chat_history=chat_request.chat_history, knowledge_base=knowledge_base)
     elif chat_request.type == ChatType.WRITE:
-        response = {
-            "message": "work in progress"
-        }
+        response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response
