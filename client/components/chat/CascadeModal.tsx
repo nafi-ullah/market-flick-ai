@@ -20,6 +20,13 @@ interface CascadeModalProps {
   onClose: () => void;
   knowledge_id: string;
   setComponentReloader: Dispatch<SetStateAction<ComponentReloaderState>>;
+
+  chatHistory: [string, string][];
+  setChatHistory: React.Dispatch<React.SetStateAction<[string, string][]>>;
+  inputValues: string[];
+  setInputValues: React.Dispatch<React.SetStateAction<string[]>>;
+  outputValues: string[];
+  setOutputValues: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 interface KeyValueMap {
@@ -38,18 +45,26 @@ const importantKeysMap: KeyValueMap[] = [
   { value: "roadmap", key: "roadmap" },
 ];
 
-const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setComponentReloader }) => {
+const CascadeModal: React.FC<CascadeModalProps> = ({ 
+  onClose,
+   knowledge_id, 
+   setComponentReloader,
+   chatHistory,
+   setChatHistory,
+   inputValues,
+   setInputValues,
+   outputValues,
+   setOutputValues,
+  }) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [mode, setMode] = useState<'write' | 'chat'>('chat');
  
-  const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
-  const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
-  const [outputValues, setOutputValues] = useState<string[]>([]); // Store output strings from API
   const [isLoading, setIsLoading] = useState(false);
-  const [showFullChat, setShowFullChat] = useState(true);
+  const [showFullChat, setShowFullChat] = useState(inputValues.length > 0);
+
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -194,14 +209,26 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
           <div className='text-xs mt-3'>FlickAI | {mode} mode</div>
           <div className="flex space-x-3 items-center justify-end py-2">
         <button
-            onClick={()=>{setShowFullChat(false)}}
+            onClick={()=>{
+              
+              setShowFullChat(false)
+              setChatHistory([])
+              setInputValues([])
+              setOutputValues([])
+            }
+              
+            }
             className="text-gray-400 hover:text-indigo-500 transition-colors"
           >
             <FiPlus/>
           </button>
 
           <button
-            onClick={onClose}
+            onClick={()=>{
+              
+              setShowFullChat(true)
+             
+            }}
             className="text-gray-400 hover:text-indigo-500 transition-colors text-xs"
           >
             <FaHistory/>
@@ -290,14 +317,24 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
           <div className='text-xs mt-3'>FlickAI | {mode} mode</div>
           <div className="flex space-x-3 items-center justify-end py-2">
         <button
-            onClick={()=>{setShowFullChat(false)}}
+            onClick={()=>{
+              
+              setShowFullChat(false)
+              setChatHistory([])
+              setInputValues([])
+              setOutputValues([])
+            }}
             className="text-gray-400 hover:text-indigo-500 transition-colors"
           >
             <FiPlus/>
           </button>
 
           <button
-            onClick={onClose}
+             onClick={()=>{
+              
+              setShowFullChat(true)
+             
+            }}
             className="text-gray-400 hover:text-indigo-500 transition-colors text-xs"
           >
             <FaHistory/>

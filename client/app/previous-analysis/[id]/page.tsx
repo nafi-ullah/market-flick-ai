@@ -105,6 +105,10 @@ export default function Home() {
     components: [],
   });
 
+    const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
+    const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
+    const [outputValues, setOutputValues] = useState<string[]>([]); 
+
   const [selectedTabs, setSelectedTabs] = useState<string[]>(["All"]);
 
   const handleTabClick = (tabKey: string) => {
@@ -414,9 +418,17 @@ export default function Home() {
       {/* Conditionally render Cascade Modal */}
       {isChatbotOpen && (
         <CascadeModal
-          onClose={toggleChatbot}
+          onClose={()=>{
+            setIsChatbotOpen(false)
+          }}
           knowledge_id={id}
           setComponentReloader={setComponentReloader}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          inputValues={inputValues}
+          setInputValues={setInputValues}
+          outputValues={outputValues}
+          setOutputValues={setOutputValues}
         />
       )}
       </div>
