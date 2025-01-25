@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any
 from pydantic import BaseModel, Field
 from enum import Enum
 
@@ -25,3 +25,18 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     output: str = Field(..., description="The output of the agent")
     chat_history: List[Tuple[str, str]] = Field(..., description="The updated chat history")
+
+
+class Identifier(BaseModel):
+    """Model for identifying keys and instructions for data updates."""
+    keys: List[str] = Field(..., description="The list of keys for which the data should be updated")
+    instruction: str = Field(..., description="The instruction for updating the data")
+
+
+class Updater(BaseModel):
+    """Model for the update response containing message and updated data."""
+    message: str = Field(..., description="The message after updating the data, what was updated and why")
+    updated_data: List[Dict[str, Any]] = Field(
+        None, 
+        description="The updated data, which must strictly follow the same format and order as the original data"
+    )
