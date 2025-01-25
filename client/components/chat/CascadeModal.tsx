@@ -20,6 +20,22 @@ interface CascadeModalProps {
   setComponentReloader: Dispatch<SetStateAction<ComponentReloaderState>>;
 }
 
+interface KeyValueMap {
+  key: string;
+  value: string;
+}
+
+
+const importantKeysMap: KeyValueMap[] = [
+  { value: "knowledge_base", key: "market_size_report" },
+  { value: "market_size_data_points", key: "market_size_graph" },
+  { value: "market_player_table_data", key: "competitors_table" },
+  { value: "competitors_chart_data", key: "competitors_chart" },
+  { value: "swot_analysis", key: "swot_analysis" },
+  { value: "pestali_analysis", key: "pestali_analysis" },
+  { value: "roadmap", key: "roadmap" },
+];
+
 const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setComponentReloader }) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
@@ -42,14 +58,16 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
   ];
 
   const important_keys = [
-    { key: "knowledge_base", value: "Market Analysis Report" },
-    { key: "market_size_data_points", value: "Market Size Analysis" },
-    { key: "market_player_table_data", value: "Market Players" },
-    { key: "competitors_chart_data", value: "Competitor Analysis Graph" },
+    { key: "market_size_report", value: "Market Analysis Report" },
+    { key: "market_size_graph", value: "Market Size Analysis" },
+    { key: "competitors_table", value: "Market Players" },
+    { key: "competitors_chart", value: "Competitor Analysis Graph" },
     { key: "swot_analysis", value: "SWOT Analysis" },
     { key: "pestali_analysis", value: "Pestali Analysis" },
     { key: "roadmap", value: "Roadmap" },
   ];
+
+
 
  
 
@@ -89,10 +107,22 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
     setSelectedKeys((prev) => [...prev, item.key]);
     setDialogVisible(false);
   };
+
+  const getValueFromKey = (key: string): string | undefined =>{
+    const foundItem = importantKeysMap.find((item) => item.key === key);
+    return foundItem?.value;
+  }
+  const mapKeysToValues = (keys: string[]): string[] => {
+    return keys
+      .map((key) => getValueFromKey(key)) // Map keys to values
+      .filter((value): value is string => !!value); // Filter out undefined values
+  }
   const handleClickReloader = (selected_comps: string[]) => {
+
+    const mappedComponents = mapKeysToValues(selected_comps); 
     setComponentReloader({
       needReload: true,
-      components: selected_comps,
+      components: mappedComponents,
     });
   };
 
