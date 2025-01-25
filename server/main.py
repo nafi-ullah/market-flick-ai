@@ -289,56 +289,25 @@ async def chat(chat_request: ChatRequest):
         response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response
 
-# @app.get("/investor-analysis/{id}")
-# async def investor_analysis(id: str):
-#     async def generate_stream() -> AsyncGenerator[str, None]:
-#         try:
-#             async for chunk in get_investor_analysis(id):
-#                 # Handle different possible chunk types
-#                 serializable_chunk = {}
-                
-#                 # If it's a tuple
-#                 if isinstance(chunk, tuple):
-#                     # Assuming the first element contains the relevant information
-#                     serializable_chunk = {
-#                         "type": "Tuple",
-#                         "data": str(chunk)
-#                     }
-                
-#                 # If it's an AIMessageChunk or similar
-#                 elif hasattr(chunk, 'content'):
-#                     serializable_chunk = {
-#                         "type": chunk.__class__.__name__,
-#                         "content": chunk.content,
-#                         "tool_calls": chunk.tool_calls if hasattr(chunk, 'tool_calls') else None
-#                     }
-                
-#                 # Fallback for other types
-#                 else:
-#                     if hasattr(chunk, 'agent'):
-#                         response_data = chunk.agent.messages[0].content
-#                     elif hasattr(chunk, 'tools'):
-#                         response_data = chunk.tools.messages[0].content
-#                     else:
-#                         print("This should not happen")
-#                         response_data = str(chunk)
-
-#                     serializable_chunk = {
-#                         "type": type(chunk).__name__,
-#                         "data": str(response_data)
-#                     }
-                
-#                 yield f"data: {json.dumps(serializable_chunk)}\n\n"
-        
-#         except Exception as e:
-#             yield f"event: error\ndata: {str(e)}\n\n"
-    
-#     return StreamingResponse(generate_stream(), media_type="text/event-stream")
-
-
 @app.get("/investor-analysis/{id}")
 async def investor_analysis(id: str):
-    get_investor_analysis(id)
+    async def generate_stream() -> AsyncGenerator[str, None]:
+        try:
+            async for s in get_investor_analysis(id):
+                message = s["messages"][-1]
+                if isinstance(message, tuple):
+                    yield message+"\n\n"
+                else:
+                    yield message.pretty_repr()+"\n\n"
+        
+        except Exception as e:
+            yield f"event: error\ndata: {str(e)}\n\n"
+    
+    return StreamingResponse(generate_stream(), media_type="text/event-stream")
+
+
+@app.get("/investor-profiles/{id}")
+async def investor_profiles(id: str):
     repsonse = load_response_from_json(f"investors_and_companies_{id}")
     return repsonse
 

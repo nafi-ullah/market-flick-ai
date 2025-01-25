@@ -37,7 +37,7 @@ def get_investor_analysis(id: str):
         ]
     }
     
-    agent.invoke(inputs, stream_mode="updates")
+    return agent.astream(inputs, stream_mode="values")
 
-    
+
 

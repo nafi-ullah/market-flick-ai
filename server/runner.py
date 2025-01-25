@@ -51,9 +51,9 @@ load_dotenv()
 
 # print(saved_responses)
 
-# print_stream(get_investor_analysis("67ef1654-9d74-47d9-ab21-a484c1e3da13"))
+print_stream(get_investor_analysis("67ef1654-9d74-47d9-ab21-a484c1e3da13"))
 
-print(str("hi"))
+# print(str("hi"))
 
 
 # Example usage
