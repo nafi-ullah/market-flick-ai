@@ -7,7 +7,7 @@ from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
 from core.rag.rag import upload_and_fetch_context
-from utils.general_utils import load_response_from_json
+from utils.general_utils import load_response_from_json, get_all_saved_responses
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile
 from fastapi.responses import StreamingResponse
@@ -40,7 +40,7 @@ from core.market_size_analysis.utils import extract_knowledge_base, get_serializ
 # print("tavily_api_key:", tavily_api_key)
 # print("OPENAI_API_KEY:", openai_api_key)
 
-set_llm_cache(InMemoryCache())
+# set_llm_cache(InMemoryCache())
 
 
 app = FastAPI()
@@ -236,35 +236,6 @@ async def business_analysis_stream(
 
 
 
-
-
-def get_all_saved_responses(knowledge_base_id: str):
-    return {
-        "basic_info": load_response_from_json(
-            f"basic_info_{knowledge_base_id}"
-        ),
-        "market_size_report": load_response_from_json(
-            f"market_size_report_{knowledge_base_id}"
-        ),
-        "market_size_graph": load_response_from_json(
-            f"market_size_graph_{knowledge_base_id}"
-        ),
-        "competitors_table": load_response_from_json(
-            f"competitors_table_{knowledge_base_id}"
-        ),
-        "generate_competitors_chart": load_response_from_json(
-            f"competitors_chart_{knowledge_base_id}"
-        ),
-        "swot_analysis": load_response_from_json(
-            f"swot_analysis_{knowledge_base_id}"
-        ),
-        "pestali_analysis": load_response_from_json(
-            f"pestali_analysis_{knowledge_base_id}"
-        ),
-        "roadmap": load_response_from_json(
-            f"roadmap_{knowledge_base_id}"
-        ),
-    }
 
 
 @app.post("/previous-analysis/{knowledge_base_id}")

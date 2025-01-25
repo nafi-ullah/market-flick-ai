@@ -4,7 +4,7 @@ import React from "react";
 
 const PASTELIAnalysisSkeleton: React.FC = () => {
   return (
-    <div className="p-4 bg-white rounded-md shadow-md max-w-7xl mx-auto my-6 animate-pulse">
+    <div className="p-4 bg-white rounded-md shadow-md  my-6 animate-pulse">
       <h2 className="text-lg font-bold mb-4 bg-gray-300 h-6 w-40 rounded-md"></h2>
       
       {/* Simulated grid of cards */}
