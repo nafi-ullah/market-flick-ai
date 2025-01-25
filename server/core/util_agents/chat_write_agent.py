@@ -26,6 +26,8 @@ def chat_write_agent(id: str, input: str, chat_history: list = None, component_k
     """
     Interact with the chat agent and return its response with error handling.
     """
+
+    print(component_keys)
     try:
         if chat_history is None:
             chat_history = []
@@ -41,8 +43,7 @@ def chat_write_agent(id: str, input: str, chat_history: list = None, component_k
         llm_key_identifier = ChatOpenAI(model="gpt-4o", temperature=0).with_structured_output(Identifier)
 
         system_message = SystemMessage(content=f"""From the given message, you need to identify the keys for which the data should be updated and the instruction for updating the data. Give the instructions in a clear manner. If there are multiple keys, give the instruction for all of them.
-        The list of acceptable keys are: {important_keys}. 
-        Sometimes the user provides the keys, in that case just use the keys that he provides.""")
+        """)
 
         prompt = ChatPromptTemplate.from_messages([
             system_message,
