@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import uuid
 from constants import RESPONSE_PATH, important_keys
+from core.investor_analysis.agent import get_investor_analysis
 from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
@@ -16,6 +17,7 @@ from custom_types.market_analysis import BusinessAnalysisInput
 from custom_types.basetypes import ChatRequest, ChatType
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
+from pprint import pformat
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
@@ -38,7 +40,7 @@ from core.market_size_analysis.utils import extract_knowledge_base, get_serializ
 # print("tavily_api_key:", tavily_api_key)
 # print("OPENAI_API_KEY:", openai_api_key)
 
-# set_llm_cache(InMemoryCache())
+set_llm_cache(InMemoryCache())
 
 
 app = FastAPI()
@@ -286,3 +288,57 @@ async def chat(chat_request: ChatRequest):
     elif chat_request.type == ChatType.WRITE:
         response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response
+
+# @app.get("/investor-analysis/{id}")
+# async def investor_analysis(id: str):
+#     async def generate_stream() -> AsyncGenerator[str, None]:
+#         try:
+#             async for chunk in get_investor_analysis(id):
+#                 # Handle different possible chunk types
+#                 serializable_chunk = {}
+                
+#                 # If it's a tuple
+#                 if isinstance(chunk, tuple):
+#                     # Assuming the first element contains the relevant information
+#                     serializable_chunk = {
+#                         "type": "Tuple",
+#                         "data": str(chunk)
+#                     }
+                
+#                 # If it's an AIMessageChunk or similar
+#                 elif hasattr(chunk, 'content'):
+#                     serializable_chunk = {
+#                         "type": chunk.__class__.__name__,
+#                         "content": chunk.content,
+#                         "tool_calls": chunk.tool_calls if hasattr(chunk, 'tool_calls') else None
+#                     }
+                
+#                 # Fallback for other types
+#                 else:
+#                     if hasattr(chunk, 'agent'):
+#                         response_data = chunk.agent.messages[0].content
+#                     elif hasattr(chunk, 'tools'):
+#                         response_data = chunk.tools.messages[0].content
+#                     else:
+#                         print("This should not happen")
+#                         response_data = str(chunk)
+
+#                     serializable_chunk = {
+#                         "type": type(chunk).__name__,
+#                         "data": str(response_data)
+#                     }
+                
+#                 yield f"data: {json.dumps(serializable_chunk)}\n\n"
+        
+#         except Exception as e:
+#             yield f"event: error\ndata: {str(e)}\n\n"
+    
+#     return StreamingResponse(generate_stream(), media_type="text/event-stream")
+
+
+@app.get("/investor-analysis/{id}")
+async def investor_analysis(id: str):
+    get_investor_analysis(id)
+    repsonse = load_response_from_json(f"investors_and_companies_{id}")
+    return repsonse
+
