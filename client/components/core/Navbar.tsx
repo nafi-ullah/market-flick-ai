@@ -72,7 +72,11 @@ const Navbar: React.FC = () => {
           {/* Right: Share button and avatar */}
           <div className="flex items-center space-x-4">
             {/* Share Button */}
-            <button className="flex items-center px-4 py-2 bg-[hsl(var(--foreground))] border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
+            <button 
+            onClick={()=>{
+              setIsShareModalOpened(true);
+            }}
+            className="flex items-center px-4 py-2 bg-[hsl(var(--foreground))] border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
               <FiShare className="mr-2 text-[hsl(var(--background))] " />
               <span className="text-sm font-medium text-[hsl(var(--background))]">Share</span>
             </button>
@@ -167,7 +171,7 @@ const Navbar: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
            
-            {/* <SocialShare url={shareVars.url} title={state.language === 'en' ? jobTitle : jobTitle_de} body={state.language === 'en' ? description : description_de} onClick={()=>{setIsShareModalOpened(false)}}/> */}
+            <SocialShare onClick={()=>{setIsShareModalOpened(false)}}/> 
           </div>
           </div>
           }

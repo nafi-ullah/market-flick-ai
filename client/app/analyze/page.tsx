@@ -49,6 +49,7 @@ import PASTELIAnalysisSkeleton from "@/components/loaders/PasteliAnalysisLoader"
 import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
 import ChatbotModal from "@/components/chat/ChatModal";
 import CascadeModal from "@/components/chat/CascadeModal";
+import { useAnalysisDataContext } from "@/context/AnalysisContext";
 
 type Props = {
   knowledge_base: MarkdownViewerProps;
@@ -63,7 +64,7 @@ type Props = {
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
-
+  
   const streamDataKeys: {
     [K in keyof Props]: {
       component: React.FC<Props[K]>;
@@ -108,7 +109,12 @@ export default function Home() {
       <Navbar />
 
       {/* Form that updates streamData */}
+      <div>
+ 
+  </div>
+      
       <BusinessAnalysisForm setStreamData={setStreamData} />
+
 
       {streamData.length > 0 && (
         <div className="mt-6 p-4 rounded-md">

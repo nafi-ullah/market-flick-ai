@@ -32,6 +32,7 @@ import CompetitiorAnalysisGraphSkeleton from "@/components/loaders/CompetitorAna
 import SWOTAnalysisSkeleton from "@/components/loaders/SwotAnalysisLoader";
 import PASTELIAnalysisSkeleton from "@/components/loaders/PasteliAnalysisLoader";
 import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
+import { useAnalysisDataContext } from "@/context/AnalysisContext";
 
 
 type ComponentReloaderState = {
@@ -81,7 +82,7 @@ export default function Home() {
   const { id } = useParams();
   const [showChat, setShowChat] = useState(false);
   const [streamData, setStreamData] = useState<any[]>([]);
-
+  const {setCurrentBasicInfoId} = useAnalysisDataContext();
   // Which components are currently reloading
   const [loadingComponents, setLoadingComponents] = useState<string[]>([]);
 
@@ -110,7 +111,7 @@ export default function Home() {
   useEffect(() => {
     if (!id) return;
     const knowledge_base_id = id;
-
+    setCurrentBasicInfoId(id);
     fetch(`${BACKENDURL}/previous-analysis/${knowledge_base_id}`, {
       method: "POST",
       body: JSON.stringify({ knowledge_base_id }),

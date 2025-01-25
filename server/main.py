@@ -294,7 +294,9 @@ async def get_analyses():
 
 
         return {
-            "analyses": analyses
+            "analyses": [
+                analyse_obj for analyse_obj in analyses if analyse_obj is not None
+            ]
         }
 
     except FileNotFoundError:
