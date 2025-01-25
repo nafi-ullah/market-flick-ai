@@ -1,14 +1,15 @@
 from datetime import datetime
 import json
 import uuid
-from constants import RESPONSE_PATH, important_keys
+from constants import BASE_URL, RESPONSE_PATH, important_keys
+from core.presentation_generation.agent import create_presentation
 from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
 from utils.general_utils import load_response_from_json, get_all_saved_responses
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 import asyncio
 from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
@@ -286,3 +287,28 @@ async def chat(chat_request: ChatRequest):
     elif chat_request.type == ChatType.WRITE:
         response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response
+
+
+
+@app.post("/generate-presentation")
+async def generate_presentation(id: str, template_name: str):
+    response = create_presentation(id=id, template_name=template_name)
+
+    return {
+        "message": "Presentation generated successfully",
+        "file_link": f"{BASE_URL}/download-presentation/{id}.pptx"
+    }
+
+
+@app.get("/download-presentation/{id}.pptx")
+async def download_file(id: str):
+    file_path = f"{RESPONSE_PATH}/presentation_{id}.pptx"
+    print(file_path)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(
+        path=file_path,
+        filename=f"presentation_{id}.pptx",
+        media_type="application/octet-stream"
+    )

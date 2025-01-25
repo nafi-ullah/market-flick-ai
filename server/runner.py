@@ -2,6 +2,8 @@
 
 from core.market_size_analysis.agent import market_size_report, market_size_graph_generator, competitors_table_generator
 from core.market_size_analysis.utils import extract_knowledge_base
+from core.presentation_generation.agent import create_presentation
+from core.presentation_generation.tools.presentation import make_presentation
 from core.util_agents.chat_write_agent import chat_write_agent
 from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint
 from core.market_size_analysis.market_size_graph import plot_market_projection
@@ -71,3 +73,80 @@ load_dotenv()
 
 # result = generate_queries({"IT", "An online AI tool which generates customised virtual gift cards and tries to sell  affiliated products on preferred choices to make money.", "United States"})
 
+
+
+# slide_data = {
+#     "startup_title": "STARTUP TITLE",
+#     "slogan": "STARTUP SLOGAN",
+#     "about_us_title": "ABOUT US",
+#     "about_us_text": (
+#         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
+#         "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
+#         "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi "
+#         "ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit "
+#         "in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+#     ),
+#     "main_goals_title": "MAIN GOALS",
+#     "main_goals_text": (
+#         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
+#         "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
+#         "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+#         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
+#         "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
+#         "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+#     ),
+#         "slide4": {
+#         "title": "CASE\nSTUDY",
+#         "body": (
+#             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
+#             "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
+#             "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+#             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
+#             "eu fugiat nulla pariatur."
+#         )
+#     },
+#     "slide5": {
+#         "title": "OUR\nPRODUCT",
+#         "body": (
+#             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
+#             "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
+#             "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+#             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
+#             "eu fugiat nulla pariatur."
+#         ),
+#     },
+#     "slide6": {
+#         "title": "OUR\nSERVICE",
+#         "body": (
+#             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
+#             "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
+#             "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+#             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
+#             "eu fugiat nulla pariatur."
+#         ),
+#         "services": [
+#             {"title": "Analysis", "description": "Presentations are tools that can be used as lectures."},
+#             {"title": "Research", "description": "Presentations are tools that can be used as lectures."},
+#             {"title": "Business Development", "description": "Presentations are tools that can be used as lectures."},
+#             {"title": "Sales and Marketing", "description": "Presentations are tools that can be used as lectures."}
+#         ]
+#     },
+#     "slide7": {
+#         "title": "BENEFIT",
+#         "body": (
+#             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
+#             "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
+#             "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
+#             "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
+#             "eu fugiat nulla pariatur. Exceptetur sint occaecat cupidatat non proident, sunt "
+#             "in culpa qui officia deserunt mollit anim id est laborum."
+#         )
+#     }
+# }
+
+
+# make_presentation(slide_data, "template3")
+
+
+
+print(create_presentation("67ef1654-9d74-47d9-ab21-a484c1e3da13", "template3"))
