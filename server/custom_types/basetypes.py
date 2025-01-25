@@ -33,6 +33,12 @@ class Identifier(BaseModel):
     instruction: str = Field(..., description="The instruction for updating the data")
 
 
+
+class UpdaterInput(BaseModel):
+    keys: List[str] = Field(..., description="The list of keys to update")
+    instruction: str = Field(..., description="The instruction for updating the data")
+    id: str = Field(..., description="The id of the conversation")
+
 class Updater(BaseModel):
     """Model for the update response containing message and updated data."""
     message: str = Field(..., description="The message after updating the data, what was updated and why")
