@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState,  Dispatch, SetStateAction } from 'react';
-import { motion } from 'framer-motion';
+import { motion , AnimatePresence} from 'framer-motion';
 import Image from "next/image";
 import FileUpload from './FileUpload';
 import axios from 'axios';
@@ -9,7 +9,9 @@ import { MdSend } from 'react-icons/md';
 import { FiPlus } from 'react-icons/fi';
 import { RxCross2 } from "react-icons/rx";
 import { FaHistory } from "react-icons/fa";
-
+import { FaChartBar, FaTable, FaClipboardList, FaProjectDiagram } from "react-icons/fa";
+import { BsGraphUp } from "react-icons/bs";
+import { GiRoad } from "react-icons/gi";
 type ComponentReloaderState = {
   needReload: boolean;
   components: string[];
@@ -18,6 +20,13 @@ interface CascadeModalProps {
   onClose: () => void;
   knowledge_id: string;
   setComponentReloader: Dispatch<SetStateAction<ComponentReloaderState>>;
+
+  chatHistory: [string, string][];
+  setChatHistory: React.Dispatch<React.SetStateAction<[string, string][]>>;
+  inputValues: string[];
+  setInputValues: React.Dispatch<React.SetStateAction<string[]>>;
+  outputValues: string[];
+  setOutputValues: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 interface KeyValueMap {
@@ -36,18 +45,26 @@ const importantKeysMap: KeyValueMap[] = [
   { value: "roadmap", key: "roadmap" },
 ];
 
-const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setComponentReloader }) => {
+const CascadeModal: React.FC<CascadeModalProps> = ({ 
+  onClose,
+   knowledge_id, 
+   setComponentReloader,
+   chatHistory,
+   setChatHistory,
+   inputValues,
+   setInputValues,
+   outputValues,
+   setOutputValues,
+  }) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [dialogVisible, setDialogVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [mode, setMode] = useState<'write' | 'chat'>('chat');
  
-  const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
-  const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
-  const [outputValues, setOutputValues] = useState<string[]>([]); // Store output strings from API
   const [isLoading, setIsLoading] = useState(false);
-  const [showFullChat, setShowFullChat] = useState(false);
+  const [showFullChat, setShowFullChat] = useState(inputValues.length > 0);
+
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -58,13 +75,13 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
   ];
 
   const important_keys = [
-    { key: "market_size_report", value: "Market Analysis Report" },
-    { key: "market_size_graph", value: "Market Size Analysis" },
-    { key: "competitors_table", value: "Market Players" },
-    { key: "competitors_chart", value: "Competitor Analysis Graph" },
-    { key: "swot_analysis", value: "SWOT Analysis" },
-    { key: "pestali_analysis", value: "Pestali Analysis" },
-    { key: "roadmap", value: "Roadmap" },
+    { key: "market_size_report", value: "Market Analysis Report", icon: <FaClipboardList /> },
+    { key: "market_size_graph", value: "Market Size Analysis", icon: <BsGraphUp /> },
+    { key: "competitors_table", value: "Market Players", icon: <FaTable /> },
+    { key: "competitors_chart", value: "Competitor Analysis Graph", icon: <FaChartBar /> },
+    { key: "swot_analysis", value: "SWOT Analysis", icon: <FaClipboardList /> },
+    { key: "pestali_analysis", value: "Pestali Analysis", icon: <FaClipboardList /> },
+    { key: "roadmap", value: "Roadmap", icon: <GiRoad /> },
   ];
 
 
@@ -105,6 +122,18 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
   const handleKeyClick = (item: { key: string; value: string }) => {
     setInputValue((prev) => `${prev}${item.value}`);
     setSelectedKeys((prev) => [...prev, item.key]);
+    
+    if(item.key == "competitors_table" && !selectedKeys.includes("competitors_chart")){
+      setSelectedKeys((prev) => [...prev, "competitors_chart"]);
+    }
+    if(item.key == "competitors_chart" && !selectedKeys.includes("competitors_table")){
+      setSelectedKeys((prev) => [...prev, "competitors_table"]);
+    }
+
+  
+
+
+
     setDialogVisible(false);
   };
 
@@ -168,26 +197,38 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 bg-indigo-500 text-white w-[420px] h-[85vh] rounded-lg shadow-lg flex flex-col"
+      className="fixed bottom-0 right-0 bg-[hsl(var(--accent))] text-white w-[420px] h-[100vh]   flex flex-col z-50"
       initial={{ opacity: 0, x: '100%' }}
       animate={{ opacity: 1, x: '0%' }}
       exit={{ opacity: 0, x: '100%' }}
       transition={{ duration: 0.3 }}
     >
       {/* Header Section */}
-      {showFullChat ? (<><div className="flex flex-col h-full w-full px-4 pb-4 bg-indigo-800 rounded-lg">
+      {showFullChat ? (<><div className="flex flex-col h-full w-full px-4 pb-4  rounded-lg">
         <div className='flex justify-between'>
           <div className='text-xs mt-3'>FlickAI | {mode} mode</div>
           <div className="flex space-x-3 items-center justify-end py-2">
         <button
-            onClick={()=>{setShowFullChat(false)}}
+            onClick={()=>{
+              
+              setShowFullChat(false)
+              setChatHistory([])
+              setInputValues([])
+              setOutputValues([])
+            }
+              
+            }
             className="text-gray-400 hover:text-indigo-500 transition-colors"
           >
             <FiPlus/>
           </button>
 
           <button
-            onClick={onClose}
+            onClick={()=>{
+              
+              setShowFullChat(true)
+             
+            }}
             className="text-gray-400 hover:text-indigo-500 transition-colors text-xs"
           >
             <FaHistory/>
@@ -204,12 +245,12 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
         </div>
         </div>
      
-      <div className="flex-grow overflow-y-auto pr-4  bg-indigo-800 rounded-md shadow-inner">
+      <div className="flex-grow overflow-y-auto pr-4   rounded-md shadow-inner">
         {/* Render inputValues on the right side */}
         {inputValues.map((input, index) => (
           <>
           <div key={index} className="flex justify-end mb-2">
-            <div className="max-w-xs px-4 py-2 rounded-lg text-white text-sm bg-indigo-400">
+            <div className="max-w-xs px-4 py-2 rounded-lg text-white text-sm bg-indigo-800">
               {input} 
             </div>
           </div>
@@ -230,12 +271,12 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
         {isLoading && (
           <div className="flex justify-start mb-2">
             <div className="max-w-xs px-4 py-2 rounded-lg bg-gray-300 animate-pulse">
-              Typing...
+              Thinking...
             </div>
           </div>
         )}
       </div>
-      <div className="mt-4 flex items-cente relative">
+      <div className="mt-4 flex items-center relative">
         <input
           ref={inputRef}
           type="text"
@@ -244,22 +285,22 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSendMessage();
           }}
-          className="flex-grow pr-12 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-indigo-500 placeholder:text-sm placeholder:text-gray-300"
+          className="flex-grow pr-12 px-4 py-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-indigo-800 placeholder:text-sm placeholder:text-gray-300"
           placeholder="Type your message here..."
         />
         {dialogVisible && (
             <div
               // style={{ top: cursorPosition.y + 5, left: cursorPosition.x }}
-              className="absolute bottom-full bg-indigo-400 text-gray-200 rounded-md shadow-lg p-2 z-50"
+              className="absolute bottom-full bg-indigo-800 text-gray-200 rounded-md shadow-lg p-2 z-50"
             >
               
               {important_keys.map((item) => (
                 <div
                   key={item.key}
                   onClick={() => handleKeyClick(item)}
-                  className="px-3 py-1 cursor-pointer hover:bg-indigo-600 rounded text-xs"
+                  className="px-3 py-1 cursor-pointer hover:bg-indigo-600 rounded text-xs flex items-center"
                 >
-                  {item.value}
+                 <span className="mr-3 text-xs">{item.icon}</span> {item.value}
                 </div>
               ))}
             </div>
@@ -271,7 +312,45 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
           <MdSend />
         </button>
       </div>
-    </div></>) : (<><div className="p-4 flex flex-col gap-2">
+    </div></>) : (<>
+      <div className='flex justify-between mx-2'>
+          <div className='text-xs mt-3'>FlickAI | {mode} mode</div>
+          <div className="flex space-x-3 items-center justify-end py-2">
+        <button
+            onClick={()=>{
+              
+              setShowFullChat(false)
+              setChatHistory([])
+              setInputValues([])
+              setOutputValues([])
+            }}
+            className="text-gray-400 hover:text-indigo-500 transition-colors"
+          >
+            <FiPlus/>
+          </button>
+
+          <button
+             onClick={()=>{
+              
+              setShowFullChat(true)
+             
+            }}
+            className="text-gray-400 hover:text-indigo-500 transition-colors text-xs"
+          >
+            <FaHistory/>
+          </button>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-indigo-500 transition-colors"
+          >
+           <RxCross2 />
+          </button>
+        
+
+         
+        </div>
+        </div>
+    <div className="p-4 flex flex-col gap-2 mt-20">
     
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 bg-white rounded-full">
@@ -284,12 +363,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
             />
             <span className="sr-only">Logo</span>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-300 hover:text-red-400 transition-colors"
-          >
-            &times;
-          </button>
+         
         </div>
 
         <motion.div
@@ -330,7 +404,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({ onClose, knowledge_id, setC
               if (e.key === "Enter") handleSendMessage();
             }}
             placeholder="Ask anything (Ctrl+L), @ to mention code blocks"
-            className="flex-1 bg-transparent outline-none text-xs placeholder:text-gray-400"
+            className="flex-1 bg-transparent outline-none text-xs placeholder:text-gray-200"
           />
 
           {dialogVisible && (

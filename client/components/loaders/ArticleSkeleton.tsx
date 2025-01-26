@@ -3,7 +3,7 @@ import React from 'react';
 const ArticleSkeleton: React.FC = () => {
   return (
     <div className='w-full '>
-    <div className="animate-pulse space-y-4 p-4 max-h-[60vh] overflow-hidden max-w-7xl mx-auto">
+    <div className="animate-pulse space-y-4 p-4 max-h-[60vh] overflow-hidden ">
       {/* Heading Placeholder */}
       <div className="h-6 bg-gray-300 rounded w-3/4"></div>
 

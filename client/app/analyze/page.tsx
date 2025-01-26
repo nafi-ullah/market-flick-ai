@@ -146,12 +146,12 @@ export default function Home() {
         </div>
       )}
 
-      <div
+      {/* <div
         className="fixed bottom-6 right-6 bg-indigo-500 text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-indigo-600 transition"
         onClick={toggleChatbot}
       >
         <BsWechat size={24} />
-      </div>
+      </div> */}
       {/* {isChatbotOpen && <ChatbotModal onClose={toggleChatbot} />} */}
       {/* {isChatbotOpen && <CascadeModal onClose={toggleChatbot} knowledge_id="0" />} */}
     </div>

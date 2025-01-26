@@ -105,6 +105,10 @@ export default function Home() {
     components: [],
   });
 
+    const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
+    const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
+    const [outputValues, setOutputValues] = useState<string[]>([]); 
+
   const [selectedTabs, setSelectedTabs] = useState<string[]>(["All"]);
 
   const handleTabClick = (tabKey: string) => {
@@ -315,8 +319,16 @@ export default function Home() {
   // Render
   return (
     <div className="relative font-[family-name:var(--font-geist-sans)] bg-[hsl(var(--background))]">
-      <Navbar />
-
+      
+      <div className="flex w-full">
+      <div
+  style={{
+    width: isChatbotOpen ? '75%' : '100%',
+    margin: isChatbotOpen ? "0" : 'auto', // Use undefined instead of an empty string
+    transition: 'width 2s ease, margin 2s ease',
+  }}
+>
+<Navbar />
       <div className="flex flex-wrap items-center gap-2 px-4 pt-4 text-lg mt-20 mx-aut justify-center">
         {/* "All" tab */}
         <button
@@ -387,8 +399,9 @@ export default function Home() {
           </div>
         </div>
       )}
-{/* 
-    <div className="max-w-7xl mx-auto min-h-[700px]">
+      </div>
+
+    {/* <div className="max-w-7xl mx-auto min-h-[700px]">
       <GoogleMapComponent coordinates={dummyCoordinates} dumpFills={dummyDumpFills} />
     </div> */}
 
@@ -405,11 +418,20 @@ export default function Home() {
       {/* Conditionally render Cascade Modal */}
       {isChatbotOpen && (
         <CascadeModal
-          onClose={toggleChatbot}
+          onClose={()=>{
+            setIsChatbotOpen(false)
+          }}
           knowledge_id={id}
           setComponentReloader={setComponentReloader}
+          chatHistory={chatHistory}
+          setChatHistory={setChatHistory}
+          inputValues={inputValues}
+          setInputValues={setInputValues}
+          outputValues={outputValues}
+          setOutputValues={setOutputValues}
         />
       )}
+      </div>
 
       
     </div>
