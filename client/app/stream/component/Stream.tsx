@@ -1,11 +1,12 @@
 "use client";
+import { BACKENDURL } from "@/utils/constants";
 import { useEffect, useState } from "react";
 
 const StreamData = () => {
   const [data, setData] = useState<string[]>([]);
 
   useEffect(() => {
-    const eventSource = new EventSource("http://localhost:8000/stream"); // Replace with your backend URL
+    const eventSource = new EventSource(`${BACKENDURL}/stream`); // Replace with your backend URL
 
     eventSource.onmessage = (event) => {
       setData((prevData) => [...prevData, event.data]);

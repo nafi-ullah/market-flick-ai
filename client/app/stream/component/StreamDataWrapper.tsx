@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Type1Component from "./Type1Component";
 import Type2Component from "./Type2Component";
 import Type3Component from "./Type3Component";
-
+import { BACKENDURL } from "@/utils/constants";
 
 const StreamDataWrapper = () => {
   const [type1Data, setType1Data] = useState<string[]>([]);
@@ -11,7 +11,7 @@ const StreamDataWrapper = () => {
   const [type3Data, setType3Data] = useState<string[]>([]);
 
   useEffect(() => {
-    const eventSource = new EventSource("http://localhost:8000/stream"); // Replace with your backend URL
+    const eventSource = new EventSource(`${BACKENDURL}/stream`); // Replace with your backend URL
 
     eventSource.onmessage = (event) => {
       const parsedData = JSON.parse(event.data);
