@@ -1,7 +1,8 @@
 from datetime import datetime
 import json
 import uuid
-from constants import RESPONSE_PATH, important_keys
+from constants import BASE_URL, RESPONSE_PATH, important_keys
+from core.presentation_generation.agent import create_presentation
 from core.investor_analysis.agent import get_investor_analysis
 from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
@@ -9,12 +10,12 @@ from core.util_agents.title_generator import generate_title
 from utils.general_utils import load_response_from_json, get_all_saved_responses
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 import asyncio
 from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
-from custom_types.basetypes import ChatRequest, ChatType
+from custom_types.basetypes import ChatRequest, ChatType, PresentationInput
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
 from pprint import pformat
@@ -300,6 +301,32 @@ async def chat(chat_request: ChatRequest):
 
 
 
+
+@app.post("/generate-presentation")
+async def generate_presentation(presentation_input: PresentationInput):
+    id = presentation_input.id
+    template_name = presentation_input.template_name
+    response = create_presentation(id=id, template_name=template_name)
+
+    return {
+        "message": "Presentation generated successfully",
+        "file_link": f"{BASE_URL}/download-presentation/{id}.pptx"
+    }
+
+
+@app.get("/download-presentation/{id}.pptx")
+async def download_file(id: str):
+    file_path = f"{RESPONSE_PATH}/presentation_{id}.pptx"
+    print(file_path)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(
+        path=file_path,
+        filename=f"presentation_{id}.pptx",
+        media_type="application/octet-stream"
+    )
+  
 @app.post("/investor-analysis/{id}")
 async def investor_analysis(id: str):
     async def generate_stream() -> AsyncGenerator[str, None]:

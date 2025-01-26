@@ -1,6 +1,7 @@
 KNOWLEDGE_BASE_PATH = "knowledge_base"
 FIGURE_PATH = "figures"
 RESPONSE_PATH = "responses"
+BASE_URL = "http://localhost:8000"
 
 
 important_keys = [
@@ -19,5 +20,5 @@ important_keys = [
     "competitors_chart_data",
     "swot_analysis",
     "pestali_analysis",
-    "roadmap",
+    "roadmap"
 ]
