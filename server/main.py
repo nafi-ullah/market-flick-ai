@@ -18,6 +18,7 @@ from custom_types.basetypes import ChatRequest, ChatType
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
 from pprint import pformat
+from dotenv import load_dotenv
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
@@ -26,8 +27,15 @@ import os
 from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
 
 
+os.makedirs(RESPONSE_PATH, exist_ok=True)
+os.makedirs('./rag_base', exist_ok=True)
+os.makedirs('./rag_base/chunks', exist_ok=True)
+os.makedirs('./rag_base/files', exist_ok=True)
+os.makedirs('./rag_base/retrieved_context', exist_ok=True)
+os.makedirs('./rag_base/sources', exist_ok=True)
+
 # # Load .env file
-# load_dotenv()
+load_dotenv()
 
 # # Access environment variables
 # mongodb_uri = os.getenv("MONGODB_URI")
@@ -51,6 +59,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://192.168.8.169:3000",
+    "http://98.85.58.122:3000"
 ]
 
 app.add_middleware(
