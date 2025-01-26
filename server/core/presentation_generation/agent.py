@@ -42,6 +42,6 @@ def create_presentation(id: str, template_name: str):
     }
 
     agent = get_presentation_agent()
-    response = agent.invoke(inputs)["messages"][-1].content
+    response = agent.invoke(inputs, {"max_iter": 20})["messages"][-1].content
 
     return response
