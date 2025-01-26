@@ -281,7 +281,7 @@ def make_presentation(slide_input: SlideInput):
         f'{template_name}/6.png', Inches(0), Inches(0), width=presentation.slide_width, height=presentation.slide_height
     )
 
-    title = slide6.shapes.add_textbox(Inches(0.5), Inches(0.5), Inches(4), Inches(1.5))
+    title = slide6.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(4), Inches(1.5))
     title_frame = title.text_frame
     title_frame.text = slide_data.slide6.title
     title_frame.paragraphs[0].font.size = Pt(36)
@@ -289,7 +289,7 @@ def make_presentation(slide_input: SlideInput):
     title_frame.paragraphs[0].font.name = "Arial"
     title_frame.paragraphs[0].font.color.rgb = RGBColor(0, 0, 0)
 
-    body = slide6.shapes.add_textbox(Inches(0.5), Inches(2), Inches(4), Inches(3))
+    body = slide6.shapes.add_textbox(Inches(0.5), Inches(3), Inches(4), Inches(3))
     body_frame = body.text_frame
     body_frame.text = slide_data.slide6.body
     for paragraph in body_frame.paragraphs:

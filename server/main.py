@@ -14,7 +14,7 @@ import asyncio
 from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
-from custom_types.basetypes import ChatRequest, ChatType
+from custom_types.basetypes import ChatRequest, ChatType, PresentationInput
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
 
@@ -291,7 +291,9 @@ async def chat(chat_request: ChatRequest):
 
 
 @app.post("/generate-presentation")
-async def generate_presentation(id: str, template_name: str):
+async def generate_presentation(presentation_input: PresentationInput):
+    id = presentation_input.id
+    template_name = presentation_input.template_name
     response = create_presentation(id=id, template_name=template_name)
 
     return {

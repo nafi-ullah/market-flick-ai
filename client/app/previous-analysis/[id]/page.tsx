@@ -34,6 +34,7 @@ import PASTELIAnalysisSkeleton from "@/components/loaders/PasteliAnalysisLoader"
 import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
 import { useAnalysisDataContext } from "@/context/AnalysisContext";
 import GoogleMapComponent from "@/components/features/HeatMap";
+import PresentationGenerator from "@/components/features/PresentationComp";
 
 
 type ComponentReloaderState = {
@@ -386,6 +387,9 @@ export default function Home() {
               );
             })}
           </div>
+          <div>
+            <PresentationGenerator investor_id={id}/>
+            </div>
         </div>
       ) : (
         /* Initial full-page skeleton if there's no data yet */
