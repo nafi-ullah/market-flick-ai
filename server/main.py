@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 import json
 import uuid
-from constants import BASE_URL, RESPONSE_PATH, important_keys
+from constants import BASE_URL, KNOWLEDGE_BASE_PATH, RESPONSE_PATH, important_keys, FIGURE_PATH
 from core.presentation_generation.agent import create_presentation
 from core.investor_analysis.agent import get_investor_analysis
 from core.util_agents.chat_agent import chat_with_agent
@@ -31,7 +31,10 @@ import os
 from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
 
 
+os.makedirs(KNOWLEDGE_BASE_PATH, exist_ok=True)
+os.makedirs(FIGURE_PATH, exist_ok=True)
 os.makedirs(RESPONSE_PATH, exist_ok=True)
+
 os.makedirs('./rag_base', exist_ok=True)
 os.makedirs('./rag_base/chunks', exist_ok=True)
 os.makedirs('./rag_base/files', exist_ok=True)
