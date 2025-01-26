@@ -1,9 +1,10 @@
 
 
+from core.investor_analysis.agent import get_investor_analysis
 from core.market_size_analysis.agent import market_size_report, market_size_graph_generator, competitors_table_generator
-from core.market_size_analysis.utils import extract_knowledge_base
 from core.presentation_generation.agent import create_presentation
 from core.presentation_generation.tools.presentation import make_presentation
+from core.market_size_analysis.utils import extract_knowledge_base, print_stream
 from core.util_agents.chat_write_agent import chat_write_agent
 from custom_types.market_analysis import BusinessAnalysisInput, MarketDataPoint
 from core.market_size_analysis.market_size_graph import plot_market_projection
@@ -12,6 +13,7 @@ from core.market_size_analysis.test_langgraph import BusinessAnalysisState
 from core.util_agents.title_generator import generate_title
 from utils.general_utils import get_all_saved_responses, load_response_from_json
 from dotenv import load_dotenv
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 load_dotenv()
 
@@ -50,6 +52,11 @@ load_dotenv()
 # saved_responses = get_all_saved_responses("67ef1654-9d74-47d9-ab21-a484c1e3da13")
 
 # print(saved_responses)
+
+print_stream(get_investor_analysis("67ef1654-9d74-47d9-ab21-a484c1e3da13"))
+
+# print(str("hi"))
+
 
 # Example usage
 # if __name__ == "__main__":

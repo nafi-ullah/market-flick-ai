@@ -58,7 +58,15 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Left: Logo */}
           <div className="flex-shrink-0">
-            {/* <span className="text-xl font-bold my-3">
+
+            <span 
+            onClick={()=>{
+              window.location.href='analyze'
+            }}
+            className="text-xl font-bold my-3 cursor-pointer">
+
+           
+
               <Image
                 src="/marktelogo.png"
                 alt="Logo"
@@ -66,12 +74,20 @@ const Navbar: React.FC = () => {
                 height={60}
                 className="rounded-full"
               />
-            </span> */}
+            </span> 
           </div>
 
           {/* Right: Share button and avatar */}
           <div className="flex items-center space-x-4">
             {/* Share Button */}
+            <button 
+            onClick={()=>{
+              window.location.href = "/investor";
+            }}
+            className="flex items-center px-4 py-2 bg-[hsl(var(--foreground))] border border-gray-300 rounded-full shadow-sm hover:bg-gray-100 focus:outline-none">
+             
+              <span className="text-sm font-medium text-[hsl(var(--background))]">Investor</span>
+            </button>
             <button 
             onClick={()=>{
               setIsShareModalOpened(true);
