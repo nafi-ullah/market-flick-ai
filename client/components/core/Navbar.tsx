@@ -58,7 +58,11 @@ const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Left: Logo */}
           <div className="flex-shrink-0">
-            <span className="text-xl font-bold my-3">
+            <span 
+            onClick={()=>{
+              window.location.href='analyze'
+            }}
+            className="text-xl font-bold my-3 cursor-pointer">
               <Image
                 src="/marktelogo.png"
                 alt="Logo"

@@ -5,18 +5,42 @@ import { BACKENDURL } from "@/utils/constants";
 import { useAnalysisDataContext } from "@/context/AnalysisContext";
 import { Typography } from "@mui/material";
 import TypingDisplay from "@/components/features/TypingDisplay";
+import Navbar from "@/components/core/Navbar";
+
+interface InvestorData {
+    name: string;
+    type: string;
+    linkedin: string;
+    email: string;
+    investments: number;
+    sector: string;
+    match_percentage: number;
+    funding_range: string;
+    investment_proposal: string;
+  }
+
+
 
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
-  
+  const [investors, setInvestors] = useState<InvestorData[] | null>(null);
   const [analyseId, setAnalyseId] = useState("");
   const [showLog, setShowLog] = useState(false);
-
+const [showInvestors, setShowInvestors] = useState(false);
+const [showLoader, setShowLoaders]= useState(false);
   const { analysisData, setAnalysisData } = useAnalysisDataContext();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
 
  // Replace with your backend URL
-
+ const fetchInvestorData = async (getid: string) => {
+    try {
+      const response = await fetch(`${BACKENDURL}/investor-profiles/${getid}`);
+      const data: InvestorData[] = await response.json();
+      setInvestors(data.investors); // Assuming the first object is the one we need
+    } catch (error) {
+      console.error("Error fetching investor data:", error);
+    }
+  };
   const truncateText = (text: string, length: number) => {
     return text.length > length ? text.substring(0, length) + "..." : text;
   };
@@ -38,6 +62,7 @@ export default function Home() {
 
   const handleGetInvestorData = (investorid: string) => {
     if (investorid) {
+        setInvestors([]);
       setShowLog(true);
           fetch(`${BACKENDURL}/investor-analysis/${investorid}`, {
             method: "POST",
@@ -55,7 +80,8 @@ export default function Home() {
               while (reader) {
                 const { value, done } = await reader.read();
                 if (done) {
-                    console.log("I am finished"); // Log when streaming ends
+                    setShowInvestors(true);
+                    fetchInvestorData(investorid); // Log when streaming ends
                     break;
                   }
                 const chunkStr = decoder.decode(value);
@@ -90,11 +116,21 @@ export default function Home() {
             })}
   };
 
+  const sendProposal = (email: string, proposal: string) => {
+    const mailtoLink = `mailto:${email}?subject=Investment Proposal&body=${encodeURIComponent(proposal)}`;
+    window.location.href = mailtoLink;
+  };
+
+
+    
+
+
   return (
-    <div className="font-[family-name:var(--font-geist-sans)] pt-24 w-full">
+    <div className="font-[family-name:var(--font-geist-sans)] pt-24 w-full bg-[hsl(var(--background))]">
+        <Navbar/>
       {!showLog && (
         <div className="p-4">
-          <h1 className="text-3xl font-bold mb-4 max-w-7xl mx-auto text-center">
+          <h1 className="text-3xl font-bold mb-4 max-w-6xl mx-auto text-center">
             Analysis Investor
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
@@ -154,6 +190,82 @@ export default function Home() {
     )}
   </div>
 )}
+
+{showInvestors && investors && investors?.length > 0 && <>
+    <div className="max-w-4xl text-4xl mx-auto text-center my-4">Suggested Investors</div>
+    <div className="grid grid-cols-2 gap-6 max-w-6xl mx-auto my-10">
+      {investors?.map((investor, index) => (
+        <div key={index} className="bg-[hsl(var(--accent))] text-white p-6 rounded-lg shadow-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold">{investor.name}</h2>
+              <p className="text-sm text-gray-400">{investor.type}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-lg font-semibold">{investor.match_percentage}% Match</p>
+              <p className="text-sm text-gray-400">{investor.funding_range}</p>
+            </div>
+          </div>
+
+          <div className="mt-4 flex gap-4">
+            <a
+              href={investor.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:underline"
+            >
+              LinkedIn
+            </a>
+            <a
+              href={`mailto:${investor.email}`}
+              className="text-indigo-300 hover:underline"
+            >
+              Email
+            </a>
+          </div>
+
+          <p className="mt-4 text-gray-300">
+            {investor.investments} investments in {investor.sector} sector
+          </p>
+
+          <button
+            onClick={() => sendProposal(investor.email, investor.investment_proposal)}
+            className="mt-6 bg-black text-white font-medium py-2 px-4 rounded-md hover:bg-gray-700 transition"
+          >
+            Send Proposal
+          </button>
+        </div>
+      ))}
+    </div>
+      <div className="w-full text-lg my-3 text-center">Want to find more investors?</div>
+    <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto my-10">
+            {analysisData.map(({ basic_info_id, basic_info }) => (
+              <div
+                onClick={() => {
+                  handleGetInvestorData(basic_info_id);
+                }}
+                key={basic_info_id}
+                className="border rounded-lg p-4 shadow-md bg-[hsl(var(--accent))] hover:bg-indigo-950 hover:shadow-lg transition-shadow cursor-pointer"
+              >
+                <h2 className="text-lg font-semibold mb-2">
+                  {truncateText(basic_info.title, 30)}
+                </h2>
+                <p className="text-gray-400 mb-1">
+                  <strong>Idea:</strong>{" "}
+                  {truncateText(basic_info.business_idea, 30)}
+                </p>
+                <p className="text-gray-400 mb-1">
+                  <strong>Sector:</strong>{" "}
+                  {truncateText(basic_info.business_sector, 30)}
+                </p>
+                <p className="text-gray-400">
+                  <strong>Location:</strong>{" "}
+                  {truncateText(basic_info.business_location, 30)}
+                </p>
+              </div>
+            ))}
+          </div>
+</>}
 
     </div>
   );
