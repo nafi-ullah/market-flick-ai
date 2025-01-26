@@ -87,8 +87,8 @@ async def business_analysis_stream(
     sector: str = Form(...),
     idea: str = Form(...),
     location: str = Form(...),
-    links: list[str] = Form(...),
-    files: list[UploadFile] | None = None,
+    links: list[str] | None = Form(None),
+    files: list[UploadFile] | None = Form(None),
 ) -> StreamingResponse:
     # Convert form data to BusinessAnalysisInput
     print('~'*100)
