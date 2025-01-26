@@ -2,7 +2,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import { parseMarkdownContentData } from "@/data/DataMapping";
 
-export interface MarkdownViewerProps {
+export interface MarkdownChatProps {
   data: {
     key: string;
     data: string;
@@ -10,7 +10,7 @@ export interface MarkdownViewerProps {
   };
 }
 
-const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
+const MarkdownChat: React.FC<MarkdownChatProps> = ({ data }) => {
   const chartData = parseMarkdownContentData(data["data"]);
 
   console.log({ chartData, data });
@@ -22,7 +22,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
     );
   }
   return (
-    <div className="markdown-content p-4 bg-[hsl(var(--accent))] rounded-md shadow-md w-full my-6">
+    <div className="markdown-content w-full">
       {/* Inline styles for scoped CSS */}
       <style>
         {`
@@ -73,10 +73,8 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
           }
         `}
       </style>
-      <div className="text-2xl font-bold text-[hsl(var(--foreground))] mb-4 text-center">
-        Market Analysis Report
-      </div>
-      <div className="markdown-content p-4 bg-[hsl(var(--background))] rounded-md border border-[hsl(var(--source))] max-w-7xl max-h-[500px] overflow-y-auto mx-auto my-6">
+
+      <div className="markdown-content">
         <ReactMarkdown
           components={{
             a: LinkRenderer,
@@ -89,4 +87,4 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = ({ data }) => {
   );
 };
 
-export default MarkdownViewer;
+export default MarkdownChat;

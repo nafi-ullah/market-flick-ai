@@ -27,13 +27,13 @@ export default async function handler(
     const $ = cheerio.load(html);
 
     // Extract metadata
-    const title = $("meta[property='og:title']").attr("content") || $("title").text() || "";
+    const title =
+      $("meta[property='og:title']").attr("content") || $("title").text() || "";
     const description =
       $("meta[property='og:description']").attr("content") ||
       $("meta[name='description']").attr("content") ||
       "";
-    const image =
-      $("meta[property='og:image']").attr("content") || "";
+    const image = $("meta[property='og:image']").attr("content") || "";
 
     const metadata: Metadata = {
       title,

@@ -50,8 +50,9 @@ search_tool = TavilySearchResults(
 )
 
 
-
-
+def get_internal_context(state: BusinessAnalysisState):
+    points = state["internal_context_points"]
+    return '\n\n'.join([f'Title: Internal Source\n\nSource: {point.payload["source"]}\n\nText: {point.payload["text"]}' for point in points])
 
 def market_size_report_node(state: BusinessAnalysisState):
     """Generate market size report"""
@@ -61,11 +62,14 @@ def market_size_report_node(state: BusinessAnalysisState):
         state_schema=BusinessAnalysisState,
     )
 
+    internal_context = (f'\n\nAlso Consider these internal data as context: {get_internal_context(state)}\n\nAdd sources of these internal data in markdown where necessary.' if len(state["internal_context_points"]) > 0 else '')
     unique_id = state["knowledge_base_id"]
-
+    with open(f"./rag_base/retrieved_context/internal_context_points_{unique_id}.txt", "w") as f:
+        f.write(market_size_system_message + internal_context)
+        
     inputs = {
         "messages": [
-            SystemMessage(market_size_system_message),
+            SystemMessage(market_size_system_message + internal_context),
             HumanMessage(
                 market_size_human_message.format(
                     business_sector=state["business_analysis_input"].sector,

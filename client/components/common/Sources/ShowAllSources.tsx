@@ -20,43 +20,47 @@ interface Props {
   sources: string[];
 }
 
-const UrlMetadataGrid: React.FC<Props> = ({ sources }) => {
+const UrlMetadataGrid: React.FC<Props> = ({ sources = [] }) => {
   const [gridItems, setGridItems] = useState<GridItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchMetadata = async () => {
       try {
-        const metadataPromises = sources.map(async (url) => {
-          // Extract website title from URL
-          const cleanUrl = url.startsWith("https://www.")
-            ? url.split("https://www.")[1].split("/")[0]
-            : url.split("https://")[1].split("/")[0];
+        const metadataPromises = sources.map(async (url, index) => {
+          return new Promise(async (resolve, reject) => {
+            setTimeout(async () => {
+              // Extract website title from URL
+              const cleanUrl = url.startsWith("https://www.")
+                ? url.split("https://www.")[1].split("/")[0]
+                : url.split("https://")[1].split("/")[0];
 
-          try {
-            const response = await fetch(
-              `/api/fetch-metadata?url=${encodeURIComponent(url)}`
-            );
-            if (!response.ok) throw new Error("Failed to fetch metadata.");
+              try {
+                const response = await fetch(
+                  `/api/fetch-metadata?url=${encodeURIComponent(url)}`
+                );
+                if (!response.ok) throw new Error("Failed to fetch metadata.");
 
-            const metadata: Metadata = await response.json();
-            return {
-              url,
-              websiteTitle: cleanUrl,
-              title: metadata.title,
-              description: metadata.description,
-              image: metadata.image,
-            };
-          } catch (error) {
-            // Handle metadata fetch failure
-            return {
-              url,
-              websiteTitle: cleanUrl,
-              title: "Unavailable",
-              description: "Could not fetch description.",
-              image: "https://via.placeholder.com/150", // Placeholder image
-            };
-          }
+                const metadata: Metadata = await response.json();
+                return resolve({
+                  url,
+                  websiteTitle: cleanUrl,
+                  title: metadata.title,
+                  description: metadata.description,
+                  image: metadata.image,
+                });
+              } catch (error) {
+                // Handle metadata fetch failure
+                return resolve({
+                  url,
+                  websiteTitle: cleanUrl,
+                  title: "Unavailable",
+                  description: "Could not fetch description.",
+                  image: "https://via.placeholder.com/150", // Placeholder image
+                });
+              }
+            }, index * 400);
+          });
         });
 
         const resolvedItems = await Promise.all(metadataPromises);
@@ -69,7 +73,7 @@ const UrlMetadataGrid: React.FC<Props> = ({ sources }) => {
     };
 
     fetchMetadata();
-  }, [sources]);
+  }, [JSON.stringify(sources)]);
 
   return (
     <div className="flex gap-5 flex-wrap">

@@ -16,11 +16,15 @@ import {
 } from "@mui/material";
 import StackedAnimatedLoader from "./loaders/AiLoader";
 
-interface FormData {
+interface FormDataState {
   businessSector: string;
   businessIdea: string;
   location: string;
+  files: File[];
+  urls: string[];
+  urls_text: string;
 }
+
 const BUSINESS_SECTORS = [
   "IT & Technology",
   "AI & Machine Learning",
@@ -46,6 +50,7 @@ const BUSINESS_SECTORS = [
   "Beauty & Wellness",
   "Other",
 ];
+
 const LOCATIONS = [
   "Global",
   "Bangladesh",
@@ -83,15 +88,18 @@ const BusinessAnalysisForm = ({
 }: {
   setStreamData: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formDataState, setFormDataState] = useState<FormDataState>({
     businessSector: "",
     businessIdea: "",
     location: "",
+    files: [],
+    urls: [],
+    urls_text: "",
   });
   const [isStreaming, setIsStreaming] = useState(false);
 
   const handleChange =
-    (field: keyof FormData) =>
+    (field: keyof FormDataState) =>
     (
       event: React.ChangeEvent<HTMLInputElement | { value: unknown }> | null,
       newValue: string | null
@@ -108,30 +116,48 @@ const BusinessAnalysisForm = ({
         return;
       }
 
-      setFormData((prev) => ({
+      setFormDataState((prev) => ({
         ...prev,
         [field]: value,
+        ...(field === "urls" && { urls_text: value }),
       }));
     };
+
+  const handleUrlChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const urlText = event.target.value;
+    // Split by newlines and filter out empty lines
+    const urlList = urlText.split("\n").filter((url) => url.trim() !== "");
+    setFormDataState((prev) => ({
+      ...prev,
+      urls: urlList,
+      urls_text: urlText,
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStreamData([]);
     setIsStreaming(true);
 
-    const payload = {
-      sector: formData.businessSector,
-      idea: formData.businessIdea,
-      location: formData.location,
-    };
-
     try {
+      const formData = new FormData();
+      formData.append("sector", formDataState.businessSector);
+      formData.append("idea", formDataState.businessIdea);
+      formData.append("location", formDataState.location);
+
+      // Append URLs as a list
+      for (const url of formDataState.urls) {
+        formData.append("links", url);
+      }
+
+      // Append files
+      formDataState.files.forEach((file) => {
+        formData.append("files", file);
+      });
+
       const response = await fetch(`${BACKENDURL}/business-analysis`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -181,6 +207,13 @@ const BusinessAnalysisForm = ({
     }
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      setFormDataState((prev) => ({ ...prev, files: Array.from(files) }));
+    }
+  };
+
   return (
     <Paper
       sx={{
@@ -218,7 +251,7 @@ const BusinessAnalysisForm = ({
         <Autocomplete
           id="businessSector"
           options={BUSINESS_SECTORS}
-          value={formData.businessSector}
+          value={formDataState.businessSector}
           onChange={(_, newValue) =>
             handleChange("businessSector")(null, newValue || "")
           }
@@ -282,7 +315,7 @@ const BusinessAnalysisForm = ({
           label="Business Idea"
           multiline
           rows={5}
-          value={formData.businessIdea}
+          value={formDataState.businessIdea}
           onChange={(e) => handleChange("businessIdea")(e, null)}
           fullWidth
           sx={{
@@ -311,7 +344,7 @@ const BusinessAnalysisForm = ({
         <Autocomplete
           id="location"
           options={LOCATIONS}
-          value={formData.location}
+          value={formDataState.location}
           onChange={(_, newValue) =>
             handleChange("location")(null, newValue || "")
           }
@@ -367,6 +400,53 @@ const BusinessAnalysisForm = ({
           }}
           freeSolo
           fullWidth
+        />
+
+        {/* File Upload */}
+        <input
+          type="file"
+          multiple
+          onChange={handleFileChange}
+          style={{
+            color: "hsl(var(--foreground))",
+            backgroundColor: "hsl(var(--background))",
+            padding: "8px",
+            border: "1px solid hsl(var(--secondary))",
+            borderRadius: "4px",
+            width: "100%",
+          }}
+        />
+
+        {/* URLs */}
+        <TextField
+          id="urls"
+          label="Web URLs (one per line)"
+          multiline
+          rows={3}
+          value={formDataState.urls_text}
+          onChange={handleUrlChange}
+          fullWidth
+          placeholder="Enter URLs related to your business idea"
+          sx={{
+            "& .MuiInputBase-root": {
+              color: "hsl(var(--foreground))",
+              backgroundColor: "hsl(var(--background))",
+            },
+            "& .MuiInputLabel-root": {
+              color: "hsl(var(--secondary))",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "hsl(var(--secondary))",
+              },
+              "&:hover fieldset": {
+                borderColor: "hsl(var(--foreground))",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "hsl(var(--foreground))",
+              },
+            },
+          }}
         />
 
         {/* Submit Button */}

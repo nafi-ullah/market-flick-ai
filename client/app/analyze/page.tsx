@@ -64,7 +64,7 @@ type Props = {
 export default function Home() {
   const [streamData, setStreamData] = useState<string[]>([]);
   const [loadedKeys, setLoadedKeys] = useState<Set<string>>(new Set());
-  
+
   const streamDataKeys: {
     [K in keyof Props]: {
       component: React.FC<Props[K]>;
@@ -109,12 +109,9 @@ export default function Home() {
       <Navbar />
 
       {/* Form that updates streamData */}
-      <div>
- 
-  </div>
-      
-      <BusinessAnalysisForm setStreamData={setStreamData} />
+      <div></div>
 
+      <BusinessAnalysisForm setStreamData={setStreamData} />
 
       {streamData.length > 0 && (
         <div className="mt-6 p-4 rounded-md">
@@ -124,7 +121,6 @@ export default function Home() {
               const data = streamData.find((item) => item["key"] === key);
               const { component: Component, loader: Loader } =
                 streamDataKeys[key as keyof Props];
-              console.log("~~~", key, data);
               return (
                 <div key={key} className="mb-3 max-w-7xl mx-auto">
                   {data ? (

@@ -91,4 +91,7 @@ watchfiles==1.0.3
 websockets==14.1
 XlsxWriter==3.2.1
 yarl==1.18.3
+qdrant-client==1.13.2
+pypdf==5.1.0
+beautifulsoup4==4.12.3
 uvicorn==0.34.0

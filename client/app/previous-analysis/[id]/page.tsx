@@ -36,7 +36,6 @@ import { useAnalysisDataContext } from "@/context/AnalysisContext";
 import GoogleMapComponent from "@/components/features/HeatMap";
 import PresentationGenerator from "@/components/features/PresentationComp";
 
-
 type ComponentReloaderState = {
   needReload: boolean;
   components: string[];
@@ -90,25 +89,24 @@ const important_keys = [
   { key: "roadmap", value: "Roadmap" },
 ];
 
-
-
 export default function Home() {
   const { id } = useParams();
   const [showChat, setShowChat] = useState(false);
   const [streamData, setStreamData] = useState<any[]>([]);
-  const {setCurrentBasicInfoId} = useAnalysisDataContext();
+  const { setCurrentBasicInfoId } = useAnalysisDataContext();
   // Which components are currently reloading
   const [loadingComponents, setLoadingComponents] = useState<string[]>([]);
 
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [componentReloader, setComponentReloader] = useState<ComponentReloaderState>({
-    needReload: false,
-    components: [],
-  });
+  const [componentReloader, setComponentReloader] =
+    useState<ComponentReloaderState>({
+      needReload: false,
+      components: [],
+    });
 
-    const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
-    const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
-    const [outputValues, setOutputValues] = useState<string[]>([]); 
+  const [chatHistory, setChatHistory] = useState<[string, string][]>([]); // Store API response chat_history
+  const [inputValues, setInputValues] = useState<string[]>([]); // Store user input strings
+  const [outputValues, setOutputValues] = useState<string[]>([]);
 
   const [selectedTabs, setSelectedTabs] = useState<string[]>(["All"]);
 
@@ -140,28 +138,31 @@ export default function Home() {
     setSelectedTabs(newSelectedTabs);
   };
 
-  const getValueFromKey = (key: string): string | undefined =>{
+  const getValueFromKey = (key: string): string | undefined => {
     const foundItem = important_keys.find((item) => item.key === key);
     return foundItem?.value;
-  }
+  };
   const dataToDisplay = selectedTabs.includes("All")
-  ? streamData
-  : streamData.filter((d) => selectedTabs.includes(d.key));
+    ? streamData
+    : streamData.filter((d) => selectedTabs.includes(d.key));
 
   const dummyCoordinates = [
     { lat: 23.810331, lng: 90.412521, name: "Dhaka" }, // Dhaka Division
     { lat: 22.347536, lng: 91.812332, name: "Chattogram" }, // Chattogram Division
     { lat: 24.363589, lng: 88.624135, name: "Rajshahi" }, // Rajshahi Division
-    { lat: 24.894930, lng: 91.868706, name: "Sylhet" }, // Sylhet Division
+    { lat: 24.89493, lng: 91.868706, name: "Sylhet" }, // Sylhet Division
     { lat: 22.845641, lng: 89.540327, name: "Khulna" }, // Khulna Division
   ];
-  
   const dummyDumpFills = [30, 50, 90, 70, 20];
 
   // Helper to extract the right component + loader + data
   function extractStreamData(
     obj: any
-  ): { component: React.FC<{ data: any }>; loader: React.FC; data: any } | null {
+  ): {
+    component: React.FC<{ data: any }>;
+    loader: React.FC;
+    data: any;
+  } | null {
     const mappingEntry = streamDataMapping[obj.key];
     if (mappingEntry) {
       return {
@@ -320,124 +321,126 @@ export default function Home() {
   // Render
   return (
     <div className="relative font-[family-name:var(--font-geist-sans)] bg-[hsl(var(--background))]">
-      
       <div className="flex w-full">
-      <div
-  style={{
-    width: isChatbotOpen ? '75%' : '100%',
-    margin: isChatbotOpen ? "0" : 'auto', // Use undefined instead of an empty string
-    transition: 'width 2s ease, margin 2s ease',
-  }}
->
-<Navbar />
-      <div className="flex flex-wrap items-center gap-2 px-4 pt-4 text-lg mt-20 mx-aut justify-center">
-        {/* "All" tab */}
-        <button
-          onClick={() => handleTabClick("All")}
-          className={
-            selectedTabs.includes("All")
-              ? "px-3 py-1 rounded bg-indigo-500 text-[hsl(var(--foreground))]"
-              : "px-3 py-1 rounded bg-[hsl(var(--accent))] text-indigo-500 hover:bg-indigo-700 hover:text-[hsl(var(--foreground))]"
-          }
+        <div
+          style={{
+            width: isChatbotOpen ? "75%" : "100%",
+            margin: isChatbotOpen ? "0" : "auto", // Use undefined instead of an empty string
+            transition: "width 2s ease, margin 2s ease",
+          }}
         >
-          All
-        </button>
-
-        {Object.keys(streamDataMapping).map((key) => {
-          const isSelected = selectedTabs.includes(key) || selectedTabs.includes("All");
-          return (
+          <Navbar />
+          <div className="flex flex-wrap items-center gap-2 px-4 pt-4 text-lg mt-20 mx-aut justify-center">
+            {/* "All" tab */}
             <button
-              key={key}
-              onClick={() => handleTabClick(key)}
+              onClick={() => handleTabClick("All")}
               className={
-                isSelected
+                selectedTabs.includes("All")
                   ? "px-3 py-1 rounded bg-indigo-500 text-[hsl(var(--foreground))]"
                   : "px-3 py-1 rounded bg-[hsl(var(--accent))] text-indigo-500 hover:bg-indigo-700 hover:text-[hsl(var(--foreground))]"
               }
             >
-              {getValueFromKey(key)}
+              All
             </button>
-          );
-        })}
-        </div>
 
-        {dataToDisplay.length > 0 ? (
-        <div className="mt-6 p-4 rounded-md">
-          <div className="ml-5">
-            {dataToDisplay.map((obj) => {
-              const extracted = extractStreamData(obj);
-              if (!extracted) return null;
-
-              const { component: Component, loader: Loader, data } = extracted;
-              const thisKey = data.key;
-
-              // If this component is currently being reloaded, show the skeleton
-              if (loadingComponents.includes(thisKey)) {
-                return (
-                  <div key={thisKey} className="mb-1 max-w-7xl mx-auto">
-                    <Loader />
-                  </div>
-                );
-              }
-              // Otherwise, show the actual component
+            {Object.keys(streamDataMapping).map((key) => {
+              const isSelected =
+                selectedTabs.includes(key) || selectedTabs.includes("All");
               return (
-                <div key={thisKey} className="mb-1 max-w-7xl mx-auto">
-                  <Component data={data} />
-                </div>
+                <button
+                  key={key}
+                  onClick={() => handleTabClick(key)}
+                  className={
+                    isSelected
+                      ? "px-3 py-1 rounded bg-indigo-500 text-[hsl(var(--foreground))]"
+                      : "px-3 py-1 rounded bg-[hsl(var(--accent))] text-indigo-500 hover:bg-indigo-700 hover:text-[hsl(var(--foreground))]"
+                  }
+                >
+                  {getValueFromKey(key)}
+                </button>
               );
             })}
           </div>
-          <div>
-            <PresentationGenerator investor_id={id}/>
+
+          {dataToDisplay.length > 0 ? (
+            <div className="mt-6 p-4 rounded-md">
+              <div className="ml-5">
+                {dataToDisplay.map((obj) => {
+                  const extracted = extractStreamData(obj);
+                  if (!extracted) return null;
+
+                  const {
+                    component: Component,
+                    loader: Loader,
+                    data,
+                  } = extracted;
+                  const thisKey = data.key;
+
+                  // If this component is currently being reloaded, show the skeleton
+                  if (loadingComponents.includes(thisKey)) {
+                    return (
+                      <div key={thisKey} className="mb-1 max-w-7xl mx-auto">
+                        <Loader />
+                      </div>
+                    );
+                  }
+                  // Otherwise, show the actual component
+                  return (
+                    <div key={thisKey} className="mb-1 max-w-7xl mx-auto">
+                      <Component data={data} />
+                    </div>
+                  );
+                })}
+              </div>
+              <div>
+                <PresentationGenerator investor_id={id} />
+              </div>
             </div>
+          ) : (
+            /* Initial full-page skeleton if there's no data yet */
+            <div className="mt-6 mx-auto p-4 rounded-md px-10 flex flex-col gap-4 max-w-7xl">
+              <ArticleSkeleton />
+              <CompetitorAnalysisTableSkeleton />
+              <div className="grid grid-cols-3 w-full">
+                <MarketSizeAnalysisCardSkeleton />
+                <MarketSizeAnalysisCardSkeleton />
+                <MarketSizeAnalysisCardSkeleton />
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        /* Initial full-page skeleton if there's no data yet */
-        <div className="mt-6 mx-auto p-4 rounded-md px-10 flex flex-col gap-4 max-w-7xl">
-          <ArticleSkeleton />
-          <CompetitorAnalysisTableSkeleton />
-          <div className="grid grid-cols-3 w-full">
-            <MarketSizeAnalysisCardSkeleton />
-            <MarketSizeAnalysisCardSkeleton />
-            <MarketSizeAnalysisCardSkeleton />
+
+        {/* <div className="max-w-7xl mx-auto min-h-[700px]">
+     <GoogleMapComponent coordinates={dummyCoordinates} dumpFills={dummyDumpFills} />
+   </div> */}
+
+        {/* Floating chat button */}
+        {showChat && (
+          <div
+            className="fixed bottom-6 right-6 bg-indigo-500 text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-indigo-600 transition"
+            onClick={toggleChatbot}
+          >
+            <BsWechat size={24} />
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Conditionally render Cascade Modal */}
+        {isChatbotOpen && (
+          <CascadeModal
+            onClose={() => {
+              setIsChatbotOpen(false);
+            }}
+            knowledge_id={id}
+            setComponentReloader={setComponentReloader}
+            chatHistory={chatHistory}
+            setChatHistory={setChatHistory}
+            inputValues={inputValues}
+            setInputValues={setInputValues}
+            outputValues={outputValues}
+            setOutputValues={setOutputValues}
+          />
+        )}
       </div>
-
-    {/* <div className="max-w-7xl mx-auto min-h-[700px]">
-      <GoogleMapComponent coordinates={dummyCoordinates} dumpFills={dummyDumpFills} />
-    </div> */}
-
-      {/* Floating chat button */}
-      {showChat && (
-        <div
-          className="fixed bottom-6 right-6 bg-indigo-500 text-white p-4 rounded-full shadow-lg cursor-pointer hover:bg-indigo-600 transition"
-          onClick={toggleChatbot}
-        >
-          <BsWechat size={24} />
-        </div>
-      )}
-
-      {/* Conditionally render Cascade Modal */}
-      {isChatbotOpen && (
-        <CascadeModal
-          onClose={()=>{
-            setIsChatbotOpen(false)
-          }}
-          knowledge_id={id}
-          setComponentReloader={setComponentReloader}
-          chatHistory={chatHistory}
-          setChatHistory={setChatHistory}
-          inputValues={inputValues}
-          setInputValues={setInputValues}
-          outputValues={outputValues}
-          setOutputValues={setOutputValues}
-        />
-      )}
-      </div>
-
-      
     </div>
   );
 }
