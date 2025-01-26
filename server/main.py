@@ -1,4 +1,6 @@
 from datetime import datetime
+from dotenv import load_dotenv
+load_dotenv()
 import json
 import uuid
 from constants import BASE_URL, RESPONSE_PATH, important_keys
@@ -19,7 +21,6 @@ from custom_types.basetypes import ChatRequest, ChatType, PresentationInput
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
 from pprint import pformat
-from dotenv import load_dotenv
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
@@ -36,7 +37,6 @@ os.makedirs('./rag_base/retrieved_context', exist_ok=True)
 os.makedirs('./rag_base/sources', exist_ok=True)
 
 # # Load .env file
-load_dotenv()
 
 # # Access environment variables
 # mongodb_uri = os.getenv("MONGODB_URI")
