@@ -34,6 +34,7 @@ import PASTELIAnalysisSkeleton from "@/components/loaders/PasteliAnalysisLoader"
 import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
 import { useAnalysisDataContext } from "@/context/AnalysisContext";
 import GoogleMapComponent from "@/components/features/HeatMap";
+import PresentationGenerator from "@/components/features/PresentationComp";
 
 type ComponentReloaderState = {
   needReload: boolean;
@@ -152,11 +153,12 @@ export default function Home() {
     { lat: 24.89493, lng: 91.868706, name: "Sylhet" }, // Sylhet Division
     { lat: 22.845641, lng: 89.540327, name: "Khulna" }, // Khulna Division
   ];
-
   const dummyDumpFills = [30, 50, 90, 70, 20];
 
   // Helper to extract the right component + loader + data
-  function extractStreamData(obj: any): {
+  function extractStreamData(
+    obj: any
+  ): {
     component: React.FC<{ data: any }>;
     loader: React.FC;
     data: any;
@@ -324,6 +326,7 @@ export default function Home() {
           style={{
             width: isChatbotOpen ? "75%" : "100%",
             margin: isChatbotOpen ? "0" : "auto", // Use undefined instead of an empty string
+            transition: "width 2s ease, margin 2s ease",
           }}
         >
           <Navbar />
@@ -389,6 +392,9 @@ export default function Home() {
                   );
                 })}
               </div>
+              <div>
+                <PresentationGenerator investor_id={id} />
+              </div>
             </div>
           ) : (
             /* Initial full-page skeleton if there's no data yet */
@@ -405,8 +411,8 @@ export default function Home() {
         </div>
 
         {/* <div className="max-w-7xl mx-auto min-h-[700px]">
-      <GoogleMapComponent coordinates={dummyCoordinates} dumpFills={dummyDumpFills} />
-    </div> */}
+     <GoogleMapComponent coordinates={dummyCoordinates} dumpFills={dummyDumpFills} />
+   </div> */}
 
         {/* Floating chat button */}
         {showChat && (

@@ -1,8 +1,12 @@
 from datetime import datetime
 import hashlib
+from dotenv import load_dotenv
+load_dotenv()
 import json
 import uuid
-from constants import RESPONSE_PATH, important_keys
+from constants import BASE_URL, RESPONSE_PATH, important_keys
+from core.presentation_generation.agent import create_presentation
+from core.investor_analysis.agent import get_investor_analysis
 from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
@@ -10,14 +14,15 @@ from core.rag.rag import upload_and_fetch_context
 from utils.general_utils import load_response_from_json, get_all_saved_responses
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 import asyncio
 from typing import AsyncGenerator
 from fastapi.middleware.cors import CORSMiddleware
 from custom_types.market_analysis import BusinessAnalysisInput
-from custom_types.basetypes import ChatRequest, ChatType
+from custom_types.basetypes import ChatRequest, ChatType, PresentationInput
 from langchain_core.caches import InMemoryCache
 from langchain_core.globals import set_llm_cache
+from pprint import pformat
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
@@ -26,8 +31,14 @@ import os
 from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
 
 
+os.makedirs(RESPONSE_PATH, exist_ok=True)
+os.makedirs('./rag_base', exist_ok=True)
+os.makedirs('./rag_base/chunks', exist_ok=True)
+os.makedirs('./rag_base/files', exist_ok=True)
+os.makedirs('./rag_base/retrieved_context', exist_ok=True)
+os.makedirs('./rag_base/sources', exist_ok=True)
+
 # # Load .env file
-# load_dotenv()
 
 # # Access environment variables
 # mongodb_uri = os.getenv("MONGODB_URI")
@@ -40,7 +51,7 @@ from core.market_size_analysis.utils import extract_knowledge_base, get_serializ
 # print("tavily_api_key:", tavily_api_key)
 # print("OPENAI_API_KEY:", openai_api_key)
 
-# set_llm_cache(InMemoryCache())
+set_llm_cache(InMemoryCache())
 
 
 app = FastAPI()
@@ -51,6 +62,7 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://192.168.8.169:3000",
+    "http://98.85.58.122:3000"
 ]
 
 app.add_middleware(
@@ -341,3 +353,62 @@ async def chat(chat_request: ChatRequest):
     elif chat_request.type == ChatType.WRITE:
         response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
     return response
+
+
+
+
+@app.post("/generate-presentation")
+async def generate_presentation(presentation_input: PresentationInput):
+    id = presentation_input.id
+    template_name = presentation_input.template_name
+    response = create_presentation(id=id, template_name=template_name)
+
+    return {
+        "message": "Presentation generated successfully",
+        "file_link": f"{BASE_URL}/download-presentation/{id}.pptx"
+    }
+
+
+@app.get("/download-presentation/{id}.pptx")
+async def download_file(id: str):
+    file_path = f"{RESPONSE_PATH}/presentation_{id}.pptx"
+    print(file_path)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    return FileResponse(
+        path=file_path,
+        filename=f"presentation_{id}.pptx",
+        media_type="application/octet-stream"
+    )
+  
+@app.post("/investor-analysis/{id}")
+async def investor_analysis(id: str):
+    async def generate_stream() -> AsyncGenerator[str, None]:
+        try:
+            async for s in get_investor_analysis(id):
+                message = s["messages"][-1]
+                if isinstance(message, tuple):
+                    # SSE requires "data: <content>\n\n"
+                    yield json.dumps({"data": message})
+                else:
+                    yield json.dumps({"data": str(message.pretty_repr())})
+        
+        except Exception as e:
+            yield json.dumps({"event": "error", "data": str(e)})
+
+    headers = {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Access-Control-Allow-Origin": "*",  # Allow frontend to access
+    }
+    
+    return StreamingResponse(generate_stream(), media_type="application/json", headers=headers)
+
+
+@app.get("/investor-profiles/{id}")
+async def investor_profiles(id: str):
+    repsonse = load_response_from_json(f"investors_and_companies_{id}")
+    return repsonse
+

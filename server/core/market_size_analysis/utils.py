@@ -10,7 +10,8 @@ def print_stream(stream):
         if isinstance(message, tuple):
             print(message)
         else:
-            message.pretty_print()
+            print(message.pretty_repr())
+            # message.pretty_print()
 
 
 def print_and_save_stream(stream, id):

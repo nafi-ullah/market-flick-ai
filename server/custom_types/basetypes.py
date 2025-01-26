@@ -46,3 +46,8 @@ class Updater(BaseModel):
         None, 
         description="The updated data, which must strictly follow the same format and order as the original data"
     )
+
+
+class PresentationInput(BaseModel):
+    id: str
+    template_name: str
