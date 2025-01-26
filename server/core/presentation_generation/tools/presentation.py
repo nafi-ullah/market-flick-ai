@@ -7,6 +7,9 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 from pptx.enum.shapes import MSO_SHAPE
 import random
+
+from constants import RESPONSE_PATH
+from custom_types.presentation_generation import SlideInput
 def resize_and_crop_image(image_bytes, target_height=720, crop_width=480):
  
     # Load the image from BytesIO
@@ -87,102 +90,29 @@ def style_body(shape, font_name="Calibri", font_size=20, font_color=(50, 50, 50)
         paragraph.font.color.rgb = RGBColor(*font_color)
         paragraph.alignment = PP_ALIGN.LEFT
 
-# Create a new PowerPoint presentation
-presentation = Presentation()
-
-# Adjust slide layouts if needed
-layout_blank = presentation.slide_layouts[6]  # Usually a completely blank layout
-layout_title_only = presentation.slide_layouts[5]  # Title + Content
-
-# Define a list of background colors for each slide to add diversity
-background_colors = [
-    (230, 242, 255),  # Light blue
-    (255, 239, 230),  # Light orange
-    (235, 255, 238),  # Light green
-    (255, 245, 230),  # Light cream
-    (240, 240, 255),  # Light purple hue
-    (255, 255, 240),  # Light yellow hue
-    (230, 245, 255),  # Another light blue
-    (255, 230, 250),  # Light pink
-    (245, 255, 230)   # Light greenish
-]
 
 
 
 
-slide_data = {
-    "startup_title": "STARTUP TITLE",
-    "slogan": "STARTUP SLOGAN",
-    "about_us_title": "ABOUT US",
-    "about_us_text": (
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-        "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi "
-        "ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit "
-        "in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-    ),
-    "main_goals_title": "MAIN GOALS",
-    "main_goals_text": (
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
-        "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
-        "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
-        "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
-        "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-    ),
-        "slide4": {
-        "title": "CASE\nSTUDY",
-        "body": (
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
-            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
-            "eu fugiat nulla pariatur."
-        )
-    },
-    "slide5": {
-        "title": "OUR\nPRODUCT",
-        "body": (
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
-            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
-            "eu fugiat nulla pariatur."
-        ),
-    },
-    "slide6": {
-        "title": "OUR\nSERVICE",
-        "body": (
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
-            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
-            "eu fugiat nulla pariatur."
-        ),
-        "services": [
-            {"title": "Analysis", "description": "Presentations are tools that can be used as lectures."},
-            {"title": "Research", "description": "Presentations are tools that can be used as lectures."},
-            {"title": "Business Development", "description": "Presentations are tools that can be used as lectures."},
-            {"title": "Sales and Marketing", "description": "Presentations are tools that can be used as lectures."}
-        ]
-    },
-    "slide7": {
-        "title": "BENEFIT",
-        "body": (
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor "
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis "
-            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. "
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore "
-            "eu fugiat nulla pariatur. Exceptetur sint occaecat cupidatat non proident, sunt "
-            "in culpa qui officia deserunt mollit anim id est laborum."
-        )
-    }
-}
+def make_presentation(slide_input: SlideInput):
+    """
+    Generates a PowerPoint presentation based on the provided input data and template.
 
-template_name_dummy ='template3'
+    This function creates a multi-slide presentation using a specified template and dynamically 
+    inserts text as specified in the slide input.
 
+    Args:
+        slide_input (SlideInput): Configuration object containing:
+            - slide_data (SlideData): Data for each slide in the presentation
+            - template_name (str): The name of the template folder to be used
+            - id (str): A unique identifier for the presentation file
+    """
 
-def make_presentation(slide_data, template_name):
+    slide_data = slide_input.slide_data
+    template_name = slide_input.template_name
+    id = slide_input.id
+
+    presentation = Presentation()
  
     assets_img = [f'pptassets/pptimg{i}.jpeg' for i in range(1, 20)]
 
@@ -202,7 +132,7 @@ def make_presentation(slide_data, template_name):
         Inches(0), Inches(2), presentation.slide_width, Inches(1)
     )
     text_frame1 = title1.text_frame
-    text_frame1.text = slide_data["startup_title"]
+    text_frame1.text = slide_data.startup_title
     text_frame1.paragraphs[0].font.size = Pt(40)
     text_frame1.paragraphs[0].font.bold = True
     text_frame1.paragraphs[0].font.name = "Arial"
@@ -214,7 +144,7 @@ def make_presentation(slide_data, template_name):
         Inches(0), Inches(3), presentation.slide_width, Inches(1)
     )
     slogan_frame = slogan.text_frame
-    slogan_frame.text = slide_data["slogan"]
+    slogan_frame.text = slide_data.slogan
     slogan_frame.paragraphs[0].font.size = Pt(20)
     slogan_frame.paragraphs[0].font.bold = False
     slogan_frame.paragraphs[0].font.name = "Arial"
@@ -237,7 +167,7 @@ def make_presentation(slide_data, template_name):
     # Title Text
     title = slide2.shapes.add_textbox(Inches(5), Inches(2), Inches(4), Inches(1))
     title_frame = title.text_frame
-    title_frame.text = slide_data["about_us_title"]
+    title_frame.text = slide_data.about_us_title
     title_frame.paragraphs[0].font.size = Pt(32)
     title_frame.paragraphs[0].font.bold = True
     title_frame.paragraphs[0].font.name = "Arial"
@@ -246,7 +176,7 @@ def make_presentation(slide_data, template_name):
     # Body Text
     body = slide2.shapes.add_textbox(Inches(5), Inches(3), Inches(4), Inches(3))
     body_frame = body.text_frame
-    body_frame.text = slide_data["about_us_text"]
+    body_frame.text = slide_data.about_us_text
     for paragraph in body_frame.paragraphs:
         paragraph.font.size = Pt(16)
         paragraph.font.name = "Arial"
@@ -263,7 +193,7 @@ def make_presentation(slide_data, template_name):
     # Title Text
     title = slide3.shapes.add_textbox(Inches(0.5), Inches(0.5), Inches(9), Inches(1))
     title_frame = title.text_frame
-    title_frame.text = slide_data["main_goals_title"]
+    title_frame.text = slide_data.main_goals_title
     title_frame.paragraphs[0].font.size = Pt(32)
     title_frame.paragraphs[0].font.bold = True
     title_frame.paragraphs[0].font.name = "Arial"
@@ -273,7 +203,7 @@ def make_presentation(slide_data, template_name):
     # Body Text
     body = slide3.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(7), Inches(2))
     body_frame = body.text_frame
-    body_frame.text = slide_data["main_goals_text"]
+    body_frame.text = slide_data.main_goals_text
     for paragraph in body_frame.paragraphs:
         paragraph.font.size = Pt(16)
         paragraph.font.name = "Arial"
@@ -298,17 +228,17 @@ def make_presentation(slide_data, template_name):
         f'{template_name}/4.png', Inches(0), Inches(0), width=presentation.slide_width, height=presentation.slide_height
     )
 
-    title = slide4.shapes.add_textbox(Inches(1), Inches(1), Inches(4), Inches(2))
+    title = slide4.shapes.add_textbox(Inches(1), Inches(1), Inches(5), Inches(2))
     title_frame = title.text_frame
-    title_frame.text = slide_data["slide4"]["title"]
-    title_frame.paragraphs[0].font.size = Pt(48)
+    title_frame.text = slide_data.slide4.title
+    title_frame.paragraphs[0].font.size = Pt(36)
     title_frame.paragraphs[0].font.bold = True
     title_frame.paragraphs[0].font.name = "Arial"
     title_frame.paragraphs[0].font.color.rgb = RGBColor(0, 0, 0)
 
     body = slide4.shapes.add_textbox(Inches(1), Inches(3), Inches(7), Inches(2))
     body_frame = body.text_frame
-    body_frame.text = slide_data["slide4"]["body"]
+    body_frame.text = slide_data.slide4.body
     for paragraph in body_frame.paragraphs:
         paragraph.font.size = Pt(18)
         paragraph.font.name = "Arial"
@@ -324,7 +254,7 @@ def make_presentation(slide_data, template_name):
 
     title = slide5.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(4.25), Inches(2.5))
     title_frame = title.text_frame
-    title_frame.text = slide_data["slide5"]["title"]
+    title_frame.text = slide_data.slide5.title
     title_frame.paragraphs[0].font.size = Pt(36)
     title_frame.paragraphs[0].font.bold = True
     title_frame.paragraphs[0].font.name = "Arial"
@@ -332,7 +262,7 @@ def make_presentation(slide_data, template_name):
 
     body = slide5.shapes.add_textbox(Inches(0.5), Inches(3.2), Inches(4.25), Inches(2.5))
     body_frame = body.text_frame
-    body_frame.text = slide_data["slide5"]["body"]
+    body_frame.text = slide_data.slide5.body
     for paragraph in body_frame.paragraphs:
         paragraph.font.size = Pt(18)
         paragraph.font.name = "Arial"
@@ -351,17 +281,17 @@ def make_presentation(slide_data, template_name):
         f'{template_name}/6.png', Inches(0), Inches(0), width=presentation.slide_width, height=presentation.slide_height
     )
 
-    title = slide6.shapes.add_textbox(Inches(0.5), Inches(0.5), Inches(4), Inches(1.5))
+    title = slide6.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(4), Inches(1.5))
     title_frame = title.text_frame
-    title_frame.text = slide_data["slide6"]["title"]
+    title_frame.text = slide_data.slide6.title
     title_frame.paragraphs[0].font.size = Pt(36)
     title_frame.paragraphs[0].font.bold = True
     title_frame.paragraphs[0].font.name = "Arial"
     title_frame.paragraphs[0].font.color.rgb = RGBColor(0, 0, 0)
 
-    body = slide6.shapes.add_textbox(Inches(0.5), Inches(2), Inches(4), Inches(3))
+    body = slide6.shapes.add_textbox(Inches(0.5), Inches(3), Inches(4), Inches(3))
     body_frame = body.text_frame
-    body_frame.text = slide_data["slide6"]["body"]
+    body_frame.text = slide_data.slide6.body
     for paragraph in body_frame.paragraphs:
         paragraph.font.size = Pt(16)
         paragraph.font.name = "Arial"
@@ -373,7 +303,7 @@ def make_presentation(slide_data, template_name):
     image_grid_3 =selected_images[6]
     image_grid_4 = selected_images[7]
 
-    for i, service in enumerate(slide_data["slide6"]["services"]):
+    for i, service in enumerate(slide_data.slide6.services):
         # Use i to index the `selected_images` list
         slide6.shapes.add_picture(selected_images[i + 4], Inches(5), Inches(y_position), Inches(2.125), Inches(1.25))
 
@@ -383,7 +313,7 @@ def make_presentation(slide_data, template_name):
 
         # Service title
         p = text_frame.add_paragraph()
-        p.text = service["title"]
+        p.text = service.title
         p.font.size = Pt(18)
         p.font.bold = True
         p.font.name = "Arial"
@@ -391,7 +321,7 @@ def make_presentation(slide_data, template_name):
 
         # Service description
         p = text_frame.add_paragraph()
-        p.text = service["description"]
+        p.text = service.description
         p.font.size = Pt(14)
         p.font.name = "Arial"
         p.font.color.rgb = RGBColor(80, 80, 80)
@@ -413,7 +343,7 @@ def make_presentation(slide_data, template_name):
 
     title = slide7.shapes.add_textbox(Inches(0.5), Inches(3.5), Inches(9), Inches(1))
     title_frame = title.text_frame
-    title_frame.text = slide_data["slide7"]["title"]
+    title_frame.text = slide_data.slide7.title
     title_frame.paragraphs[0].font.size = Pt(36)
     title_frame.paragraphs[0].font.bold = True
     title_frame.paragraphs[0].font.name = "Arial"
@@ -421,7 +351,7 @@ def make_presentation(slide_data, template_name):
 
     body = slide7.shapes.add_textbox(Inches(1), Inches(4.5), Inches(8), Inches(2))
     body_frame = body.text_frame
-    body_frame.text = slide_data["slide7"]["body"]
+    body_frame.text = slide_data.slide7.body
     for paragraph in body_frame.paragraphs:
         paragraph.font.size = Pt(16)
         paragraph.font.name = "Arial"
@@ -460,14 +390,20 @@ def make_presentation(slide_data, template_name):
 
 
 
-    presentation.save("Pet_Sitting_Presentation.pptx")
-
-    return 'Pet_Sitting_Presentation.pptx'
+    presentation.save(f"{RESPONSE_PATH}/presentation_{id}.pptx")
 
 
+    print("Presentation created successfully and saved as '{RESPONSE_PATH}/presentation_{id}.pptx'")
+
+    return {
+        "message": "Presentation created successfully.",
+        "file_name": f"presentation_{id}.pptx"
+    }
 
 
-print("Presentation created successfully and saved as 'Pet_Sitting_Presentation.pptx'")
 
 
-make_presentation()
+# print("Presentation created successfully and saved as 'Pet_Sitting_Presentation.pptx'")
+
+
+# make_presentation(slide_data, "")
