@@ -480,7 +480,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({
           </div>
 
           {/* Past Workflows Section */}
-          <FileUpload />
+          {/* <FileUpload /> */}
           <div className="flex-1 overflow-y-auto mt-4 px-4">
             <h2 className="text-md font-semibold mb-2">Past Workflows</h2>
             <div className="flex flex-col gap-2">
