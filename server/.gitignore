@@ -1,0 +1,9 @@
+.tool-versions
+.env
+venv
+**/__pycache__/
+knowledge_base/
+figures/
+responses/
+rag_base/
+qdrant_db_local/*
