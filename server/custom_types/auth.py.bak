@@ -1,0 +1,96 @@
+from pydantic import BaseModel, EmailStr, Field
+from typing import Optional, List, Dict, Any
+from datetime import datetime
+from bson import ObjectId
+from enum import Enum
+
+# Custom ObjectId field that handles MongoDB's ObjectId
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid ObjectId")
+        return ObjectId(v)
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(type="string")
+
+class SocialProvider(str, Enum):
+    GOOGLE = "google"
+    GITHUB = "github"
+    NONE = "none"
+
+# User base model for shared properties
+class UserBase(BaseModel):
+    email: EmailStr
+    name: str
+    is_active: bool = True
+    is_verified: bool = False
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+# User creation model (used for signup)
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+    name: str
+
+# User model for database operations
+class UserInDB(UserBase):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    hashed_password: str
+    social_provider: SocialProvider = SocialProvider.NONE
+    social_id: Optional[str] = None
+    verification_token: Optional[str] = None
+    verification_token_expires: Optional[datetime] = None
+    reset_token: Optional[str] = None
+    reset_token_expires: Optional[datetime] = None
+    
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+# User model for responses (without sensitive fields)
+class User(UserBase):
+    id: str = Field(alias="_id")
+    social_provider: SocialProvider
+    
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+# Token model for JWT response
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    user: User
+
+# Login request model
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+# Password reset request
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+# Password reset with token
+class PasswordResetWithToken(BaseModel):
+    token: str
+    password: str
+
+# Social login request
+class SocialLoginRequest(BaseModel):
+    provider: SocialProvider
+    token: str
+    
+# Error response
+class ErrorResponse(BaseModel):
+    detail: str

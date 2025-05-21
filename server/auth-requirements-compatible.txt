@@ -1,0 +1,15 @@
+# Authentication requirements compatible with main requirements.txt
+# These versions are chosen to be compatible with the existing dependencies
+
+# Already in requirements.txt (using the existing versions)
+# fastapi==0.115.6
+# uvicorn==0.34.0
+# pymongo==4.10.1
+# python-dotenv==1.0.1
+# httpx==0.28.1
+# python-multipart==0.0.20
+
+# New dependencies for auth system
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+emails>=0.6

@@ -59,8 +59,9 @@ set_llm_cache(InMemoryCache())
 
 app = FastAPI()
 
-
-
+# Import auth modules
+from core.auth.middleware import verify_jwt_token
+from core.auth.routes import router as auth_router
 
 origins = [
     "http://localhost:3000",
@@ -75,6 +76,14 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
+# Add JWT verification middleware
+@app.middleware("http")
+async def jwt_middleware(request, call_next):
+    return await verify_jwt_token(request, call_next)
+
+# Include auth router
+app.include_router(auth_router)
 
 
 @app.get("/")
