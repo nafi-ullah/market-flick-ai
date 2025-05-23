@@ -93,7 +93,7 @@ async def signup(user_data: UserCreate):
     
     # Send verification email (unless skipped)
     if not skip_verification:
-        send_verification_email(user_data.email, verification_token)
+        send_verification_email(user_data.email, verification_token, user_data.name)
         return {"message": "User created. Please check your email to verify your account."}
     else:
         return {"message": "User created and auto-verified. You can now log in."}
@@ -179,8 +179,8 @@ async def request_password_reset(request_data: PasswordResetRequest):
             {"$set": {"reset_token": reset_token, "reset_token_expires": reset_token_expires}}
         )
         
-        # Send reset email
-        send_password_reset_email(request_data.email, reset_token)
+        # Send reset email with user's name if available
+        send_password_reset_email(request_data.email, reset_token, user.name)
     
     return {"message": "If your email is registered, you will receive a password reset link"}
 
@@ -235,8 +235,8 @@ async def resend_verification(email_data: Dict[str, str]):
         }}
     )
     
-    # Send verification email
-    send_verification_email(email, verification_token)
+    # Send verification email with user's name
+    send_verification_email(email, verification_token, user.name)
     
     return {"message": "Verification link sent. Please check your email."}
 

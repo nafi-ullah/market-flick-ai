@@ -82,7 +82,34 @@ OPENAI_API_KEY=""
 PPLX_API_KEY=""
 TAVILY_API_KEY=""
 NVIDIA_API_KEY=""
+
+# Authentication
+JWT_SECRET_KEY=""
+JWT_ALGORITHM="HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES="30"
+REFRESH_TOKEN_EXPIRE_DAYS="7"
+
+# Email Service (for authentication)
+EMAIL_PROVIDER="smtp"  # Options: "smtp" or "ses"
+EMAIL_SENDER="no-reply@marketflick.ai"
+EMAIL_SERVER="smtp.gmail.com"
+EMAIL_PORT="587"
+EMAIL_USERNAME=""
+EMAIL_PASSWORD=""
 ```
+
+### Email Service Configuration
+
+For setting up the email service used in authentication:
+```bash
+cd server
+./setup_email.sh
+```
+
+See detailed guides:
+- [Email Service Guide](./EMAIL_SERVICE_GUIDE.md)
+- [Email Test Guide](./server/EMAIL_TEST_GUIDE.md)
+- [Email Verification Guide](./server/EMAIL_VERIFICATION_README.md)
 
 
 ## Contributing

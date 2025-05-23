@@ -8,8 +8,7 @@ import secrets
 from dotenv import load_dotenv
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-import emails
-from emails.template import JinjaTemplate
+from utils.email_service import send_verification_email, send_password_reset_email, should_skip_verification
 
 # Load environment variables
 load_dotenv()
@@ -20,12 +19,8 @@ ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
-# Email Configuration
-EMAIL_SENDER = os.getenv("EMAIL_SENDER", "no-reply@marketflick.ai")
-EMAIL_SERVER = os.getenv("EMAIL_SERVER", "smtp.gmail.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
-EMAIL_USERNAME = os.getenv("EMAIL_USERNAME", "")
-EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD", "")
+# Email Provider
+EMAIL_PROVIDER = os.getenv("EMAIL_PROVIDER", "smtp").lower()
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # Development Configuration
@@ -97,75 +92,35 @@ def generate_password_reset_token() -> str:
     return secrets.token_urlsafe(32)
 
 # Email sending functionality
-def send_verification_email(email: str, token: str) -> bool:
-    """Send verification email to user."""
-    # If email verification is skipped, return success without sending
-    if SKIP_EMAIL_VERIFICATION:
-        print("Email verification is skipped in development mode.")
-        return True
-        
-    # Check if email credentials are configured
-    if not EMAIL_USERNAME or not EMAIL_PASSWORD:
-        print("Email credentials are not configured. Cannot send verification email.")
-        return False
-        
-    verification_url = f"{FRONTEND_URL}/auth/verify-email?token={token}"
+def send_verification_email(email: str, token: str, user_name: str = None) -> bool:
+    """Send verification email to user.
     
-    message = emails.Message(
-        subject="Verify your email address",
-        html=f"""
-        <h1>Welcome to Market Flick AI!</h1>
-        <p>Please click the link below to verify your email address:</p>
-        <p><a href="{verification_url}">Verify Email</a></p>
-        <p>If you did not sign up for Market Flick AI, please ignore this email.</p>
-        """,
-        mail_from=(EMAIL_SENDER, "Market Flick AI")
-    )
-    
-    try:
-        response = message.send(
-            to=email,
-            smtp={"host": EMAIL_SERVER, "port": EMAIL_PORT, "user": EMAIL_USERNAME, "password": EMAIL_PASSWORD, "tls": True}
-        )
-        return response.status_code == 250
-    except Exception as e:
-        print(f"Error sending email: {e}")
-        return False
+    Args:
+        email: The recipient's email address
+        token: The verification token
+        user_name: Optional name of the user
+        
+    Returns:
+        bool: True if the email was sent successfully, False otherwise
+    """
+    # Use the new email service implementation
+    from utils.email_service import send_verification_email as send_verification_email_service
+    return send_verification_email_service(email, token, user_name)
 
-def send_password_reset_email(email: str, token: str) -> bool:
-    """Send password reset email to user."""
-    # If email verification is skipped, print debug info but still send email
-    if SKIP_EMAIL_VERIFICATION:
-        print("Email verification is skipped, but still attempting to send password reset email.")
+def send_password_reset_email(email: str, token: str, user_name: str = None) -> bool:
+    """Send password reset email to user.
     
-    # Check if email credentials are configured
-    if not EMAIL_USERNAME or not EMAIL_PASSWORD:
-        print("Email credentials are not configured. Cannot send password reset email.")
-        return False
+    Args:
+        email: The recipient's email address
+        token: The password reset token
+        user_name: Optional name of the user
         
-    reset_url = f"{FRONTEND_URL}/auth/reset-password?token={token}"
-    
-    message = emails.Message(
-        subject="Reset your password",
-        html=f"""
-        <h1>Market Flick AI Password Reset</h1>
-        <p>You requested a password reset. Please click the link below to set a new password:</p>
-        <p><a href="{reset_url}">Reset Password</a></p>
-        <p>If you did not request a password reset, please ignore this email.</p>
-        <p>This link will expire in 1 hour.</p>
-        """,
-        mail_from=(EMAIL_SENDER, "Market Flick AI")
-    )
-    
-    try:
-        response = message.send(
-            to=email,
-            smtp={"host": EMAIL_SERVER, "port": EMAIL_PORT, "user": EMAIL_USERNAME, "password": EMAIL_PASSWORD, "tls": True}
-        )
-        return response.status_code == 250
-    except Exception as e:
-        print(f"Error sending email: {e}")
-        return False
+    Returns:
+        bool: True if the email was sent successfully, False otherwise
+    """
+    # Use the new email service implementation
+    from utils.email_service import send_password_reset_email as send_password_reset_email_service
+    return send_password_reset_email_service(email, token, user_name)
 
 def should_skip_verification() -> bool:
     """Check if email verification should be skipped."""
