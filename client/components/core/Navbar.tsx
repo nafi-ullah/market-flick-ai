@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
   const handleMenuItemClick = (action: string) => {
     switch (action) {
       case 'profile':
-        // Handle profile click
+        router.push('/profile');
         break;
       case 'previous-analysis':
         router.push('/previous-analysis');

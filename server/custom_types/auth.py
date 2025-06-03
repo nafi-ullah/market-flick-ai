@@ -44,6 +44,10 @@ class UserCreate(BaseModel):
     password: str
     name: str
 
+# User update model (used for profile updates)
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+
 # User model for database operations
 class UserInDB(UserBase):
     id: Annotated[PyObjectId, Field(default_factory=PyObjectId, alias="_id")]

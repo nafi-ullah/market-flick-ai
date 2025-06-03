@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Define the paths that require authentication
-const protectedPaths = ["/analyze", "/investor", "/previous-analysis"];
+const protectedPaths = ["/analyze", "/investor", "/previous-analysis", "/profile"];
 
 // Define the authentication-related paths
 const authPaths = ["/auth/login", "/auth/signup", "/auth/verify-email", "/auth/forgot-password", "/auth/reset-password"];

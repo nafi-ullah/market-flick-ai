@@ -20,6 +20,7 @@ interface AuthContextType {
   socialLogin: (provider: string, token: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, password: string) => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -31,6 +32,7 @@ export const AuthContext = createContext<AuthContextType>({
   socialLogin: async () => {},
   forgotPassword: async () => {},
   resetPassword: async () => {},
+  refreshUser: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -147,24 +149,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const refreshUser = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      const res = await fetch("/api/auth/me", {
+        headers: token ? {
+          Authorization: `Bearer ${token}`,
+        } : {},
+      });
+
+      if (!res.ok) {
+        return;
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      // Silently fail for refresh
+      console.error("Failed to refresh user data:", error);
+    }
+  };
+
   useEffect(() => {
     // Check if user is already logged in
     const checkUserAuth = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!token) {
-          setLoading(false);
-          return;
-        }
-
+        
         const res = await fetch("/api/auth/me", {
-          headers: {
+          headers: token ? {
             Authorization: `Bearer ${token}`,
-          },
+          } : {},
         });
 
         if (!res.ok) {
-          localStorage.removeItem("token");
+          // If we have a token in localStorage but the request failed, clear it
+          if (token) {
+            localStorage.removeItem("token");
+          }
           setLoading(false);
           return;
         }
@@ -192,6 +215,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         socialLogin,
         forgotPassword,
         resetPassword,
+        refreshUser,
       }}
     >
       {children}

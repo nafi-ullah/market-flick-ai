@@ -10,7 +10,7 @@ from jose import jwt, JWTError
 from typing import Dict, Any, Optional
 
 from custom_types.auth import (
-    UserCreate, User, UserInDB, LoginRequest, Token, ErrorResponse, 
+    UserCreate, UserUpdate, User, UserInDB, LoginRequest, Token, ErrorResponse, 
     PasswordResetRequest, PasswordResetWithToken, SocialLoginRequest, 
     SocialProvider
 )
@@ -361,6 +361,49 @@ async def get_current_user_info(current_user: Dict[str, Any] = Depends(get_curre
     return User(**{
         **user.dict(),
         "id": str(user.id)
+    })
+
+@router.put("/update-profile", response_model=User)
+async def update_user_profile(
+    update_data: UserUpdate,
+    current_user: Dict[str, Any] = Depends(get_current_user)
+):
+    """Update user profile information."""
+    user = await get_user_by_id(current_user["user_id"])
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    # Prepare update fields
+    update_fields = {"updated_at": datetime.utcnow()}
+    
+    if update_data.name is not None:
+        if not update_data.name.strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Name cannot be empty"
+            )
+        update_fields["name"] = update_data.name.strip()
+    
+    # Update user in database
+    result = users_collection.update_one(
+        {"_id": user.id},
+        {"$set": update_fields}
+    )
+    
+    if result.modified_count == 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No changes made to profile"
+        )
+    
+    # Get updated user
+    updated_user = await get_user_by_id(current_user["user_id"])
+    return User(**{
+        **updated_user.dict(),
+        "id": str(updated_user.id)
     })
 
 @router.post("/refresh-token", response_model=Token)

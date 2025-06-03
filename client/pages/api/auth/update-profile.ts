@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'PUT') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
   // First try to get token from Authorization header
   let token = req.headers.authorization?.replace('Bearer ', '');
   
@@ -14,11 +18,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const backendRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/me`, {
+    const backendRes = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/update-profile`, {
+      method: 'PUT',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify(req.body),
     });
+
     const data = await backendRes.json();
     res.status(backendRes.status).json(data);
   } catch (error) {
