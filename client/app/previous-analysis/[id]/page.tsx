@@ -35,6 +35,7 @@ import RoadmapComponentSkeleton from "@/components/loaders/RoadMapSkeleton";
 import { useAnalysisDataContext } from "@/context/AnalysisContext";
 import GoogleMapComponent from "@/components/features/HeatMap";
 import PresentationGenerator from "@/components/features/PresentationComp";
+import { useAuth } from "@/hooks/useAuth";
 
 type ComponentReloaderState = {
   needReload: boolean;
@@ -96,7 +97,7 @@ export default function Home() {
   const { setCurrentBasicInfoId } = useAnalysisDataContext();
   // Which components are currently reloading
   const [loadingComponents, setLoadingComponents] = useState<string[]>([]);
-
+  const {user} = useAuth();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [componentReloader, setComponentReloader] =
     useState<ComponentReloaderState>({
@@ -145,7 +146,7 @@ export default function Home() {
   const dataToDisplay = selectedTabs.includes("All")
     ? streamData
     : streamData.filter((d) => selectedTabs.includes(d.key));
-
+  
   const dummyCoordinates = [
     { lat: 23.810331, lng: 90.412521, name: "Dhaka" }, // Dhaka Division
     { lat: 22.347536, lng: 91.812332, name: "Chattogram" }, // Chattogram Division
@@ -176,12 +177,13 @@ export default function Home() {
 
   // 1) Initial fetch for the entire dataset
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
     const knowledge_base_id = id;
     setCurrentBasicInfoId(id);
     fetch(`${BACKENDURL}/previous-analysis/${knowledge_base_id}`, {
       method: "POST",
-      body: JSON.stringify({ knowledge_base_id }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: user._id }), // knowledge_base_id is in URL
     })
       .then(async (response) => {
         if (!response.ok) {
@@ -234,7 +236,7 @@ export default function Home() {
 
   // 2) Partial reload effect
   useEffect(() => {
-    if (!componentReloader.needReload || !id) return;
+    if (!componentReloader.needReload || !id || user) return;
     const { components: keysToReload } = componentReloader;
     if (!keysToReload || keysToReload.length === 0) return;
 
@@ -246,10 +248,8 @@ export default function Home() {
         // Example: pass the keys to your backend for partial fetch
         const response = await fetch(`${BACKENDURL}/previous-analysis/${id}`, {
           method: "POST",
-          body: JSON.stringify({
-            knowledge_base_id: id,
-            reloadKeys: keysToReload,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: user?._id ?? '' }), 
         });
         if (!response.ok) {
           throw new Error("Failed to partially fetch data");

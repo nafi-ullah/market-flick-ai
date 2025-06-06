@@ -1,38 +1,66 @@
 
 import json
 from constants import RESPONSE_PATH
+from database.db import get_database
 
-def load_response_from_json(file_name: str):
-    try:
-        with open(f"{RESPONSE_PATH}/{file_name}.json", "r") as f:
-            return json.load(f)
-    except Exception as e:
-        return None
+#note : we have to change the funcion name and refactor
+def load_response_from_json(collection: str, knowledge_base_id: str, user_id: str):
+    db = get_database()
+    collection_name = collection
+    collection = db[collection]
+    query = {
+        "knowledge_base_id": knowledge_base_id,
+        "user_id": user_id
+    }
+    response = collection.find(query, {"_id": 0})
+    
 
-def get_all_saved_responses(knowledge_base_id: str):
+    response_list = list(response)
+    if response_list:
+        return response_list[0]
+    else:
+        return {}
+
+def get_all_saved_responses(knowledge_base_id: str, user_id: str):
     return {
         "basic_info": load_response_from_json(
-            f"basic_info_{knowledge_base_id}"
+            collection="basic_info",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "market_size_report": load_response_from_json(
-            f"market_size_report_{knowledge_base_id}"
+            collection="market_size_report",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "market_size_graph": load_response_from_json(
-            f"market_size_graph_{knowledge_base_id}"
+            collection="market_size_graph",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "competitors_table": load_response_from_json(
-            f"competitors_table_{knowledge_base_id}"
+            collection="competitors_table",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "generate_competitors_chart": load_response_from_json(
-            f"competitors_chart_{knowledge_base_id}"
+            collection="competitors_chart",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "swot_analysis": load_response_from_json(
-            f"swot_analysis_{knowledge_base_id}"
+            collection="swot_analysis",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "pestali_analysis": load_response_from_json(
-            f"pestali_analysis_{knowledge_base_id}"
+            collection="pestali_analysis",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
         "roadmap": load_response_from_json(
-            f"roadmap_{knowledge_base_id}"
+            collection="roadmap",
+            knowledge_base_id=knowledge_base_id,
+            user_id=user_id
         ),
     }

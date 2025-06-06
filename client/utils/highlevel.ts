@@ -17,6 +17,7 @@ import PASTELIAnalysis from "../components/PASTELIAnalysis";
 import PASTELIAnalysisSkeleton from "../components/skeletons/PASTELIAnalysisSkeleton";
 import RoadmapCard from "../components/RoadmapCard";
 import RoadmapComponentSkeleton from "../components/skeletons/RoadmapComponentSkeleton";
+import { useAuth } from "@/hooks/useAuth";
 
 const BACKENDURL = "YOUR_BACKEND_URL"; // replace with your actual BACKENDURL
 
@@ -68,6 +69,7 @@ export default function Home() {
   const [showChat, setShowChat] = useState(false);
   const [streamData, setStreamData] = useState<any[]>([]);
   const { setCurrentBasicInfoId } = useAnalysisDataContext();
+    const { user} = useAuth();
   
   // Keep track of which components are currently being reloaded
   const [loadingComponents, setLoadingComponents] = useState<string[]>([]);
@@ -133,12 +135,13 @@ export default function Home() {
 
   // 1) Initial fetch for the entire dataset
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
     setCurrentBasicInfoId(id);
     
     fetch(`${BACKENDURL}/previous-analysis/${id}`, {
       method: "POST",
-      body: JSON.stringify({ knowledge_base_id: id }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: user._id }), 
     })
       .then(async (response) => {
         if (!response.ok) {
@@ -188,7 +191,7 @@ export default function Home() {
 
   // 2) Partial reload effect
   useEffect(() => {
-    if (!componentReloader.needReload || !id) return;
+    if (!componentReloader.needReload || !id || !user) return;
     const { components: keysToReload } = componentReloader;
     if (!keysToReload || keysToReload.length === 0) return;
 
@@ -199,10 +202,8 @@ export default function Home() {
 
         const response = await fetch(`${BACKENDURL}/previous-analysis/${id}`, {
           method: "POST",
-          body: JSON.stringify({
-            knowledge_base_id: id,
-            reloadKeys: keysToReload,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: user?._id ?? '' }), 
         });
         if (!response.ok) {
           throw new Error("Failed to partially fetch data");

@@ -42,7 +42,7 @@ def generate_competitors_chart_node(state: BusinessAnalysisState):
     market_size_data_points = state['market_size_data_points']
     market_player_table_data = state['market_player_table_data']
     chart_id = state['knowledge_base_id']
-                              
+    user_id = state['user_id']                         
     agent = create_react_agent(llm, tools=[search_tool, export_business_analysis_charts], state_schema=BusinessAnalysisState)
     
     
@@ -68,7 +68,7 @@ def generate_competitors_chart_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    save_response_to_json(responses_to_save, f"competitors_chart_{chart_id}")
+    save_response_to_json(responses_to_save, knowledge_base_id=chart_id, user_id=user_id, collection_name="competitors_chart")
     
     return response
 
@@ -80,7 +80,7 @@ def swot_analysis_node(state: BusinessAnalysisState):
     market_player_table_data = state['market_player_table_data']
     competitors_charts = state['competitors_chart_data']
     swot_id = state['knowledge_base_id']
-
+    user_id = state['user_id']
 
     agent = create_react_agent(llm, tools=[swot_analysis_tool], state_schema=BusinessAnalysisState)
 
@@ -105,7 +105,8 @@ def swot_analysis_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    save_response_to_json(responses_to_save, f"swot_analysis_{swot_id}")
+    # save_response_to_json(responses_to_save, f"swot_analysis_{swot_id}")
+    save_response_to_json(responses_to_save, knowledge_base_id=swot_id, user_id=user_id, collection_name="swot_analysis")
 
     return response
 
@@ -114,7 +115,7 @@ def pestali_analysis_node(state: BusinessAnalysisState):
     knowledge_base = state['knowledge_base']
     market_player_table_data = state['market_player_table_data']
     pestali_id = state['knowledge_base_id']
-
+    user_id = state['user_id']
     agent = create_react_agent(llm, tools=[search_tool, pestali_analysis_tool], state_schema=BusinessAnalysisState)
 
     inputs = {"messages": [
@@ -136,8 +137,7 @@ def pestali_analysis_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    save_response_to_json(responses_to_save, f"pestali_analysis_{pestali_id}")
-
+    save_response_to_json(responses_to_save, knowledge_base_id=pestali_id, user_id=user_id, collection_name="pestali_analysis")
     return response
 
     
@@ -146,7 +146,7 @@ def roadmap_node(state: BusinessAnalysisState):
     swot_analysis = state['swot_analysis']
     pestali_analysis = state['pestali_analysis']
     roadmap_id = state['knowledge_base_id']
-
+    user_id = state['user_id']
     agent = create_react_agent(llm, tools=[roadmap_tool], state_schema=BusinessAnalysisState)
 
     inputs = {"messages": [
@@ -170,7 +170,7 @@ def roadmap_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    save_response_to_json(responses_to_save, f"roadmap_{roadmap_id}")
+    save_response_to_json(responses_to_save, knowledge_base_id=roadmap_id, user_id=user_id, collection_name="roadmap")
 
     return response 
 

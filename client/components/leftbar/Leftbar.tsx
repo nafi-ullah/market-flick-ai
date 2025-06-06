@@ -21,6 +21,7 @@ import IndividualLoader from "@/components/loaders/IndividualLoader";
 import { Button } from "../ui/button";
 import { Circle, LineChart, Loader, PlusSquare, Square } from "lucide-react";
 import { useAnalysisDataContext } from "@/context/AnalysisContext";
+import { useAuth } from "@/hooks/useAuth";
 
 interface BasicInfo {
   title: string;
@@ -41,23 +42,32 @@ export default function Leftbar() {
   const [analyses, setAnalyses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { setAnalysisData } = useAnalysisDataContext();
+  const { user } = useAuth(); // Assuming you have user context to get the user ID
   useEffect(() => {
-    fetch(`${BACKENDURL}/analyses`)
+    if (!user) {
+      setIsLoading(false);
+      return;
+    } else{
+      setIsLoading(true);
+    }
+    fetch(`${BACKENDURL}/analyses?user_id=${user?._id ?? ''}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("~~~ data", data);
-        const filteredData = data.analyses
+        
+        const filteredData = (data?.analyses?? [])
           .filter((analysis) => analysis && analysis["basic_info"])
           .sort((a, b) => {
+            
             const dateA = new Date(a["basic_info"]["date"]);
             const dateB = new Date(b["basic_info"]["date"]);
             return dateB.getTime() - dateA.getTime();
           });
+        
         setAnalyses(filteredData);
         setIsLoading(false);
       })
       .catch((error) => console.error("Error fetching analyses:", error));
-  }, [setAnalysisData]);
+  }, [user,setAnalysisData ]);
 
   return (
     <>

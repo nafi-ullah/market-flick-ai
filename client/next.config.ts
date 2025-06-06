@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
+    async rewrites() {
+    return [
+      {
+        source: '/analyses/:path*',
+        destination: 'http://localhost:8000/analyses/:path*', // Proxy to backend
+      },
+    ]
+  },
 };
 
 export default nextConfig;

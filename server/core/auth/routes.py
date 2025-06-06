@@ -14,6 +14,7 @@ from custom_types.auth import (
     PasswordResetRequest, PasswordResetWithToken, SocialLoginRequest, 
     SocialProvider
 )
+from database.db import get_database
 from utils.auth_utils import (
     verify_password, get_password_hash, create_access_token, create_refresh_token,
     get_current_user, generate_verification_token, generate_password_reset_token,
@@ -23,10 +24,8 @@ from utils.auth_utils import (
 # Create router
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
-# Connect to MongoDB
-MONGODB_URI = os.getenv("MONGODB_URI")
-client = MongoClient(MONGODB_URI)
-db = client["marketflickai"]
+#db
+db = get_database()
 users_collection: Collection = db["users"]
 
 # Helper function to find user by email

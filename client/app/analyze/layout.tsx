@@ -19,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BACKENDURL } from "@/utils/constants";
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import Leftbar from "@/components/leftbar/Leftbar";
+import { useAuth } from "@/hooks/useAuth";
 
 const DRAWER_WIDTH = 250;
 
@@ -30,19 +31,41 @@ export default function AnalyzeLayout({
   const theme = useTheme();
   const router = useRouter();
   const pathname = usePathname();
-
+     const { user} = useAuth();
+ 
   const [analyses, setAnalyses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${BACKENDURL}/analyses`)
-      .then((res) => res.json())
+    if(!user) {
+      setIsLoading(false);
+      return;
+    }
+    
+    fetch(`/analyses?user_id=${user?._id ?? ''}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`HTTP error! status: ${res.status}, body: ${text}`);
+        }
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          return res.json();
+        } else {
+          const text = await res.text();
+          throw new Error(`Expected JSON, got: ${text}`);
+        }
+      })
       .then((data) => {
+        
         setAnalyses(data.analyses);
         setIsLoading(false);
       })
-      .catch((error) => console.error("Error fetching analyses:", error));
-  }, []);
+      .catch((error) => {
+        setIsLoading(false);
+        console.error("Error fetching analyses:", error);
+      });
+  }, [user]);
 
   return (
     <Box
