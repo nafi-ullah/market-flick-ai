@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 from core.presentation_generation.tools.presentation import make_presentation
 from custom_types.presentation_generation import SlideInput
-from utils.general_utils import load_response_from_json
+from utils.general_utils import load_response_from_db
 from core.presentation_generation.prompt import presentation_system_message, presentation_human_message
 
 
@@ -28,7 +28,7 @@ def create_presentation(id: str, template_name: str):
     """
 
 
-    market_size_report = load_response_from_json(f"market_size_report_{id}")
+    market_size_report = load_response_from_db(f"market_size_report_{id}")
 
     inputs = {
         "messages": [

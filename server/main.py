@@ -11,7 +11,7 @@ from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
 from core.rag.rag import upload_and_fetch_context
-from utils.general_utils import load_response_from_json, get_all_saved_responses
+from utils.general_utils import load_response_from_db, get_all_saved_responses
 from database.db import get_database
 from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile, Query, Body
 from fastapi.responses import StreamingResponse, FileResponse
@@ -28,7 +28,7 @@ from core.market_size_analysis.test_langgraph import build_business_analysis_gra
 import os
 
 
-from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
+from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_db
 
 
 os.makedirs(KNOWLEDGE_BASE_PATH, exist_ok=True)
@@ -183,7 +183,7 @@ async def business_analysis_stream(
                 "status": "success"
             })
 
-            save_response_to_json(basic_info, knowledge_base_id, user_id=userId, collection_name="basic_info")
+            save_response_to_db(basic_info, knowledge_base_id, user_id=userId, collection_name="basic_info")
 
 
             # Create the graph
@@ -421,6 +421,6 @@ async def investor_analysis(id: str):
 
 @app.get("/investor-profiles/{id}")
 async def investor_profiles(id: str):
-    repsonse = load_response_from_json(f"investors_and_companies_{id}")
+    repsonse = load_response_from_db(f"investors_and_companies_{id}")
     return repsonse
 

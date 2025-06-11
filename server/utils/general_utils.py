@@ -2,9 +2,9 @@
 import json
 from constants import RESPONSE_PATH
 from database.db import get_database
+# may we need to refactor this in the future to use a more generic function
 
-#note : we have to change the funcion name and refactor
-def load_response_from_json(collection: str, knowledge_base_id: str, user_id: str):
+def load_response_from_db(collection: str, knowledge_base_id: str, user_id: str):
     db = get_database()
     collection_name = collection
     collection = db[collection]
@@ -23,42 +23,42 @@ def load_response_from_json(collection: str, knowledge_base_id: str, user_id: st
 
 def get_all_saved_responses(knowledge_base_id: str, user_id: str):
     return {
-        "basic_info": load_response_from_json(
+        "basic_info": load_response_from_db(
             collection="basic_info",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "market_size_report": load_response_from_json(
+        "market_size_report": load_response_from_db(
             collection="market_size_report",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "market_size_graph": load_response_from_json(
+        "market_size_graph": load_response_from_db(
             collection="market_size_graph",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "competitors_table": load_response_from_json(
+        "competitors_table": load_response_from_db(
             collection="competitors_table",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "generate_competitors_chart": load_response_from_json(
+        "generate_competitors_chart": load_response_from_db(
             collection="competitors_chart",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "swot_analysis": load_response_from_json(
+        "swot_analysis": load_response_from_db(
             collection="swot_analysis",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "pestali_analysis": load_response_from_json(
+        "pestali_analysis": load_response_from_db(
             collection="pestali_analysis",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id
         ),
-        "roadmap": load_response_from_json(
+        "roadmap": load_response_from_db(
             collection="roadmap",
             knowledge_base_id=knowledge_base_id,
             user_id=user_id

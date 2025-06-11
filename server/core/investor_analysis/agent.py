@@ -7,7 +7,7 @@ from langgraph.prebuilt import create_react_agent
 from core.investor_analysis.prompts import investor_finder_system_message, investor_finder_human_message
 
 from core.investor_analysis.tools.investor_finder import save_investors_data
-from utils.general_utils import load_response_from_json
+from utils.general_utils import load_response_from_db
 
 def get_investor_analysis(id: str):
     
@@ -23,8 +23,8 @@ def get_investor_analysis(id: str):
         search_tool, save_investors_data
     ])
 
-    basic_info = load_response_from_json(f"basic_info_{id}")["basic_info"]
-    knowledge_base = load_response_from_json(f"market_size_report_{id}")["knowledge_base"]
+    basic_info = load_response_from_db(f"basic_info_{id}")["basic_info"]
+    knowledge_base = load_response_from_db(f"market_size_report_{id}")["knowledge_base"]
 
     inputs = {
         "messages": [

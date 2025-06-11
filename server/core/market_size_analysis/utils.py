@@ -98,7 +98,7 @@ def get_serializable_response(response: dict):
     return serializable_response
 
 # change the function name a refactor
-def save_response_to_json(response: dict, knowledge_base_id: str, user_id: str, collection_name: str):
+def save_response_to_db(response: dict, knowledge_base_id: str, user_id: str, collection_name: str):
     """
     Save response to a JSON file after ensuring all values are JSON serializable.
     Also save the response in MongoDB with userId for retrieval.

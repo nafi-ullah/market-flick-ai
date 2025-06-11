@@ -14,7 +14,7 @@ from core.market_size_analysis.utils import (
     print_and_save_stream,
     extract_knowledge_base,
     print_stream,
-    save_response_to_json,
+    save_response_to_db,
     save_sources
 )
 from core.market_size_analysis.market_size_graph import plot_market_projection
@@ -94,7 +94,7 @@ def market_size_report_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    save_response_to_json(responses_to_save, knowledge_base_id=unique_id, user_id=user_id, collection_name="market_size_report")
+    save_response_to_db(responses_to_save, knowledge_base_id=unique_id, user_id=user_id, collection_name="market_size_report")
 
     return response
 
@@ -136,7 +136,7 @@ def market_size_graph_node(state: BusinessAnalysisState):
         **response,
     }
  
-    save_response_to_json(responses_to_save, knowledge_base_id=unique_id, user_id=user_id, collection_name="market_size_graph")
+    save_response_to_db(responses_to_save, knowledge_base_id=unique_id, user_id=user_id, collection_name="market_size_graph")
 
     return response
 
@@ -174,7 +174,7 @@ def competitors_table_node(state: BusinessAnalysisState):
         **response,
     }
 
-    save_response_to_json(responses_to_save, knowledge_base_id=state["knowledge_base_id"], user_id=user_id, collection_name="competitors_table")
+    save_response_to_db(responses_to_save, knowledge_base_id=state["knowledge_base_id"], user_id=user_id, collection_name="competitors_table")
     return response
 
 
