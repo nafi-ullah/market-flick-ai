@@ -98,20 +98,6 @@ EMAIL_USERNAME=""
 EMAIL_PASSWORD=""
 ```
 
-### Email Service Configuration
-
-For setting up the email service used in authentication:
-```bash
-cd server
-./setup_email.sh
-```
-
-See detailed guides:
-- [Email Service Guide](./EMAIL_SERVICE_GUIDE.md)
-- [Email Test Guide](./server/EMAIL_TEST_GUIDE.md)
-- [Email Verification Guide](./server/EMAIL_VERIFICATION_README.md)
-
-
 ## Contributing
 
 1. Fork the repository

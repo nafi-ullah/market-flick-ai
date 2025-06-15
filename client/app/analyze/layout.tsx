@@ -31,7 +31,7 @@ export default function AnalyzeLayout({
   const theme = useTheme();
   const router = useRouter();
   const pathname = usePathname();
-     const { user} = useAuth();
+  const { user} = useAuth();
  
   const [analyses, setAnalyses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
