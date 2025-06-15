@@ -36,7 +36,8 @@ export default function PreviousAnalysisLayout({
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth(); // Assuming you have a useAuth hook to get the user context
   useEffect(() => {
-    fetch(`${BACKENDURL}/analyses?user_id=${user?._id ?? ''}`)
+    if (!user) return;
+    fetch(`${BACKENDURL}/analyses?user_id=${user._id}`)
       .then((res) => res.json())
       .then((data) => {
         setAnalyses(data.analyses);

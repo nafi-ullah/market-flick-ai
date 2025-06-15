@@ -89,7 +89,7 @@ const BusinessAnalysisForm = ({
 }: {
   setStreamData: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
-    const { user} = useAuth();
+    const { user } = useAuth();
   
   const [formDataState, setFormDataState] = useState<FormDataState>({
     businessSector: "",

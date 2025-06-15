@@ -236,7 +236,7 @@ export default function Home() {
 
   // 2) Partial reload effect
   useEffect(() => {
-    if (!componentReloader.needReload || !id || user) return;
+    if (!componentReloader.needReload || !id || !user) return;
     const { components: keysToReload } = componentReloader;
     if (!keysToReload || keysToReload.length === 0) return;
 
