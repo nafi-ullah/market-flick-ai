@@ -249,7 +249,11 @@ export default function Home() {
         const response = await fetch(`${BACKENDURL}/previous-analysis/${id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: user?._id ?? '' }), 
+          body: JSON.stringify({ 
+            user_id: user?._id ?? '', 
+            knowledge_base_id: id, 
+            reloadKeys: keysToReload 
+          }),  
         });
         if (!response.ok) {
           throw new Error("Failed to partially fetch data");

@@ -42,7 +42,7 @@ export default function AnalyzeLayout({
       return;
     }
     
-    fetch(`/analyses?user_id=${user?._id ?? ''}`)
+    fetch(`${BACKENDURL}/analyses?user_id=${user._id}`)
       .then(async (res) => {
         if (!res.ok) {
           const text = await res.text();
