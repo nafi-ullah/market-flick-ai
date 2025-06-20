@@ -11,9 +11,9 @@ from core.util_agents.chat_agent import chat_with_agent
 from core.util_agents.chat_write_agent import chat_write_agent
 from core.util_agents.title_generator import generate_title
 from core.rag.rag import upload_and_fetch_context
-from utils.general_utils import load_response_from_json, get_all_saved_responses
+from utils.general_utils import load_response_from_db, get_all_saved_responses
 from database.db import get_database
-from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile
+from fastapi import FastAPI, Depends, HTTPException, Form, UploadFile, Query, Body
 from fastapi.responses import StreamingResponse, FileResponse
 import asyncio
 from typing import AsyncGenerator
@@ -28,7 +28,7 @@ from core.market_size_analysis.test_langgraph import build_business_analysis_gra
 import os
 
 
-from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_json
+from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_db
 
 
 os.makedirs(KNOWLEDGE_BASE_PATH, exist_ok=True)
@@ -59,8 +59,9 @@ set_llm_cache(InMemoryCache())
 
 app = FastAPI()
 
-
-
+# Import auth modules
+from core.auth.middleware import verify_jwt_token
+from core.auth.routes import router as auth_router
 
 origins = [
     "http://localhost:3000",
@@ -76,6 +77,14 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+# Add JWT verification middleware
+@app.middleware("http")
+async def jwt_middleware(request, call_next):
+    return await verify_jwt_token(request, call_next)
+
+# Include auth router
+app.include_router(auth_router)
+
 
 @app.get("/")
 async def root():
@@ -89,8 +98,13 @@ async def business_analysis_stream(
     location: str = Form(...),
     links: list[str] | None = Form(None),
     files: list[UploadFile] | None = Form(None),
+    userId : str | None = Form(None)
 ) -> StreamingResponse:
     # Convert form data to BusinessAnalysisInput
+    if userId is None or userId.strip() == "":
+        raise HTTPException(status_code=400, detail="User ID is required")
+        
+
     print('~'*100)
     print(links, type(links))
     print('~'*100)
@@ -169,7 +183,7 @@ async def business_analysis_stream(
                 "status": "success"
             })
 
-            save_response_to_json(basic_info, f"basic_info_{knowledge_base_id}")
+            save_response_to_db(basic_info, knowledge_base_id, user_id=userId, collection_name="basic_info")
 
 
             # Create the graph
@@ -181,6 +195,7 @@ async def business_analysis_stream(
             initial_state = {
                 "business_analysis_input": business_input,
                 "knowledge_base_id": knowledge_base_id,
+                "user_id": userId,
                 "internal_context_points": points,
                 "knowledge_base": "",
                 "market_size_data_points": "",
@@ -256,7 +271,11 @@ async def business_analysis_stream(
 @app.post("/previous-analysis/{knowledge_base_id}")
 async def previous_analysis_stream(
     knowledge_base_id: str,
+    payload: dict = Body(...)
 ) -> StreamingResponse:
+    user_id = payload.get("user_id")
+    if user_id is None or user_id.strip() == "":
+        raise HTTPException(status_code=400, detail="User ID is required")
     async def generate_stream() -> AsyncGenerator[str, None]:
         try:
             yield json.dumps({
@@ -265,8 +284,8 @@ async def previous_analysis_stream(
                 "status": "success"
             })
             # Create the graph
-            saved_responses = get_all_saved_responses(knowledge_base_id)
-
+            
+            saved_responses = get_all_saved_responses(knowledge_base_id , user_id)
             # Stream the graph execution
             for key, response in saved_responses.items():
                 try:
@@ -308,40 +327,30 @@ async def previous_analysis_stream(
 
 
 @app.get("/analyses")
-async def get_analyses():
+async def get_analyses(user_id : str | None = Query(None)):
     """
     Endpoint to list all file names in the KNOWLEDGEBASE_PATH.
 
     Returns:
         List[str]: A list of file names in the knowledge base directory.
     """
+    
+    if user_id is None or user_id.strip() == "":
+        raise HTTPException(status_code=400, detail="User ID is required")
     try:
-        # Get a list of files in the knowledge base directory
-        file_names = os.listdir(RESPONSE_PATH)
-
-        # Filter only files (exclude directories)
-        file_names = [file for file in file_names if os.path.isfile(os.path.join(RESPONSE_PATH, file))]
-
-        filtered_files = [
-            file.split("market_size_report_")[1].replace(".json", "") for file in file_names
-            if os.path.isfile(os.path.join(RESPONSE_PATH, file)) and "market_size_report" in file.lower()
-        ]
-
-        analyses = []
-
-        for id in filtered_files:
-            basic_info = load_response_from_json(f"basic_info_{id}")
-            analyses.append(basic_info)
-
-
+        
+        db = get_database()
+        collection = db['basic_info']
+        # Filter analyses based on user_id from the database
+        analyses = collection.find({"user_id": user_id}, {"_id": 0})
+        
+        
         return {
-            "analyses": [
-                analyse_obj for analyse_obj in analyses if analyse_obj is not None
-            ]
+            "analyses": list(analyses),
         }
 
     except FileNotFoundError:
-        return {"error": "PATH not found"}
+        return {"error": "File not found"}
     except Exception as e:
         return {"error": str(e)}
 
@@ -412,6 +421,6 @@ async def investor_analysis(id: str):
 
 @app.get("/investor-profiles/{id}")
 async def investor_profiles(id: str):
-    repsonse = load_response_from_json(f"investors_and_companies_{id}")
+    repsonse = load_response_from_db(f"investors_and_companies_{id}")
     return repsonse
 

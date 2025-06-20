@@ -33,7 +33,7 @@ const UrlMetadataGrid: React.FC<Props> = ({ sources = [] }) => {
               // Extract website title from URL
               const cleanUrl = url.startsWith("https://www.")
                 ? url.split("https://www.")[1].split("/")[0]
-                : url.split("https://")[1].split("/")[0];
+                : url.split("https://")?.[1]?.split("/")[0] ?? '';
 
               try {
                 const response = await fetch(

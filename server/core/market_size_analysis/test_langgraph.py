@@ -14,7 +14,7 @@ from core.market_size_analysis.utils import (
     print_and_save_stream,
     extract_knowledge_base,
     print_stream,
-    save_response_to_json,
+    save_response_to_db,
     save_sources
 )
 from core.market_size_analysis.market_size_graph import plot_market_projection
@@ -64,6 +64,7 @@ def market_size_report_node(state: BusinessAnalysisState):
 
     internal_context = (f'\n\nAlso Consider these internal data as context: {get_internal_context(state)}\n\nAdd sources of these internal data in markdown where necessary.' if len(state["internal_context_points"]) > 0 else '')
     unique_id = state["knowledge_base_id"]
+    user_id = state["user_id"]
     with open(f"./rag_base/retrieved_context/internal_context_points_{unique_id}.txt", "w") as f:
         f.write(market_size_system_message + internal_context)
         
@@ -93,7 +94,7 @@ def market_size_report_node(state: BusinessAnalysisState):
     responses_to_save = {
         **response,
     }
-    save_response_to_json(responses_to_save, f"market_size_report_{unique_id}")
+    save_response_to_db(responses_to_save, knowledge_base_id=unique_id, user_id=user_id, collection_name="market_size_report")
 
     return response
 
@@ -108,6 +109,7 @@ def market_size_graph_node(state: BusinessAnalysisState):
     )
 
     unique_id = state["knowledge_base_id"]
+    user_id = state["user_id"]
     plot_id = unique_id
 
     inputs = {
@@ -134,7 +136,7 @@ def market_size_graph_node(state: BusinessAnalysisState):
         **response,
     }
  
-    save_response_to_json(responses_to_save, f"market_size_graph_{unique_id}")
+    save_response_to_db(responses_to_save, knowledge_base_id=unique_id, user_id=user_id, collection_name="market_size_graph")
 
     return response
 
@@ -148,7 +150,7 @@ def competitors_table_node(state: BusinessAnalysisState):
         state_schema=BusinessAnalysisState,
     )
     table_id = state["knowledge_base_id"]
-
+    user_id = state["user_id"]
     inputs = {
         "messages": [
             SystemMessage(competitors_table_generator_system_message),
@@ -172,8 +174,7 @@ def competitors_table_node(state: BusinessAnalysisState):
         **response,
     }
 
-    save_response_to_json(responses_to_save, f"competitors_table_{table_id}")
-
+    save_response_to_db(responses_to_save, knowledge_base_id=state["knowledge_base_id"], user_id=user_id, collection_name="competitors_table")
     return response
 
 

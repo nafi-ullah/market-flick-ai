@@ -64,6 +64,7 @@ class BusinessAnalysisState(TypedDict):
     messages: Annotated[Sequence[BaseMessage], add_messages]
     internal_context_points: list[PointStruct] = []
     knowledge_base_id: str
+    user_id: str
     knowledge_base: str = ""
     market_size_data_points: str =""
     market_size_plot_id: str = ""

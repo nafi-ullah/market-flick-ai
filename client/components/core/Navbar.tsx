@@ -19,9 +19,11 @@ import {
 } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import SocialShare from "../features/ShareCards";
+import { useAuth } from "@/hooks/useAuth";
 
 const Navbar: React.FC = () => {
   const router = useRouter();
+  const { logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isShareModalOpened, setIsShareModalOpened] = useState(false);
   const open = Boolean(anchorEl);
@@ -37,7 +39,7 @@ const Navbar: React.FC = () => {
   const handleMenuItemClick = (action: string) => {
     switch (action) {
       case 'profile':
-        // Handle profile click
+        router.push('/profile');
         break;
       case 'previous-analysis':
         router.push('/previous-analysis');
@@ -46,7 +48,7 @@ const Navbar: React.FC = () => {
         // Handle settings click
         break;
       case 'logout':
-        // Handle logout
+        logout();
         break;
     }
     handleClose();

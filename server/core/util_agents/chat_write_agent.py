@@ -8,8 +8,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
 
-from core.market_size_analysis.utils import print_stream, save_response_to_json
-from utils.general_utils import get_all_saved_responses, load_response_from_json
+from core.market_size_analysis.utils import print_stream, save_response_to_db
+from utils.general_utils import get_all_saved_responses, load_response_from_db
 from core.util_agents.prompts import identifier_system_message, updater_agent_system_message, write_react_system_message, write_react_human_message
 from custom_types.basetypes import Identifier, Updater
 
@@ -78,7 +78,7 @@ def load_data_for_keys(keys: List[str], id: str) -> List[Dict[str, Any]]:
     data_list = []
     for key in keys:
         try:
-            data = load_response_from_json(f"{key}_{id}")
+            data = load_response_from_db(f"{key}_{id}")
             data_list.append({"key": key, "data": data})
         except Exception as e:
             raise ValueError(f"Failed to load data for key: {key}. Error: {str(e)}")
@@ -136,7 +136,7 @@ def save_updated_data(updated_data: List[Dict[str, Any]], id: str) -> None:
     """Save the updated data to storage."""
     for data in updated_data:
         key = data["key"]
-        save_response_to_json(data["data"], f"{key}_{id}")
+        save_response_to_db(data["data"], f"{key}_{id}")
 
 
 def chat_write_agent(

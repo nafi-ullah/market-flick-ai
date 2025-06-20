@@ -3,6 +3,8 @@ from constants import KNOWLEDGE_BASE_PATH, RESPONSE_PATH
 from constants import FIGURE_PATH
 import json
 
+from database.db import get_database
+
 
 def print_stream(stream):
     for s in stream:
@@ -95,21 +97,36 @@ def get_serializable_response(response: dict):
             serializable_response[key] = str(value)
     return serializable_response
 
-
-def save_response_to_json(response: dict, unique_id: str):
+# change the function name a refactor
+def save_response_to_db(response: dict, knowledge_base_id: str, user_id: str, collection_name: str):
     """
     Save response to a JSON file after ensuring all values are JSON serializable.
+    Also save the response in MongoDB with userId for retrieval.
 
     Args:
         response (dict): Response dictionary to save
-        unique_id (str): Unique identifier for the file name
+        knowledge_base_id (str): Unique identifier for the knowledge base
+        userId (str): User identifier for MongoDB
+        collection_name (str): MongoDB collection name
     """
+    db = get_database()
+    collection = db[collection_name]
     # Convert any non-serializable values to strings
     serializable_response = get_serializable_response(response)
 
-    os.makedirs(RESPONSE_PATH, exist_ok=True)
-    with open(f"{RESPONSE_PATH}/{unique_id}.json", "w") as f:
-        json.dump(serializable_response, f)
+    # Save to file as before
+    # os.makedirs(RESPONSE_PATH, exist_ok=True)
+    # with open(f"{RESPONSE_PATH}/{unique_id}.json", "w") as f:
+    #     json.dump(serializable_response, f)
+
+    # Save to MongoDB with userId and unique_id
+    mongo_doc = {
+        **serializable_response,
+        "user_id": user_id,
+        "knowledge_base_id": knowledge_base_id,
+        
+    }
+    collection.insert_one(mongo_doc)
 
 
 def extract_search_queries(search_id: str):

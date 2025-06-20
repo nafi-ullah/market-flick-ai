@@ -95,3 +95,8 @@ qdrant-client==1.13.2
 pypdf==5.1.0
 beautifulsoup4==4.12.3
 uvicorn==0.34.0
+python-jose==3.4.0
+passlib==1.7.4
+bcrypt==3.2.2
+emails==0.6
+boto3==1.35.0

@@ -6,6 +6,7 @@ import { useAnalysisDataContext } from "@/context/AnalysisContext";
 import { Typography } from "@mui/material";
 import TypingDisplay from "@/components/features/TypingDisplay";
 import Navbar from "@/components/core/Navbar";
+import { useAuth } from "@/hooks/useAuth";
 
 interface InvestorData {
     name: string;
@@ -30,7 +31,7 @@ const [showInvestors, setShowInvestors] = useState(false);
 const [showLoader, setShowLoaders]= useState(false);
   const { analysisData, setAnalysisData } = useAnalysisDataContext();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-
+const {user} = useAuth();
  // Replace with your backend URL
  const fetchInvestorData = async (getid: string) => {
     try {
@@ -46,7 +47,7 @@ const [showLoader, setShowLoaders]= useState(false);
   };
 
   useEffect(() => {
-    fetch(`${BACKENDURL}/analyses`)
+    fetch(`${BACKENDURL}/analyses?user_id=${user?._id ?? ''}`)
       .then((res) => res.json())
       .then((data) => {
         const filteredData = data.analyses

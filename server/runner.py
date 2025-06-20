@@ -11,7 +11,7 @@ from core.market_size_analysis.market_size_graph import plot_market_projection
 from datetime import date
 from core.market_size_analysis.test_langgraph import BusinessAnalysisState
 from core.util_agents.title_generator import generate_title
-from utils.general_utils import get_all_saved_responses, load_response_from_json
+from utils.general_utils import get_all_saved_responses, load_response_from_db
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 

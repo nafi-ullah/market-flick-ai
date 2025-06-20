@@ -15,6 +15,7 @@ import {
   Box,
 } from "@mui/material";
 import StackedAnimatedLoader from "./loaders/AiLoader";
+import { useAuth } from "@/hooks/useAuth";
 
 interface FormDataState {
   businessSector: string;
@@ -88,6 +89,8 @@ const BusinessAnalysisForm = ({
 }: {
   setStreamData: React.Dispatch<React.SetStateAction<string[]>>;
 }) => {
+    const { user } = useAuth();
+  
   const [formDataState, setFormDataState] = useState<FormDataState>({
     businessSector: "",
     businessIdea: "",
@@ -154,7 +157,11 @@ const BusinessAnalysisForm = ({
       formDataState.files.forEach((file) => {
         formData.append("files", file);
       });
-
+      // Append user ID if available
+      if (user && user._id) {
+        formData.append("userId", user._id);
+      }
+      
       const response = await fetch(`${BACKENDURL}/business-analysis`, {
         method: "POST",
         body: formData,

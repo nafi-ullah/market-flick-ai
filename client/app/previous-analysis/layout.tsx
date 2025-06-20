@@ -19,6 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BACKENDURL } from "@/utils/constants";
 import IndividualLoader from "@/components/loaders/IndividualLoader";
 import Leftbar from "@/components/leftbar/Leftbar";
+import { useAuth } from "@/hooks/useAuth";
 
 const DRAWER_WIDTH = 250;
 
@@ -33,9 +34,10 @@ export default function PreviousAnalysisLayout({
 
   const [analyses, setAnalyses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const { user } = useAuth(); // Assuming you have a useAuth hook to get the user context
   useEffect(() => {
-    fetch(`${BACKENDURL}/analyses`)
+    if (!user) return;
+    fetch(`${BACKENDURL}/analyses?user_id=${user._id}`)
       .then((res) => res.json())
       .then((data) => {
         setAnalyses(data.analyses);
