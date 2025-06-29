@@ -22,11 +22,11 @@ fs = gridfs.GridFS(db)
 files_collection = db["files"]
 
 # Qdrant Cloud setup (replace with your credentials)
-quadrant_url = os.getenv("QDRANT_URL")
-quadrant_api_key = os.getenv("QDRANT_API_KEY")
+qdrant_url = os.getenv("QDRANT_URL")
+qdrant_api_key = os.getenv("QDRANT_API_KEY")
 qdrant_client = QdrantClient(
-    url=quadrant_url, 
-    api_key=quadrant_api_key,
+    url=qdrant_url, 
+    api_key=qdrant_api_key,
 )
 
 def chunk_text(text: str, token_limit: int):
