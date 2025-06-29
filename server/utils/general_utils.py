@@ -64,3 +64,12 @@ def get_all_saved_responses(knowledge_base_id: str, user_id: str):
             user_id=user_id
         ),
     }
+
+def clean_for_json(data):
+    # Recursively remove or convert non-serializable fields
+    if isinstance(data, dict):
+        return {k: clean_for_json(v) for k, v in data.items() if k != '_id'}
+    elif isinstance(data, list):
+        return [clean_for_json(i) for i in data]
+    else:
+        return data

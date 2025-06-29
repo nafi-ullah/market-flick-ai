@@ -26,6 +26,7 @@ from pprint import pformat
 
 from core.market_size_analysis.test_langgraph import build_business_analysis_graph
 import os
+import gridfs
 
 
 from core.market_size_analysis.utils import extract_knowledge_base, get_serializable_response, save_response_to_db
@@ -120,36 +121,50 @@ async def business_analysis_stream(
     
     points = []
     if files:
-        # save those files in ./rag_base/files
         sources_object = {
             "knowledge_base_id": knowledge_base_id,
             "files": [],
             "links": []
         }
+        db = get_database()
+        fs = gridfs.GridFS(db)
+        # Save files to MongoDB GridFS
         for file in files:
-            content = None
             content = await file.read()
             file_uuid = hashlib.sha256(content).hexdigest()
-            with open(f"./rag_base/files/{file_uuid}.{file.filename.split('.')[-1]}", "wb") as f:
-                f.write(content)
+            gridfs_id = fs.put(content, filename=file.filename)
             file_object = {
                 "file_id": file_uuid,
                 "file_name": file.filename,
-                "file_path": f"./rag_base/files/{file_uuid}.{file.filename.split('.')[-1]}"
+                "gridfs_id": gridfs_id,
+                "knowledge_base_id": knowledge_base_id,
+                "uploaded_at": datetime.utcnow()
             }
-        
-            sources_object["files"].append(file_object)
-    
+            db["files"].insert_one(file_object)
+            sources_object["files"].append({
+                "file_id": file_uuid,
+                "file_name": file.filename,
+                "gridfs_id": str(gridfs_id)
+            })
+
+        # Save links to MongoDB
         if links:
-            sources_object["links"] = [
-                {
-                    "link_id": hashlib.sha256(link.encode()).hexdigest(),
-                    "link_url": link
+            for link in links:
+                link_id = hashlib.sha256(link.encode()).hexdigest()
+                link_object = {
+                    "link_id": link_id,
+                    "link_url": link,
+                    "knowledge_base_id": knowledge_base_id,
+                    "uploaded_at": datetime.utcnow()
                 }
-                for link in links
-            ]
+                db["links"].insert_one(link_object)
+                sources_object["links"].append({
+                    "link_id": link_id,
+                    "link_url": link
+                })
+
         print(sources_object)
-        json.dump(sources_object, open(f"./rag_base/sources/sources_{knowledge_base_id}.json", "w"), indent=4)
+        # No local JSON or file write needed
     
         points = upload_and_fetch_context(knowledge_base_id, f'Idea: {business_input.idea} - Sector: {business_input.sector} - Location: {business_input.location}', sources_object)
      
@@ -358,12 +373,16 @@ async def get_analyses(user_id : str | None = Query(None)):
 @app.post("/chat")
 async def chat(chat_request: ChatRequest):
     knowledge_base_id = chat_request.id
+    user_id = chat_request.user_id
+    if user_id is None or user_id.strip() == "":
+        raise HTTPException(status_code=400, detail="User ID is required")
+    
     knowledge_base = extract_knowledge_base(knowledge_base_id)
 
     if chat_request.type == ChatType.CHAT:
-        response = chat_with_agent(input_text=chat_request.message, chat_history=chat_request.chat_history, knowledge_base=knowledge_base, knowledge_base_id=knowledge_base_id)
+        response = chat_with_agent(input_text=chat_request.message, chat_history=chat_request.chat_history, knowledge_base=knowledge_base, knowledge_base_id=knowledge_base_id, user_id=user_id)
     elif chat_request.type == ChatType.WRITE:
-        response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base)
+        response = chat_write_agent(id=chat_request.id, input=chat_request.message, chat_history=chat_request.chat_history, component_keys=chat_request.component_keys, knowledge_base=knowledge_base, user_id=user_id)
     return response
 
 

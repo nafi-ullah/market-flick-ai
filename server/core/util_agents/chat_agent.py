@@ -4,9 +4,9 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from langchain_core.runnables import RunnablePassthrough
 from core.util_agents.prompts import chat_system_message
-from utils.general_utils import get_all_saved_responses
+from utils.general_utils import clean_for_json, get_all_saved_responses
 
-def create_chat_agent(knowledge_base: str = None, knowledge_base_id: str = None):
+def create_chat_agent(knowledge_base: str = None, knowledge_base_id: str = None, user_id: str = '') :
     """
     Create and return a chat agent.
     """
@@ -14,7 +14,7 @@ def create_chat_agent(knowledge_base: str = None, knowledge_base_id: str = None)
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
     # Define a system message to set the agent's behavior
-    business_context = knowledge_base + '\n\n' + json.dumps(get_all_saved_responses(knowledge_base_id))
+    business_context = knowledge_base + '\n\n' + json.dumps(clean_for_json(get_all_saved_responses(knowledge_base_id, user_id)))
     system_message = SystemMessage(content=chat_system_message.format(business_context=business_context))
 
     # Create a prompt template with conversation history
@@ -35,7 +35,7 @@ def create_chat_agent(knowledge_base: str = None, knowledge_base_id: str = None)
 
     return chain
 
-def chat_with_agent(input_text: str, chat_history: list = None, knowledge_base: str = None, knowledge_base_id: str = None) -> dict:
+def chat_with_agent(input_text: str, chat_history: list = None, knowledge_base: str = None, knowledge_base_id: str = None, user_id: str = '') -> dict:
     """
     Interact with the chat agent and return its response.
     """
@@ -51,7 +51,7 @@ def chat_with_agent(input_text: str, chat_history: list = None, knowledge_base: 
             formatted_chat_history.append(AIMessage(content=message))
 
     # Get the chat agent
-    chat_agent = create_chat_agent(knowledge_base, knowledge_base_id)
+    chat_agent = create_chat_agent(knowledge_base, knowledge_base_id, user_id)
 
     # Invoke the agent with the correct input format
     response = chat_agent.invoke({
