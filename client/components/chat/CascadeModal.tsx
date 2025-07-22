@@ -24,6 +24,7 @@ import {
 import { BsGraphUp } from "react-icons/bs";
 import { GiRoad } from "react-icons/gi";
 import MarkdownChat from "../MarkdownChat";
+import { useAuth } from "@/hooks/useAuth";
 type ComponentReloaderState = {
   needReload: boolean;
   components: string[];
@@ -78,7 +79,8 @@ const CascadeModal: React.FC<CascadeModalProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [showFullChat, setShowFullChat] = useState(inputValues.length > 0);
-
+  const { user} = useAuth();
+  
   const inputRef = useRef<HTMLInputElement>(null);
 
   const pastWorkflows = [
@@ -200,6 +202,7 @@ const CascadeModal: React.FC<CascadeModalProps> = ({
         message: inputValue,
         chat_history: chatHistory, // Send existing chatHistory to backend
         component_keys: selectedKeys,
+        user_id: user?._id ?? '', // Pass user ID if available
       });
 
       const { output, chat_history: newChatHistory } = response.data;

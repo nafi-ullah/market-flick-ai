@@ -9,7 +9,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, BaseMessage
 
 from core.market_size_analysis.utils import print_stream, save_response_to_db
-from utils.general_utils import get_all_saved_responses, load_response_from_db
+from utils.general_utils import clean_for_json, get_all_saved_responses, load_response_from_db
 from core.util_agents.prompts import identifier_system_message, updater_agent_system_message, write_react_system_message, write_react_human_message
 from custom_types.basetypes import Identifier, Updater
 
@@ -31,7 +31,7 @@ def format_chat_history(chat_history: List[Tuple[str, str]]) -> List[BaseMessage
 
 
 
-def get_react_agent(id: str, input: str, component_keys: Optional[List[str]] = None, formatted_chat_history: List[BaseMessage] = None):
+def get_react_agent(id: str, input: str, component_keys: Optional[List[str]] = None, formatted_chat_history: List[BaseMessage] = None, user_id: str = ''):
 
     search_tool = TavilySearchResults(
         include_answer=True,
@@ -41,7 +41,7 @@ def get_react_agent(id: str, input: str, component_keys: Optional[List[str]] = N
     agent = create_react_agent(model=llm, tools=[
         update_data_with_llm, search_tool
     ])
-    business_context = get_all_saved_responses(id)
+    business_context = clean_for_json(get_all_saved_responses(knowledge_base_id=id, user_id=user_id))
 
     inputs = {
         "messages": [
@@ -144,7 +144,9 @@ def chat_write_agent(
     input: str,
     chat_history: Optional[List[Tuple[str, str]]] = None,
     component_keys: Optional[List[str]] = None,
-    knowledge_base: Optional[str] = None
+    knowledge_base: Optional[str] = None,
+    user_id: str = ''
+    
 ) -> Dict[str, Any]:
     """
     Main function to handle chat interactions and data updates.
@@ -164,7 +166,7 @@ def chat_write_agent(
         formatted_chat_history = format_chat_history(chat_history or [])
 
         # Use the modified get_react_agent method
-        final_message = get_react_agent(id, input, component_keys, formatted_chat_history)
+        final_message = get_react_agent(id, input, component_keys, formatted_chat_history, user_id)
 
         # Update chat history
         formatted_chat_history.extend([
