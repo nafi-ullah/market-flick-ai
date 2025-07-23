@@ -50,7 +50,7 @@ mdurl==0.1.2
 msgpack==1.1.0
 multidict==6.1.0
 mypy-extensions==1.0.0
-numpy==1.26.4
+numpy
 openai==1.59.6
 orjson==3.10.14
 packaging==24.2
@@ -91,7 +91,7 @@ watchfiles==1.0.3
 websockets==14.1
 XlsxWriter==3.2.1
 yarl==1.18.3
-qdrant-client==1.13.2
+qdrant-client
 pypdf==5.1.0
 beautifulsoup4==4.12.3
 uvicorn==0.34.0
