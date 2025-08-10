@@ -97,7 +97,7 @@ export default function Home() {
   const { setCurrentBasicInfoId } = useAnalysisDataContext();
   // Which components are currently reloading
   const [loadingComponents, setLoadingComponents] = useState<string[]>([]);
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [componentReloader, setComponentReloader] =
     useState<ComponentReloaderState>({
@@ -146,7 +146,7 @@ export default function Home() {
   const dataToDisplay = selectedTabs.includes("All")
     ? streamData
     : streamData.filter((d) => selectedTabs.includes(d.key));
-  
+
   const dummyCoordinates = [
     { lat: 23.810331, lng: 90.412521, name: "Dhaka" }, // Dhaka Division
     { lat: 22.347536, lng: 91.812332, name: "Chattogram" }, // Chattogram Division
@@ -157,9 +157,7 @@ export default function Home() {
   const dummyDumpFills = [30, 50, 90, 70, 20];
 
   // Helper to extract the right component + loader + data
-  function extractStreamData(
-    obj: any
-  ): {
+  function extractStreamData(obj: any): {
     component: React.FC<{ data: any }>;
     loader: React.FC;
     data: any;
@@ -177,7 +175,9 @@ export default function Home() {
 
   // 1) Initial fetch for the entire dataset
   useEffect(() => {
+    console.log("~~~ coming here", { id, user });
     if (!id || !user) return;
+
     const knowledge_base_id = id;
     setCurrentBasicInfoId(id);
     fetch(`${BACKENDURL}/previous-analysis/${knowledge_base_id}`, {
@@ -232,7 +232,7 @@ export default function Home() {
 
     // Show chat only if ID is available
     setShowChat(id && id.length > 0);
-  }, [id]);
+  }, [id, setCurrentBasicInfoId, user]);
 
   // 2) Partial reload effect
   useEffect(() => {
@@ -249,11 +249,11 @@ export default function Home() {
         const response = await fetch(`${BACKENDURL}/previous-analysis/${id}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            user_id: user?._id ?? '', 
-            knowledge_base_id: id, 
-            reloadKeys: keysToReload 
-          }),  
+          body: JSON.stringify({
+            user_id: user?._id ?? "",
+            knowledge_base_id: id,
+            reloadKeys: keysToReload,
+          }),
         });
         if (!response.ok) {
           throw new Error("Failed to partially fetch data");
