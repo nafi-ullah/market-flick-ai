@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { GoogleLoginButton, GitHubLoginButton } from "@/components/auth/SocialLoginButtons";
+import {
+  GoogleLoginButton,
+  GitHubLoginButton,
+} from "@/components/auth/SocialLoginButtons";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -39,11 +42,17 @@ export default function SignupPage() {
             Join Market Flick AI today
           </p>
         </div>
-        
-        <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100">
+
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-lg rounded-2xl p-8 border border-gray-100"
+        >
           <div className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-base font-medium text-gray-800 mb-1">
+              <label
+                htmlFor="name"
+                className="block text-base font-medium text-gray-800 mb-1"
+              >
                 Full Name
               </label>
               <input
@@ -51,14 +60,17 @@ export default function SignupPage() {
                 type="text"
                 placeholder="John Doe"
                 value={name}
-                onChange={e => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base"
                 required
               />
             </div>
-            
+
             <div>
-              <label htmlFor="email" className="block text-base font-medium text-gray-800 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-base font-medium text-gray-800 mb-1"
+              >
                 Email Address
               </label>
               <input
@@ -66,14 +78,17 @@ export default function SignupPage() {
                 type="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base"
                 required
               />
             </div>
-            
+
             <div>
-              <label htmlFor="password" className="block text-base font-medium text-gray-800 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-base font-medium text-gray-800 mb-1"
+              >
                 Password
               </label>
               <input
@@ -81,18 +96,18 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 text-base"
                 required
               />
             </div>
-            
+
             {error && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium">
                 {error}
               </div>
             )}
-            
+
             <button
               type="submit"
               className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 font-medium text-base shadow-sm transition-all"
@@ -101,21 +116,24 @@ export default function SignupPage() {
               {loading ? "Creating account..." : "Create Account"}
             </button>
           </div>
-          
+
           <div className="mt-6 flex items-center">
             <div className="flex-grow h-px bg-gray-200"></div>
             <span className="px-4 text-sm text-gray-500 font-medium">OR</span>
             <div className="flex-grow h-px bg-gray-200"></div>
           </div>
-          
+
           <div className="mt-6 space-y-3">
             <GoogleLoginButton onError={(error) => setError(error.message)} />
-            <GitHubLoginButton onError={(error) => setError(error.message)} />
+            {/* <GitHubLoginButton onError={(error) => setError(error.message)} /> */}
           </div>
-          
+
           <div className="mt-6 text-center text-sm">
             <span className="text-gray-600">Already have an account? </span>
-            <a href="/auth/login?callbackUrl=/analyze" className="text-blue-600 hover:text-blue-800 font-medium">
+            <a
+              href="/auth/login?callbackUrl=/analyze"
+              className="text-blue-600 hover:text-blue-800 font-medium"
+            >
               Sign in
             </a>
           </div>

@@ -80,13 +80,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' });
+    await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
-    localStorage.removeItem('token');
-    setToast('You have been logged out.');
+    localStorage.removeItem("token");
+    setToast("You have been logged out.");
     setTimeout(() => {
       setToast(null);
-      window.location.href = '/';
+      window.location.href = "/auth/login";
     }, 2000);
   };
 
@@ -97,15 +97,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider, token }),
       });
-
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.message || "Social login failed");
       }
 
       const data = await res.json();
+
       setUser(data.user);
       localStorage.setItem("token", data.access_token);
+      document.cookie = `token=${data.access_token}; path=/;`;
+      window.location.href = "/analyze";
     } catch (error: any) {
       throw new Error(error.message || "Social login failed");
     }
@@ -152,11 +154,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const refreshUser = async () => {
     try {
       const token = localStorage.getItem("token");
-      
+
       const res = await fetch("/api/auth/me", {
-        headers: token ? {
-          Authorization: `Bearer ${token}`,
-        } : {},
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
       });
 
       if (!res.ok) {
@@ -176,11 +180,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkUserAuth = async () => {
       try {
         const token = localStorage.getItem("token");
-        
+
         const res = await fetch("/api/auth/me", {
-          headers: token ? {
-            Authorization: `Bearer ${token}`,
-          } : {},
+          headers: token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {},
         });
 
         if (!res.ok) {
@@ -219,7 +225,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-      {toast && <Toast message={toast} onClose={() => setToast(null)} duration={2000} />}
+      {toast && (
+        <Toast message={toast} onClose={() => setToast(null)} duration={2000} />
+      )}
     </AuthContext.Provider>
   );
 };
