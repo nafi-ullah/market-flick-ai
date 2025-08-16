@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/analyses/:path*',
-        destination: 'http://localhost:8000/analyses/:path*', // Proxy to backend
+        destination: `${process.env.NEXT_PUBLIC_BACKEND_URL}/analyses/:path*`, // Proxy to backend
       },
     ]
   },
